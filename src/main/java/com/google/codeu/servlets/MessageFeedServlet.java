@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 
 @WebServlet("/feed")
 public class MessageFeedServlet extends HttpServlet {
-  
+
   private Datastore datastore;
 
   @Override
@@ -41,3 +41,4 @@ public class MessageFeedServlet extends HttpServlet {
 
     response.getOutputStream().println(json);
   }
+}
