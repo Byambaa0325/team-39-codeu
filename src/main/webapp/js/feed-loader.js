@@ -63,5 +63,5 @@ function showMessageFormIfLoggedIn() {
 // Fetch data and populate the UI of the page.
 function buildUI(){
 fetchMessages();
-showMessageFormIfLoggedIn()
+showMessageFormIfLoggedIn();
 }
