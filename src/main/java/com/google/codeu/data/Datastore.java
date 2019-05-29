@@ -79,7 +79,7 @@ public class Datastore {
     }
 
     /**
-    * Extract all messages from query
+    * Extracts all messages from query
     *
     * @return a list of messages, or empty list if
     * the query is empty
@@ -89,6 +89,7 @@ public class Datastore {
 
       for( Entity entity : results.asIterable()){
         try{
+
           String idString = entity.getKey().getName();
           UUID id = UUID.fromString(idString);
           String user = (String) entity.getProperty("user");
