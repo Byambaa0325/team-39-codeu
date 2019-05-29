@@ -1,18 +1,18 @@
 /*
- * Copyright 2019 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2019 Google Inc.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 package com.google.codeu.data;
 
@@ -47,17 +47,17 @@ public class Datastore {
   }
 
   /**
-   * Gets messages posted by a specific user.
-   *
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
-   */
+  * Gets messages posted by a specific user.
+  *
+  * @return a list of messages posted by the user, or empty list if user has never posted a
+  *     message. List is sorted by time descending.
+  */
   public List<Message> getMessages(String user) {
 
     Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-            .addSort("timestamp", SortDirection.DESCENDING);
+    new Query("Message")
+    .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+    .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     return readMessagesFromQuery(results);
@@ -72,39 +72,39 @@ public class Datastore {
   public List<Message> getAllMessages(){
 
     Qurey query =
-      new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+    new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     return readMessagesFromQuery(results);
-    }
-
-    /**
-    * Extracts all messages from query
-    *
-    * @return a list of messages, or empty list if
-    * the query is empty
-    */
-    private List<Message> readMessagesFromQuery(PreparedQuery results){
-      List<Message> messages = new ArrayList<>();
-
-      for( Entity entity : results.asIterable()){
-        try{
-
-          String idString = entity.getKey().getName();
-          UUID id = UUID.fromString(idString);
-          String user = (String) entity.getProperty("user");
-          String text = (String) entity.getProperty("text");
-          long timestamp = (long) entity.getProperty("timestamp");
-
-          Message message = new Message(id, user, text, timestamp);
-          messages.add(message);
-        } catch (Exception e) {
-          System.err.println("Error reading message.");
-          System.err.println(entity.toString());
-          e.printStackTrace();
-        }
-        }
-        return messages;
-    }
   }
+
+  /**
+  * Extracts all messages from query
+  *
+  * @return a list of messages, or empty list if
+  * the query is empty
+  */
+  private List<Message> readMessagesFromQuery(PreparedQuery results){
+    List<Message> messages = new ArrayList<>();
+
+    for( Entity entity : results.asIterable()){
+      try{
+
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String user = (String) entity.getProperty("user");
+        String text = (String) entity.getProperty("text");
+        long timestamp = (long) entity.getProperty("timestamp");
+
+        Message message = new Message(id, user, text, timestamp);
+        messages.add(message);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return messages;
+  }
+}
 }
