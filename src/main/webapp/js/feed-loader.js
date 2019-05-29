@@ -53,7 +53,7 @@ function showMessageFormIfLoggedIn() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedI) {
+        if (loginStatus.isLoggedIn) {
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
         }
