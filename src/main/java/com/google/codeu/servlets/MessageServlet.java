@@ -81,7 +81,7 @@ public class MessageServlet extends HttpServlet {
     Message message = new Message(user, text);
     datastore.storeMessage(message);
 
-    if(request.getParameter("source-page")=="user-page.html"){
+    if("user-page.html".equals(request.getParameter("source-page"))){
       response.sendRedirect("/user-page.html?user=" + user);
     }
     else{
