@@ -10,6 +10,9 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 
 /**
  * Handles fetching and saving user data.
@@ -52,7 +55,6 @@ public class AboutMeServlet extends HttpServlet {
 	}
 
 	@Override
-
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException {
 
@@ -65,7 +67,9 @@ public class AboutMeServlet extends HttpServlet {
 			String userEmail = userService.getCurrentUser().getEmail();
 			String userAboutMe = request.getParameter("about-me");
 
-			System.out.println("Saving about me for " + userEmail);
+			// Sanitizing user data
+			userAboutMe = Jsoup.clean(userAboutMe, Whitelist.none());
+
 			User user = new User( userEmail, userAboutMe);
 			datastore.storeUser(user);
 
