@@ -42,6 +42,9 @@ function showMessageFormIfViewingSelf() {
             loginStatus.username == parameterUsername) {
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
+
+          const aboutMeForm = document.getElementById('about-me-form');
+          aboutMeForm.classList.remove('hidden');
         }
       });
 }
@@ -90,9 +93,25 @@ function buildMessageDiv(message) {
   return messageDiv;
 }
 
+/* Fetches About me of the user */
+function fetchAboutMe() {
+  const url = '/about?user=' + parameterUsername;
+
+  fetch(url).then((response) => {
+    return response.text();
+  }).then((aboutMe) => {
+    const aboutMeContainer = document.getElementById('about-me-container');
+    if (aboutMe == '') {
+      aboutMe = 'This user has not entered any information yet.';
+    }
+    aboutMeContainer.innerHTML = aboutMe;
+  });
+}
+
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchMessages();
+  fetchAboutMe();
 }
