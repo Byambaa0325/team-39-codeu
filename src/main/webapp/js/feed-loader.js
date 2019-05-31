@@ -44,7 +44,25 @@ messageDiv.appendChild(bodyDiv);
 return messageDiv;
 }
 
+/**
+ * Shows the message form if the user is logged in and viewing their own page.
+ */
+function showMessageFormIfLoggedIn() {
+  fetch('/login-status')
+      .then((response) => {
+        return response.json();
+      })
+      .then((loginStatus) => {
+        if (loginStatus.isLoggedIn) {
+          const messageForm = document.getElementById('message-form');
+          messageForm.classList.remove('hidden');
+        }
+      });
+}
+
 // Fetch data and populate the UI of the page.
 function buildUI(){
+addLoginOrLogoutLinkToNavigation();
 fetchMessages();
+showMessageFormIfLoggedIn();
 }
