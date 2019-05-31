@@ -15,8 +15,8 @@ import org.jsoup.safety.Whitelist;
 
 
 /**
- * Handles fetching and saving user data.
- */
+* Handles fetching and saving user data.
+*/
 
 @WebServlet("/about")
 
