@@ -40,6 +40,12 @@
   margin: 5px;
 }
 
+/* About Me's Form size */
+#about-me-input {
+  height: 100px;
+  width: 100%;
+}
+
 /* Use this to hide certain elements like forms if the
    user is not logged in or viewing their own page. */
 .hidden {
