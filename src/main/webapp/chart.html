@@ -1,0 +1,43 @@
+<head>
+  <title>A New Chart</title>
+
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart(){
+      fetch("/chart")
+        .then((response) => {
+          return response.json();
+        })
+        .then((hikingJson) => {
+          console.log(hikingJson);
+
+          var hiking_data = new google.visualization.DataTable();
+          hiking_data.addColumn('string', 'Year');
+          hiking_data.addColumn('number', 'Participants');
+          
+          for(let i = 0 ; i < hikingJson.length ; i++){
+            let currYear = [
+              String(hikingJson[i].year),
+              hikingJson[i].participants
+            ];
+            console.log(currYear);
+            hiking_data.addRow(currYear);
+          }
+          let chart_options = {
+            width: 800,
+            height: 400
+          }
+
+          let hikingChart = new google.visualization.ColumnChart( document.getElementById('chart') );
+          hikingChart.draw( hiking_data, chart_options );
+        });
+    }
+  </script>
+</head>
+<body>
+  <h1>US hiking participants</h1>
+  <div id="chart"></div>
+</body>
