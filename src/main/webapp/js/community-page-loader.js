@@ -13,6 +13,18 @@ function fetchUserList() {
     });
 }
 
+function fetchAboutMe(parameterUsername) {
+  const url = '/about?user=' + parameterUsername;
+  return fetch(url).then((response) => {
+    return response.text();
+  }).then((aboutMe) => {
+    if (aboutMe == '') {
+      aboutMe = 'This user has not entered any information yet.';
+    }
+    return aboutMe;
+  });
+}
+
 /**
  * Builds a list element that contains a link to a user page, e.g.
  * <li><a href="/user-page.html?user=test@example.com">test@example.com</a></li>
@@ -23,6 +35,13 @@ function buildUserListItem(user) {
     userLink.appendChild(document.createTextNode(user));
     const userListItem = document.createElement('li');
     userListItem.appendChild(userLink);
+
+    const aboutUser = document.createElement('p');
+    fetchAboutMe(user).then(function(data) {
+      aboutUser.appendChild(document.createTextNode(data));
+    });
+    userListItem.appendChild(aboutUser);
+
     return userListItem;
 }
 
