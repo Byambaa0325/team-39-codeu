@@ -161,6 +161,23 @@ public class Datastore {
   }
 
   /**
+   * Gets article of specific id.
+   *
+   * @return a single-element list of article posted with the id, or empty list
+   * if article with the id was never posted.
+   */
+  public List<Article> getArticleById(String id) {
+
+    Query query =
+            new Query("Article")
+                    .setFilter(new Query.FilterPredicate("Article", FilterOperator.EQUAL, id));
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return readArticlesFromQuery(results);
+  }
+
+  /**
    * Gets articles posted by a specific user.
    *
    * @return a list of articles posted by the user, or empty list if user has
