@@ -159,4 +159,68 @@ public class Datastore {
 
     datastore.put(articleEntity);
   }
+
+  /**
+   * Gets articles posted by a specific user.
+   *
+   * @return a list of articles posted by the user, or empty list if user has
+   * never posted a article. List is sorted by time descending.
+   */
+  public List<Article> getArticles(String user) {
+
+    Query query =
+            new Query("Article")
+                    .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+                    .addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return readArticlesFromQuery(results);
+  }
+
+  /**
+   * Gets all articles stored in Datastore
+   *
+   * @return a list of articles posted sorted by timestamp descending, or empty list if
+   * there is no articles stored
+   */
+  public List<Article> getAllArticles(){
+
+    Query query =
+            new Query("Article").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    return readArticlesFromQuery(results);
+  }
+
+  /**
+   * Extracts all articles from query
+   *
+   * @return a list of articles, or empty list if
+   * the query is empty
+   */
+  private List<Article> readArticlesFromQuery(PreparedQuery results){
+    List<Article> articles = new ArrayList<>();
+
+    for( Entity entity : results.asIterable()){
+      try{
+
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String authors = (String) entity.getProperty("authors");
+        String tags = (String) entity.getProperty("tags");
+        String header = (String) entity.getProperty("header");
+        String body = (String) entity.getProperty("body");
+        long timestamp = (long) entity.getProperty("timestamp");
+
+        Article article = new Article(id, authors, tags, header, body, timestamp);
+        articles.add(article);
+      } catch (Exception e) {
+        System.err.println("Error reading article.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return articles;
+  }
 }
