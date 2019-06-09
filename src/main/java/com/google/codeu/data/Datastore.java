@@ -147,4 +147,16 @@ public class Datastore {
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     return new User(email, aboutMe);
   }
+
+  /** Stores the Article in Datastore. */
+  public void storeArticle(Article article) {
+    Entity articleEntity = new Entity("Article", article.getId().toString());
+    articleEntity.setProperty("authors", article.getAuthors());
+    articleEntity.setProperty("tags",article.getTags());
+    articleEntity.setProperty("header",article.getHeader());
+    articleEntity.setProperty("body", article.getBody());
+    articleEntity.setProperty("timestamp", article.getTimestamp());
+
+    datastore.put(articleEntity);
+  }
 }
