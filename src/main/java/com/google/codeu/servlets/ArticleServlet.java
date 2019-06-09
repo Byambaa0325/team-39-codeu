@@ -42,7 +42,9 @@ public class ArticleServlet extends HttpServlet {
             return;
         }
 
-        List<Article> articles = datastore.getArticles(user);
+        String id = request.getParameter("id");
+
+        List<Article> articles = datastore.getArticlesById(id);
         Gson gson = new Gson();
         String json = gson.toJson(articles);
 
