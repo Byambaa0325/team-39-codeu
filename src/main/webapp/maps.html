@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>My Google Map</title>
+    <style media="screen">
+      #map{
+        height:400px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>My Google Map</h1>
+    <div id="map"></div>
+
+    <script>
+      function initMap() {
+        var pnt = {lat:47.8864, lng:106.9057};
+        var options = {
+          zoom:8,
+          center: pnt
+        };
+        var map = new google.maps.Map(document.getElementById('map'), options);
+
+        addMarker({
+          coords: {lat:47.8864, lng:106.9057},
+          iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+          content: '<h1>qwerty</h1>'
+        });
+        addMarker({coords: {lat:47.7537, lng:107.3728}, content: '<h1>asdfgh</h1>'});
+
+        function addMarker(props) {
+          var marker = new google.maps.Marker({
+            position: props.coords,
+            map: map
+          });
+          if(props.iconImage) {
+            marker.setIcon(props.iconImage);
+          }
+          if(props.content) {
+            var infoWindow = new google.maps.InfoWindow({
+              content : props.content
+            });
+            marker.addListener('click', function() {
+              infoWindow.open(map, marker);
+            });
+          }
+        }
+      }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4&callback=initMap">
+    </script>
+
+  </body>
+</html>
