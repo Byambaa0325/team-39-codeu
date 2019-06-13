@@ -151,6 +151,7 @@ public class Datastore {
   /** Stores the Article in Datastore. */
   public void storeArticle(Article article) {
     Entity articleEntity = new Entity("Article", article.getId().toString());
+    articleEntity.setProperty("id", article.getId().toString());
     articleEntity.setProperty("authors", article.getAuthors());
     articleEntity.setProperty("tags",article.getTags());
     articleEntity.setProperty("header",article.getHeader());
@@ -170,7 +171,7 @@ public class Datastore {
 
     Query query =
             new Query("Article")
-                    .setFilter(new Query.FilterPredicate("Article", FilterOperator.EQUAL, id));
+                    .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
 
     PreparedQuery results = datastore.prepare(query);
 

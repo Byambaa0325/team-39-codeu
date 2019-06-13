@@ -36,6 +36,10 @@ public class Article {
         this(UUID.randomUUID(), authors, "", header, body, System.currentTimeMillis());
     }
 
+    public Article(String authors, String tags, String header, String body) {
+        this(UUID.randomUUID(), authors, tags, header, body, System.currentTimeMillis());
+    }
+
     public Article(UUID id, String authors, String tags, String header, String body, long timestamp) {
         this.id = id;
         this.authors = Arrays.asList(authors.replace(" ", "").split(","));
