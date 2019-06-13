@@ -4,20 +4,24 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Article;
-import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.List;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-/** Handles fetching and saving {@link Article} instances. */
+/**
+ * Handles {@link Article} instances.
+ */
 @WebServlet("/article")
 public class ArticleServlet extends HttpServlet {
-    
+
     private Datastore datastore;
 
     @Override
@@ -26,32 +30,42 @@ public class ArticleServlet extends HttpServlet {
     }
 
     /**
-     * Responds with a JSON representation of {@link Article} data for a specific user. Responds with
-     * an empty array if the user is not provided.
+     * Renders {@link Article} in html for a specific id. Responds with
+     * Not Found page otherwise.
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        response.setContentType("application/json");
-
-        String user = request.getParameter("user");
-
-        if (user == null || user.equals("")) {
-            // Request is invalid, return empty array
-            response.getWriter().println("[]");
-            return;
-        }
-
         String id = request.getParameter("id");
 
         List<Article> articles = datastore.getArticleById(id);
-        Gson gson = new Gson();
-        String json = gson.toJson(articles);
 
-        response.getWriter().println(json);
+        if (articles.size() == 0) {
+            response.getOutputStream().println("<h1>");
+            response.getOutputStream().println("Article Not Found");
+            response.getOutputStream().println("</h1>");
+            return;
+        }
+
+        Article article = articles.get(0);
+
+        request.setAttribute("id", article.getId().toString());
+        request.setAttribute("authors", article.getAuthors());
+        request.setAttribute("tags", article.getTags());
+        request.setAttribute("header", article.getHeader());
+        request.setAttribute("body", article.getBody());
+        request.setAttribute("timestamp", article.getTimestamp());
+
+        try {
+            request.getRequestDispatcher("/article.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
     }
 
-    /** Stores a new {@link Article}. */
+    /**
+     * Stores a new {@link Article}.
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -61,18 +75,16 @@ public class ArticleServlet extends HttpServlet {
             return;
         }
 
-        String authors = Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+        String authors = userService.getCurrentUser().getEmail() + ",";
+        authors += Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+        String tags = Jsoup.clean(request.getParameter("tags"), Whitelist.none());
         String header = Jsoup.clean(request.getParameter("header"), Whitelist.none());
         String body = Jsoup.clean(request.getParameter("body"), Whitelist.none());
 
-        Article article = new Article(authors,header, body);
+        Article article = new Article(authors, tags, header, body);
         datastore.storeArticle(article);
 
-        if("user-page.html".equals(request.getParameter("source-page"))){
-            response.sendRedirect("/user-page.html?user=" + userService.getCurrentUser().getEmail());
-        }
-        else{
-            response.sendRedirect("/"+request.getParameter("source-page"));
-        }
+        response.sendRedirect("/article?id=" + article.getId());
+
     }
 }
