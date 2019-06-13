@@ -63,11 +63,5 @@ public class ArticleFeedServlet extends HttpServlet {
 
         response.getOutputStream().println("</body>");
         response.getOutputStream().println("</html>");
-
-        try {
-            request.getRequestDispatcher("/article.jsp").forward(request, response);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
     }
 }
