@@ -38,6 +38,34 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
+  /** Fetches markers from Datastore. */
+  public List<Marker> getMarkers() {
+    List<Marker> markers = new ArrayList<>();
+
+    Query query = new Query("Marker");
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      double lat = (double) entity.getProperty("lat");
+      double lng = (double) entity.getProperty("lng");
+      String content = (String) entity.getProperty("content");
+
+      Marker marker = new Marker(lat, lng, content);
+      markers.add(marker);
+    }
+    return markers;
+  }
+
+  /** Stores a marker in Datastore. */
+  public void storeMarker(Marker marker) {
+    Entity markerEntity = new Entity("Marker");
+    markerEntity.setProperty("lat", marker.getLat());
+    markerEntity.setProperty("lng", marker.getLng());
+    markerEntity.setProperty("content", marker.getContent());
+
+    datastore.put(markerEntity);
+  }
+
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
@@ -123,7 +151,7 @@ public class Datastore {
   /** Stores the User in Datastore. */
   public void storeUser(User user) {
     Entity userEntity = new Entity("User", user.getEmail());
-    
+
     userEntity.setProperty("email", user.getEmail());
     userEntity.setProperty("aboutMe", user.getAboutMe());
 
@@ -137,7 +165,7 @@ public class Datastore {
   public User getUser(String email) {
     Query query = new Query("User")
       .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
