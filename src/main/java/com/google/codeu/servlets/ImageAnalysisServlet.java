@@ -55,11 +55,21 @@ public class ImageAnalysisServlet extends HttpServlet {
 
         //Analyze the picture by specified type
         //The default is labeling tasg
-        List<EntityAnnotation> imageLabels;
+        String labelsToPrint = "";
         if ("SafeSearch".equals(request.getParameter("type"))) {
-            imageLabels = doSafeSearch(blobBytes);
+            SafeSearchAnnotation explicityLabels = doSafeSearch(blobBytes);
+            labelsToPrint = String.format("<li>adult: %s</li><li>medical: %s</li><li>spoofed: %s</li><li>violence: %s</li><li>racy: %s</li>",
+                    explicityLabels.getAdult(),
+                    explicityLabels.getMedical(),
+                    explicityLabels.getSpoof(),
+                    explicityLabels.getViolence(),
+                    explicityLabels.getRacy());
         } else {
-            imageLabels = getImageLabels(blobBytes);
+            List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
+            for (EntityAnnotation label : imageLabels) {
+                labelsToPrint += "<li>" + label.getDescription() + " " + label.getScore() + "\n";
+            }
+
         }
 
         // Output some HTML that shows the data the user entered.
@@ -71,9 +81,7 @@ public class ImageAnalysisServlet extends HttpServlet {
         out.println("</a>");
         out.println("<p>Here are the labels:</p>");
         out.println("<ul>");
-        for (EntityAnnotation label : imageLabels) {
-            out.println("<li>" + label.getDescription() + " " + label.getScore());
-        }
+        out.println(labelsToPrint);
         out.println("</ul>");
     }
 
@@ -162,7 +170,7 @@ public class ImageAnalysisServlet extends HttpServlet {
      * Uses the Google Cloud Vision API to detect level of inappropriateness that apply to the image
      * represented by the binary data stored in imgBytes.
      */
-    private List<EntityAnnotation> doSafeSearch(byte[] imgBytes) throws IOException {
+    private SafeSearchAnnotation doSafeSearch(byte[] imgBytes) throws IOException {
         List<AnnotateImageRequest> requests = new ArrayList<>();
 
         ByteString byteString = ByteString.copyFrom(imgBytes);
@@ -183,7 +191,7 @@ public class ImageAnalysisServlet extends HttpServlet {
             System.err.println("Error getting image labels: " + imageResponse.getError().getMessage());
             return null;
         }
-        return imageResponse.getLabelAnnotationsList();
+        return imageResponse.getSafeSearchAnnotation();
 
     }
 
