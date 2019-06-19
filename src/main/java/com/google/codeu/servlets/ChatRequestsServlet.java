@@ -10,6 +10,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 @WebServlet("/chat/requests")
 public class ChatRequestsServlet extends HttpServlet{
+  /*
+  * Returns current user's conversation requests
+  */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException{
@@ -18,8 +21,20 @@ public class ChatRequestsServlet extends HttpServlet{
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
-    }
+    } 
+  }
 
-
+  /*
+  * Creates new conversation requests for every invitee
+  */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException{
+    
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/index.html");
+      return;
+    } 
   }
 }

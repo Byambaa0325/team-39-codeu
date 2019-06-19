@@ -9,7 +9,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 @WebServlet("/chat/get")
-public class ChatRequestsServlet extends HttpServlet{
+public class ChatGetServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException{
