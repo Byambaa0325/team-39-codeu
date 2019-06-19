@@ -1,5 +1,6 @@
 package com.google.codeu.servlets;
 
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,9 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 @WebServlet("/chat/requests")
 public class ChatRequestsServlet extends HttpServlet{
+  private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+  
   /*
   * Returns current user's conversation requests
   */
@@ -35,6 +40,25 @@ public class ChatRequestsServlet extends HttpServlet{
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
-    } 
+    }
+
+    // Extracing the invitees
+    String inviteesString = request.getParameter("invitee");
+    inviteesString = inviteesString.replaceAll(" ", "");
+    List<String> inviteesList = new ArrayList<String>();
+
+    for( String invitee : inviteesString.split(",") ) {
+      invitee =  Jsoup.clean(invitee, Whitelist.none());
+      if( invitee.matches(EMAIL_REGEX) ){
+        inviteesList.add( invitee );
+      }
+    }
+
+    // Nickname of the conversation cleaned
+    String nicknameConv = request.getParameter("nickname");
+    nicknameConv = Jsoup.clean(nicknameConv, Whitelist.none());
+
+    response.getOutputStream().println(nicknameConv);
+    response.getOutputStream().println(inviteesList.toString());
   }
 }
