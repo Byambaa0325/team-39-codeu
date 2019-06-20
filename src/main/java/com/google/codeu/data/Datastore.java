@@ -269,4 +269,12 @@ public class Datastore {
     }
     return articles;
   }
+
+  public void storeConversation(Conversation conv){
+    Entity entity = new Entity("Conversation", conv.getId().toString());
+    entity.setProperty("nickname", conv.getNickname());
+    entity.setProperty("id", conv.getId().toString());
+    entity.setProperty("latesttime", conv.getLatestTime());
+    datastore.put( entity );
+  }
 }
