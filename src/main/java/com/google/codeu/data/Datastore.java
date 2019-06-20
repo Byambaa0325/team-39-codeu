@@ -292,4 +292,31 @@ public class Datastore {
     entity.setProperty("convid", convReq.getConvId());
     datastore.put( entity );
   }
+
+  /*
+  * Gets all conversation requests of user's email
+  */
+  public List < ConvRequest > getConvRequests(String email){
+    Query query = 
+            new Query("ConvReq")
+              .setFilter( new FilterPredicate("to", FilterOperator.EQUAL, email) );
+    PreparedQuery results = datastore.prepare(query);
+
+    List <ConvRequest> convRequests = new ArrayList<ConvRequest>();
+    for( Entity entity : results.asIterable()) {
+      try{
+        String convId = (String) entity.getProperty("convid");
+        String to = (String) entity.getProperty("to");
+        String from = (String) entity.getProperty("from");
+
+        convRequests.add( new ConvRequest(to, from, convId) );
+      } catch (Exception e) {
+        System.err.println("Error reading conversation requests of " + email + ".");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+
+    return convRequests;
+  }
 }

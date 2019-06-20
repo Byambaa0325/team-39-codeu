@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Conversation;
+import com.google.codeu.data.ConvRequest;
 import com.google.codeu.data.Datastore;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.gson.Gson;
 
 @WebServlet("/chat/requests")
 public class ChatRequestsServlet extends HttpServlet{
@@ -35,7 +37,12 @@ public class ChatRequestsServlet extends HttpServlet{
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
-    } 
+    }
+    response.setContentType("application/json");
+    
+    List <ConvRequest> convRequests = datastore.getConvRequests( userService.getCurrentUser().getEmail() );
+    Gson gson = new Gson();
+    response.getOutputStream().println( gson.toJson( convRequests ) );
   }
 
   /*
@@ -73,7 +80,7 @@ public class ChatRequestsServlet extends HttpServlet{
 
     for(String invitee : inviteesList) {
       System.out.println( invitee );
-      currConv.createRequest(invitee);
+      currConv.createRequest(invitee, userService.getCurrentUser().getEmail() );
     }
 
     response.getOutputStream().println(nicknameConv);
