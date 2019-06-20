@@ -7,22 +7,18 @@ import java.util.UUID;
 
 public class ConvRequest {
   private String to;
-  private UUID id;
+  private String convId;
 
   public ConvRequest( String to, UUID id){
     this.to = to;
-    this.id = id;
+    this.convId = id.toString();
   }
 
   public String getTo(){
     return to;
   }
 
-  public UUID getId(){
-    return id;
-  }
-
-  public String getIdAsString(){
-    return id.toString();
+  public String getConvId(){
+    return convId;
   }
 }

@@ -287,7 +287,7 @@ public class Datastore {
   public void storeConvRequest(ConvRequest convReq){
     Entity entity = new Entity("ConvReq");
     entity.setProperty("to", convReq.getTo());
-    entity.setProperty("id", convReq.getIdAsString());
+    entity.setProperty("convid", convReq.getConvId());
     datastore.put( entity );
   }
 }
