@@ -22,8 +22,6 @@ public class TranslationServlet extends HttpServlet {
     response.setContentType("text/html;charest=UTF-8");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(translatedText);
-
-
   }
 
 }
