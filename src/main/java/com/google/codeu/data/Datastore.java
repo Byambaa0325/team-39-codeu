@@ -270,11 +270,24 @@ public class Datastore {
     return articles;
   }
 
+  /*
+  * Stores new conversation
+  */
   public void storeConversation(Conversation conv){
-    Entity entity = new Entity("Conversation", conv.getId().toString());
+    Entity entity = new Entity("Conversation");
     entity.setProperty("nickname", conv.getNickname());
     entity.setProperty("id", conv.getId().toString());
     entity.setProperty("latesttime", conv.getLatestTime());
+    datastore.put( entity );
+  }
+
+  /*
+  * Stores conversation request
+  */
+  public void storeConvRequest(ConvRequest convReq){
+    Entity entity = new Entity("ConvReq");
+    entity.setProperty("to", convReq.getTo());
+    entity.setProperty("id", convReq.getIdAsString());
     datastore.put( entity );
   }
 }

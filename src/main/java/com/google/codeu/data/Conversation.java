@@ -4,6 +4,7 @@
 package com.google.codeu.data;
 
 import java.util.UUID;
+import com.google.codeu.data.Datastore;
 
 public class Conversation {
   private String nickname;
@@ -26,5 +27,15 @@ public class Conversation {
 
   public UUID getId(){
     return id;
+  }
+
+  public String getIdAsString(){
+    return id.toString();
+  }
+
+  public void createRequest( String to ){
+    ConvRequest convReq = new ConvRequest(to, id);
+    Datastore datastore = new Datastore();
+    datastore.storeConvRequest(convReq);
   }
 }

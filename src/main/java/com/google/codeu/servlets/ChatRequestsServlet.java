@@ -71,6 +71,11 @@ public class ChatRequestsServlet extends HttpServlet{
     Conversation currConv = new Conversation(nicknameConv);
     datastore.storeConversation(currConv);
 
+    for(String invitee : inviteesList) {
+      System.out.println( invitee );
+      currConv.createRequest(invitee);
+    }
+
     response.getOutputStream().println(nicknameConv);
     response.getOutputStream().println(inviteesList.toString());
   }
