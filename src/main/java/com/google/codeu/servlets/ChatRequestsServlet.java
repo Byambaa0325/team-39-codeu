@@ -54,7 +54,7 @@ public class ChatRequestsServlet extends HttpServlet{
     // Extracing the invitees
     String inviteesString = request.getParameter("invitee");
     inviteesString = inviteesString.replaceAll(" ", "");
-    List<String> inviteesList = new ArrayList<String>();
+    Set<String> inviteesList = new HashSet<String>();
 
     for( String invitee : inviteesString.split(",") ) {
       invitee =  Jsoup.clean(invitee, Whitelist.none());
