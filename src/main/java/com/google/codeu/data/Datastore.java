@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
@@ -287,6 +288,7 @@ public class Datastore {
   public void storeConvRequest(ConvRequest convReq){
     Entity entity = new Entity("ConvReq");
     entity.setProperty("to", convReq.getTo());
+    entity.setProperty("from", convReq.getFrom());
     entity.setProperty("convid", convReq.getConvId());
     datastore.put( entity );
   }

@@ -33,8 +33,8 @@ public class Conversation {
     return id.toString();
   }
 
-  public void createRequest( String to ){
-    ConvRequest convReq = new ConvRequest(to, id);
+  public void createRequest( String to, String from ){
+    ConvRequest convReq = new ConvRequest(to, from, id);
     Datastore datastore = new Datastore();
     datastore.storeConvRequest(convReq);
   }
