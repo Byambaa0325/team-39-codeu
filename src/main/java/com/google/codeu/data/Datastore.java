@@ -81,7 +81,7 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      users.add(((String)entity.getProperty("user")).trim());
+      users.add((String)entity.getProperty("user"));
     }
     return users;
   }
