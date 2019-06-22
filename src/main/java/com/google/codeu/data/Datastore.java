@@ -60,6 +60,26 @@ public class Datastore {
     }
   }
 
+  public float getScoreById(String id){
+    Query query =
+            new Query("SentimentScore")
+                    .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    float score;
+    for( Entity entity : results.asIterable()){
+      try{
+        score = (float) entity.getProperty("score");
+
+      } catch (Exception e) {
+        System.err.println("Error reading score.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return score;
+
+  }
+
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
