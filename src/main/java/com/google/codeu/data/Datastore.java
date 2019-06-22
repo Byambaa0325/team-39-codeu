@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +39,25 @@ public class Datastore {
 
   public Datastore() {
     datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+
+  /** Retrieves all articles and score them. Then, put
+  the score in datastore indexed by article's id*/
+  public void scoreArticles(){
+    List<Article> articles = getAllArticles();
+
+    for (Article article : articles.asIterable()) {
+    Document doc = Document.newBuilder()
+        .setContent(article.getBody()).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+
+    Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
+    articleScoreEntity.setProperty("score", score);
+    datastore.put(articleScoreEntity);
+    }
   }
 
   /** Stores the Message in Datastore. */
@@ -123,7 +145,7 @@ public class Datastore {
   /** Stores the User in Datastore. */
   public void storeUser(User user) {
     Entity userEntity = new Entity("User", user.getEmail());
-    
+
     userEntity.setProperty("email", user.getEmail());
     userEntity.setProperty("aboutMe", user.getAboutMe());
 
@@ -137,7 +159,7 @@ public class Datastore {
   public User getUser(String email) {
     Query query = new Query("User")
       .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
