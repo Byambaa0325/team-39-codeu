@@ -283,6 +283,26 @@ public class Datastore {
   }
 
   /*
+  * Gets conversation with id
+  */
+  public Conversation getConversation(String id){
+    Query query = new Query("Conversation")
+      .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, id ) );
+    
+    PreparedQuery results = datastore.prepare(query);
+    Entity convEntity = results.asSingleEntity();
+    if( convEntity == null ){
+      return null;
+    }
+
+    return new Conversation(
+      (String) convEntity.getProperty("nickname"),
+      (Long) convEntity.getProperty("latesttime"),
+      (String) convEntity.getProperty("id")
+    );
+  }
+
+  /*
   * Stores conversation request
   */
   public void storeConvRequest(ConvRequest convReq){

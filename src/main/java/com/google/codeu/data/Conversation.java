@@ -17,6 +17,12 @@ public class Conversation {
     this.id = UUID.randomUUID();
   }
 
+  public Conversation( String nickname, Long latestTime, String id ){
+    this.nickname = nickname;
+    this.latestTime = latestTime;
+    this.id = UUID.fromString(id);
+  }
+
   public String getNickname(){
     return nickname;
   }
