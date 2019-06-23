@@ -1,4 +1,24 @@
-function buildConversations(){
+function createNewConversation(){
+  let nicknameDom = document.getElementById('new-conv-nickname');
+  let inviteesDom = document.getElementById('new-conv-invitees');
+
+  console.log('Doing POST');
+
+  fetch( '/chat/new/', {
+    method: 'POST',
+    body: JSON.stringify({
+      nickname: nicknameDom.value, 
+      invitee:inviteesDom.value
+    })
+  }).then(() => {
+    nicknameDom.value = '';
+    inviteesDom.value = '';
+    buildConversations();
+  });
+}
+
+function buildConversations( targetDom = document.getElementById('conversation-wrapper') ){
+  targetDom.innerHTML = '';
   fetch( 'chat/conversations/' )
     .then( response => response.json() )
     .then( data => {
@@ -11,11 +31,10 @@ function buildConversations(){
         }
       });
 
-      data.forEach( conv => {
-        document.getElementById( 'conversation-wrapper' )
-          .appendChild( buildConversationDom(conv) );
+      for( let conv of data ){
+        targetDom.appendChild( buildConversationDom(conv) );
         console.log( 'Created :', conv.nickname );
-      });
+      }
     });
 }
 

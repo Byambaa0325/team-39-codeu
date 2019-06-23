@@ -13,6 +13,10 @@ import com.google.codeu.data.Datastore;
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 
 @WebServlet("/chat/*")
 public class ChatManagerServlet extends HttpServlet{
@@ -54,37 +58,45 @@ public class ChatManagerServlet extends HttpServlet{
     }
 
     if( request.getPathInfo().equals( "/new/" ) ){
-      if( request.getParameter("nickname") == null || request.getParameter("invitee") == null ){
-        return;
-      }
-      // Extracing and cleaning the invitees
-      String inviteesString = request.getParameter("invitee");
-      inviteesString = inviteesString.replaceAll(" ", "");
-      List<String> inviteesList = new ArrayList<String>();
+      JSONParser jsonParser = new JSONParser();
 
-      for( String invitee : inviteesString.split(",") ) {
-        invitee =  Jsoup.clean(invitee, Whitelist.none());
-        if( invitee.matches(EMAIL_REGEX) ){
-          inviteesList.add( invitee );
+      try {
+        JSONObject jsonObject = (JSONObject) jsonParser.parse( request.getReader().readLine() );
+        if( jsonObject.get("nickname") == null || jsonObject.get("invitee") == null ){
+          return;
         }
+
+        // Nickname of the conversation cleaned
+        String nicknameConv = (String) jsonObject.get("nickname");
+        nicknameConv = Jsoup.clean(nicknameConv, Whitelist.none());
+
+        // Extracing and cleaning the invitees
+        String inviteesString = (String) jsonObject.get("invitee");
+        inviteesString = inviteesString.replaceAll(" ", "");
+        List<String> inviteesList = new ArrayList<String>();
+
+        for( String invitee : inviteesString.split(",") ) {
+          invitee =  Jsoup.clean(invitee, Whitelist.none());
+          if( invitee.matches(EMAIL_REGEX) ){
+            inviteesList.add( invitee );
+          }
+        }
+
+        // Storing new Conversation
+        Conversation currConv = new Conversation(nicknameConv);
+        datastore.storeConversation(currConv);
+
+        // Adding all invitees and the current user to the new Conversation
+        inviteesList.add( userService.getCurrentUser().getEmail() );
+        for( String invitee : inviteesList ){
+          datastore.addPersonToConversation(currConv, invitee);
+        }
+
+        System.out.println("Nickname : " + nicknameConv);
+        System.out.println("Invitees : " + inviteesList.toString());
+      } catch( ParseException e){
+        e.printStackTrace();
       }
-
-      // Nickname of the conversation cleaned
-      String nicknameConv = request.getParameter("nickname");
-      nicknameConv = Jsoup.clean(nicknameConv, Whitelist.none());
-
-      // Storing new Conversation
-      Conversation currConv = new Conversation(request.getParameter("nickname"));
-      datastore.storeConversation(currConv);
-
-      // Adding all invitees and the current user to the new Conversation
-      inviteesList.add( userService.getCurrentUser().getEmail() );
-      for( String invitee : inviteesList ){
-        datastore.addPersonToConversation(currConv, invitee);
-      }
-
-      System.out.println("Nickname : " + nicknameConv);
-      System.out.println("Invitees : " + inviteesList.toString());
     }
   }
 }
