@@ -12,6 +12,20 @@
   padding-left: 8px;
 }
 
+.conversation{
+  border-bottom: 1px skyblue solid;
+}
+
+.conv-nickname{
+  margin: 4px;
+}
+
+.conv-date{
+  font-size: 12px;
+  margin: 2px;
+  text-align: end;
+}
+
 #chat {
   height: 800px;
   width: 600px;

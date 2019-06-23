@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/chat.css">
   </head>
-  <body>
+  <body onload="buildChat()">
     <h3>Welcome to chat!</h3>
     <div>
       <div class="dropdown">
@@ -24,6 +24,7 @@
     <div id="chat-wrapper">
       <div id="conversations">
         <div style="border-bottom: 1px black solid">Conversations</div>
+        <div id="conversation-wrapper"></div>
       </div>
       <div id="chat"></div>
     </div>
