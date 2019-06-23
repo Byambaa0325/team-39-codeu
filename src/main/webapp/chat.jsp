@@ -19,12 +19,6 @@
           </form>
         </div>
       </div>
-      <div class="dropdown">
-          <button class="dropbtn">Requests</button>
-          <div class="dropdown-content">
-            Requests
-          </div>
-        </div>
     </div>
 
     <div id="chat-wrapper">
@@ -33,5 +27,7 @@
       </div>
       <div id="chat"></div>
     </div>
+
+    <script src="/js/chat.js"></script>
   </body>
 </html>
