@@ -325,11 +325,7 @@ public class Datastore {
     List<Conversation> conversations = new ArrayList<Conversation>();
 
     for( Entity entity : results.asIterable() ){
-      conversations.add( new Conversation( 
-        (String) entity.getProperty("nickname"),
-        (Long) entity.getProperty("latesttime"),
-        (String) entity.getProperty("id")
-       ));
+      conversations.add( getConversation( (String) entity.getProperty("convid") ) );
     }
 
     return conversations;

@@ -35,11 +35,12 @@ public class ChatManagerServlet extends HttpServlet{
 
     // Gets all conversations of the current user
     if( request.getPathInfo().equals( "/conversations/" ) ){
+      response.setContentType("application/json");
       String email = userService.getCurrentUser().getEmail();
-      Gson gson = new Gson();
       List<Conversation> conversations = datastore.getAllConversations( email );
 
-      response.getOutputStream().print(gson.toJson(conversations));
+      Gson gson = new Gson();
+      response.getOutputStream().println(gson.toJson(conversations));
     }
   }
 
@@ -81,6 +82,9 @@ public class ChatManagerServlet extends HttpServlet{
       for( String invitee : inviteesList ){
         datastore.addPersonToConversation(currConv, invitee);
       }
+
+      System.out.println("Nickname : " + nicknameConv);
+      System.out.println("Invitees : " + inviteesList.toString());
     }
   }
 }
