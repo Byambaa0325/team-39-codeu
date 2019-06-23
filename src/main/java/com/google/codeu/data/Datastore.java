@@ -319,7 +319,7 @@ public class Datastore {
   */
   public List<Conversation> getAllConversations(String email){
     Query query = new Query("UserConversation")
-      .setFilter( new FilterPredicate( "email", FilterOperator.EQUAL, email ) );
+      .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
     
     PreparedQuery results = datastore.prepare(query);
     List<Conversation> conversations = new ArrayList<Conversation>();
