@@ -33,6 +33,7 @@ public class ChatManagerServlet extends HttpServlet{
       return;
     }
 
+    // Gets all conversations of the current user
     if( request.getPathInfo().equals( "/conversations/" ) ){
       String email = userService.getCurrentUser().getEmail();
       Gson gson = new Gson();

@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -300,5 +302,36 @@ public class Datastore {
       (Long) convEntity.getProperty("latesttime"),
       (String) convEntity.getProperty("id")
     );
+  }
+
+  /*
+  * Adds person to Conversation
+  */
+  public void addPersonToConversation(Conversation conversation, String email){
+    Entity entity = new Entity("UserConversation");
+    entity.setProperty("user", email);
+    entity.setProperty("convid", conversation.getIdAsString());
+    datastore.put( entity );
+  }
+
+  /*
+  * Gets all Conversation of the current user
+  */
+  public List<Conversation> getAllConversations(String email){
+    Query query = new Query("UserConversation")
+      .setFilter( new FilterPredicate( "email", FilterOperator.EQUAL, email ) );
+    
+    PreparedQuery results = datastore.prepare(query);
+    List<Conversation> conversations = new ArrayList<Conversation>();
+
+    for( Entity entity : results.asIterable() ){
+      conversations.add( new Conversation( 
+        (String) entity.getProperty("nickname"),
+        (Long) entity.getProperty("latesttime"),
+        (String) entity.getProperty("id")
+       ));
+    }
+
+    return conversations;
   }
 }
