@@ -12,7 +12,7 @@
       <div class="dropdown">
         <button class="dropbtn">New conversation</button>
         <div class="dropdown-content">
-          <form action="/chat/requests" method="POST">
+          <form action="/chat/new/" method="POST">
             <input type="text" name="nickname" placeholder="Nickname">
             <input type="text" name="invitee" placeholder="Invitee email(s)">
             <button>Submit</button>
