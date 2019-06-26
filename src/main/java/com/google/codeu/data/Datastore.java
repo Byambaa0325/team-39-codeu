@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +41,43 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
+  /** Retrieves all articles and score them. Then, put
+  the score in datastore indexed by article's id*/
+  public void scoreArticles(){
+    List<Article> articles = getAllArticles();
+
+    for (Article article : articles.asIterable()) {
+    Document doc = Document.newBuilder()
+        .setContent(article.getBody()).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+
+    Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
+    articleScoreEntity.setProperty("score", score);
+    datastore.put(articleScoreEntity);
+    }
+  }
+
+  public float getScoreById(String id){
+    Query query =
+            new Query("SentimentScore")
+                    .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    float score;
+    for( Entity entity : results.asIterable()){
+      try{
+        score = (float) entity.getProperty("score");
+
+      } catch (Exception e) {
+        System.err.println("Error reading score.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return score;
+  }
   /** Fetches markers from Datastore. */
   public List<Marker> getMarkers() {
     List<Marker> markers = new ArrayList<>();
