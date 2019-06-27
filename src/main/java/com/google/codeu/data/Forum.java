@@ -11,14 +11,13 @@ public class Forum {
     private List<String> keywords;
     private List<UUID> articleIds;
 
-
-    public Forum(UUID id, String title, List<User> owners, List<User> members, List<String> keywords, List<ForumSection> sections) {
+    public Forum(UUID id, String title, List<User> owners, List<User> members, List<String> keywords, List<UUID> articleIds) {
         this.id = id;
         this.title = title;
         this.owners = owners;
         this.members = members;
         this.keywords = keywords;
-        this.sections = sections;
+        this.articleIds = articleIds;
     }
 
     public UUID getId() {
@@ -61,13 +60,11 @@ public class Forum {
         this.keywords = keywords;
     }
 
-    public List<ForumSection> getSections() {
-        return sections;
+    public List<UUID> getArticleIds() {
+        return articleIds;
     }
 
-    public void setSections(List<ForumSection> sections) {
-        this.sections = sections;
+    public void setArticleIds(List<UUID> articleIds) {
+        this.articleIds = articleIds;
     }
-
-
 }
