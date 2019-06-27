@@ -26,6 +26,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,17 +48,24 @@ public class Datastore {
   public void scoreArticles(){
     List<Article> articles = getAllArticles();
 
-    for (Article article : articles.asIterable()) {
+    for (Article article : articles) {
     Document doc = Document.newBuilder()
         .setContent(article.getBody()).setType(Document.Type.PLAIN_TEXT).build();
-    LanguageServiceClient languageService = LanguageServiceClient.create();
-    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    float score = sentiment.getScore();
-    languageService.close();
 
-    Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
-    articleScoreEntity.setProperty("score", score);
-    datastore.put(articleScoreEntity);
+    LanguageServiceClient languageService;
+      try {
+        languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+
+        float score = sentiment.getScore();
+        languageService.close();
+
+        Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
+        articleScoreEntity.setProperty("score", score);
+        datastore.put(articleScoreEntity);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -65,7 +74,7 @@ public class Datastore {
             new Query("SentimentScore")
                     .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
-    float score;
+    float score = 0;
     for( Entity entity : results.asIterable()){
       try{
         score = (float) entity.getProperty("score");
