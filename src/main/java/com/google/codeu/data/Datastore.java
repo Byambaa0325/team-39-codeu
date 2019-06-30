@@ -330,8 +330,8 @@ public class Datastore {
   public void storeForum(Forum forum) {
     Entity forumEntity = new Entity("Forum", forum.getId().toString());
     forumEntity.setProperty("title", forum.getTitle());
-    forumEntity.setProperty("owners", forum.getOwners());
-    forumEntity.setProperty("members", forum.getMembers());
+    forumEntity.setProperty("ownersId", forum.getOwnersId());
+    forumEntity.setProperty("membersId", forum.getMembersId());
     forumEntity.setProperty("keywords", forum.getKeywords());
     forumEntity.setProperty("articleIds", forum.getArticleIds());
 
@@ -350,10 +350,10 @@ public class Datastore {
     Entity forumEntity = datastore.get(key);
     UUID uuid = UUID.fromString(id);
     String title = (String) forumEntity.getProperty("title");
-    List<User> owners = (List<User>) forumEntity.getProperty("owners");
-    List<User> members = (List<User>) forumEntity.getProperty("members");
+    List<String> owners = (List<String>) forumEntity.getProperty("ownersId");
+    List<String> members = (List<String>) forumEntity.getProperty("membersId");
     List<String> keywords = (List<String>) forumEntity.getProperty("keywords");
-    List<UUID> articleIds = (List<UUID>) forumEntity.getProperty("articleIds");
+    List<String> articleIds = (List<String>) forumEntity.getProperty("articleIds");
 
     return new Forum(uuid, title, owners, members, keywords, articleIds);
   }
