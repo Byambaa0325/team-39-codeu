@@ -26,6 +26,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -46,26 +48,33 @@ public class Datastore {
   public void scoreArticles(){
     List<Article> articles = getAllArticles();
 
-    for (Article article : articles.asIterable()) {
-    Document doc = Document.newBuilder()
-        .setContent(article.getBody()).setType(Document.Type.PLAIN_TEXT).build();
-    LanguageServiceClient languageService = LanguageServiceClient.create();
-    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    float score = sentiment.getScore();
-    languageService.close();
+    for (Article article : articles) {
+      Document doc = Document.newBuilder()
+      .setContent(article.getBody()).setType(Document.Type.PLAIN_TEXT).build();
 
-    Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
-    articleScoreEntity.setProperty("score", score);
-    datastore.put(articleScoreEntity);
+      LanguageServiceClient languageService;
+      try {
+        languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+
+        float score = sentiment.getScore();
+        languageService.close();
+
+        Entity articleScoreEntity = new Entity("SentimentScore", article.getId().toString());
+        articleScoreEntity.setProperty("score", score);
+        datastore.put(articleScoreEntity);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
   public float getScoreById(String id){
     Query query =
-            new Query("SentimentScore")
-                    .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id));
+    new Query("SentimentScore")
+    .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
-    float score;
+    float score = 0;
     for( Entity entity : results.asIterable()){
       try{
         score = (float) entity.getProperty("score");
@@ -127,17 +136,17 @@ public class Datastore {
   }
 
   /**
-   * Gets messages posted by a specific user.
-   *
-   * @return a list of messages posted by the user, or empty list if user has
-   * never posted a message. List is sorted by time descending.
-   */
+  * Gets messages posted by a specific user.
+  *
+  * @return a list of messages posted by the user, or empty list if user has
+  * never posted a message. List is sorted by time descending.
+  */
   public List<Message> getMessages(String user) {
 
     Query query =
-      new Query("Message")
-        .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    new Query("Message")
+    .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+    .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -204,7 +213,7 @@ public class Datastore {
   */
   public User getUser(String email) {
     Query query = new Query("User")
-      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
 
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
@@ -230,16 +239,16 @@ public class Datastore {
   }
 
   /**
-   * Gets article of specific id.
-   *
-   * @return a single-element list of article posted with the id, or empty list
-   * if article with the id was never posted.
-   */
+  * Gets article of specific id.
+  *
+  * @return a single-element list of article posted with the id, or empty list
+  * if article with the id was never posted.
+  */
   public List<Article> getArticleById(String id) {
 
     Query query =
-            new Query("Article")
-                    .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
+    new Query("Article")
+    .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -247,17 +256,17 @@ public class Datastore {
   }
 
   /**
-   * Gets articles posted by a specific user.
-   *
-   * @return a list of articles posted by the user, or empty list if user has
-   * never posted a article. List is sorted by time descending.
-   */
+  * Gets articles posted by a specific user.
+  *
+  * @return a list of articles posted by the user, or empty list if user has
+  * never posted a article. List is sorted by time descending.
+  */
   public List<Article> getArticles(String user) {
 
     Query query =
-            new Query("Article")
-                    .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-                    .addSort("timestamp", SortDirection.DESCENDING);
+    new Query("Article")
+    .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+    .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -265,26 +274,26 @@ public class Datastore {
   }
 
   /**
-   * Gets all articles stored in Datastore
-   *
-   * @return a list of articles posted sorted by timestamp descending, or empty list if
-   * there is no articles stored
-   */
+  * Gets all articles stored in Datastore
+  *
+  * @return a list of articles posted sorted by timestamp descending, or empty list if
+  * there is no articles stored
+  */
   public List<Article> getAllArticles(){
 
     Query query =
-            new Query("Article").addSort("timestamp", SortDirection.DESCENDING);
+    new Query("Article").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     return readArticlesFromQuery(results);
   }
 
   /**
-   * Extracts all articles from query
-   *
-   * @return a list of articles, or empty list if
-   * the query is empty
-   */
+  * Extracts all articles from query
+  *
+  * @return a list of articles, or empty list if
+  * the query is empty
+  */
   private List<Article> readArticlesFromQuery(PreparedQuery results){
     List<Article> articles = new ArrayList<>();
 
