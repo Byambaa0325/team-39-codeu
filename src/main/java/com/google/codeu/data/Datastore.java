@@ -16,26 +16,15 @@
 
 package com.google.codeu.data;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -343,6 +332,26 @@ public class Datastore {
     return articles;
   }
 
+  public List<Forum> getAllForumList(){
+    Query query =
+            new Query("Forum");
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Forum> forums = new ArrayList<>();
+    for(Entity forumEntity : results.asIterable()) {
+      String idString = forumEntity.getKey().getName();
+      UUID uuid = UUID.fromString(idString);
+      String title = (String) forumEntity.getProperty("title");
+      List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+      List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+      List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+      List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
+      Forum forum = new Forum(uuid, title, owners, members, keywords, articleIds);
+      forums.add(forum);
+    }
+    return forums;
+  }
+
   /**
    * Stores a forum in the Datastore
    *
@@ -351,10 +360,10 @@ public class Datastore {
   public void storeForum(Forum forum) {
     Entity forumEntity = new Entity("Forum", forum.getId().toString());
     forumEntity.setProperty("title", forum.getTitle());
-    forumEntity.setProperty("ownersId", forum.getOwnersId());
-    forumEntity.setProperty("membersId", forum.getMembersId());
-    forumEntity.setProperty("keywords", forum.getKeywords());
-    forumEntity.setProperty("articleIds", forum.getArticleIds());
+    forumEntity.setProperty("ownersId", String.join(",",forum.getOwnersId()));
+    forumEntity.setProperty("membersId", String.join(",",forum.getMembersId()));
+    forumEntity.setProperty("keywords", String.join(",",forum.getKeywords()));
+    forumEntity.setProperty("articleIds", String.join(",",forum.getArticleIds()));
 
     datastore.put(forumEntity);
   }
@@ -371,10 +380,10 @@ public class Datastore {
     Entity forumEntity = datastore.get(key);
     UUID uuid = UUID.fromString(id);
     String title = (String) forumEntity.getProperty("title");
-    List<String> owners = (List<String>) forumEntity.getProperty("ownersId");
-    List<String> members = (List<String>) forumEntity.getProperty("membersId");
-    List<String> keywords = (List<String>) forumEntity.getProperty("keywords");
-    List<String> articleIds = (List<String>) forumEntity.getProperty("articleIds");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
 
     return new Forum(uuid, title, owners, members, keywords, articleIds);
   }
