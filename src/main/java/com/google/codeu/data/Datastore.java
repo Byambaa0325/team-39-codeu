@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -317,5 +320,41 @@ public class Datastore {
       }
     }
     return articles;
+  }
+
+  /**
+   * Stores a forum in the Datastore
+   *
+   * @param forum forum to be stored
+   */
+  public void storeForum(Forum forum) {
+    Entity forumEntity = new Entity("Forum", forum.getId().toString());
+    forumEntity.setProperty("title", forum.getTitle());
+    forumEntity.setProperty("owners", forum.getOwners());
+    forumEntity.setProperty("members", forum.getMembers());
+    forumEntity.setProperty("keywords", forum.getKeywords());
+    forumEntity.setProperty("articleIds", forum.getArticleIds());
+
+    datastore.put(forumEntity);
+  }
+
+  /**
+   * Retrieves a Forum by string id
+   *
+   * @param id id of a forum
+   * @return Forum object
+   * @throws EntityNotFoundException when no such forum with id is found
+   */
+  public Forum getForum(String id) throws EntityNotFoundException {
+    Key key = KeyFactory.createKey("Forum", id);
+    Entity forumEntity = datastore.get(key);
+    UUID uuid = UUID.fromString(id);
+    String title = (String) forumEntity.getProperty("title");
+    List<User> owners = (List<User>) forumEntity.getProperty("owners");
+    List<User> members = (List<User>) forumEntity.getProperty("members");
+    List<String> keywords = (List<String>) forumEntity.getProperty("keywords");
+    List<UUID> articleIds = (List<UUID>) forumEntity.getProperty("articleIds");
+
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
   }
 }
