@@ -67,4 +67,8 @@ public class Forum {
     public void setArticleIds(List<UUID> articleIds) {
         this.articleIds = articleIds;
     }
+
+    public void addArticle(UUID id){articleIds.add(id);}
+
+    public void removeArticle(UUID id){articleIds.remove(id);}
 }
