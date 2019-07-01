@@ -1,4 +1,5 @@
 #chat-wrapper{
+  display: flex;
   height: 800px;
   width: 100%;
   border: 1px black solid;
@@ -6,7 +7,7 @@
 
 #conversations{
   height: 800px;
-  width: 200px;
+  width: 300px;
   border-right: 1px black solid;
   overflow-y: scroll;
   padding-left: 8px;
