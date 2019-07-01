@@ -362,4 +362,29 @@ public class Datastore {
     entity.setProperty("timestamp", chatMsg.getTimestamp());
     datastore.put(entity);
   }
+
+  /*
+  * Gets messages of conversation
+  */
+  public List <ChatMessage> getChatMessages(String email, String convid){
+    List <ChatMessage> messages = new ArrayList<>();
+    if( checkUserIsInConversation(email, convid) == false ){
+      return messages;
+    }
+
+    Query query = new Query("ChatMessage")
+      .setFilter(new FilterPredicate("convid", FilterOperator.EQUAL, convid));
+    PreparedQuery results = datastore.prepare(query);
+
+    for( Entity entity : results.asIterable()) {
+      messages.add( new ChatMessage(
+          (String) entity.getProperty("user"),
+          (String) entity.getProperty("message"),
+          (String) entity.getProperty("convid"),
+          (Long) entity.getProperty("timestamp")
+        ));
+    }
+
+    return messages;
+  }
 }

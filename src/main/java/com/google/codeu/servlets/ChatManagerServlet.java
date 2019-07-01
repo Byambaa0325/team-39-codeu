@@ -5,6 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.files.FileServicePb.ListDirRequest;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -45,6 +47,19 @@ public class ChatManagerServlet extends HttpServlet{
       Gson gson = new Gson();
       response.getOutputStream().println(gson.toJson(conversations));
     }
+
+    // Gets all chat messages of the current user's convid
+    if( request.getPathInfo().equals( "/get/messages/" ) ){
+      response.setContentType("application/json");
+      String email = userService.getCurrentUser().getEmail();
+      String convid = (String) request.getParameter("convid");
+      List<ChatMessage> messages = datastore.getChatMessages( email, convid );
+
+      Gson gson = new Gson();
+      response.getOutputStream().println(gson.toJson(messages));
+    }
+
+    
   }
 
   @Override 
