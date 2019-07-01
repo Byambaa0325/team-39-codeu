@@ -83,8 +83,23 @@ function showChat( id ){
 }
 
 function sendMessage(){
-  console.log("Sending");
+  let msgInputDom = document.getElementById('message-message');
+  let convid = document.getElementById('message-convid').value;
+
+  console.log('Sending message');
+
+  fetch( '/chat/new/message/', {
+    method: 'POST',
+    body: JSON.stringify({
+      convid: convid, 
+      message: msgInputDom.value
+    })
+  }).then(() => {
+    msgInputDom.value = '';
+    loadChat( convid );
+  });
 }
+
 
 function buildChat(){
   buildConversations();

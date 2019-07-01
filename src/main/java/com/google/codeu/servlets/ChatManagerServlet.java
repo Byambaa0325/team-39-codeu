@@ -56,10 +56,10 @@ public class ChatManagerServlet extends HttpServlet{
       response.sendRedirect("/index.html");
       return;
     }
+    
+    JSONParser jsonParser = new JSONParser();
 
     if( request.getPathInfo().equals( "/new/conversation/" ) ){
-      JSONParser jsonParser = new JSONParser();
-
       try {
         JSONObject jsonObject = (JSONObject) jsonParser.parse( request.getReader().readLine() );
         if( jsonObject.get("nickname") == null || jsonObject.get("invitee") == null ){
@@ -94,6 +94,25 @@ public class ChatManagerServlet extends HttpServlet{
 
         System.out.println("Nickname : " + nicknameConv);
         System.out.println("Invitees : " + inviteesList.toString());
+      } catch( ParseException e){
+        e.printStackTrace();
+      }
+    }
+
+    if( request.getPathInfo().equals( "/new/message/" ) ){
+      try {
+        JSONObject jsonObject = (JSONObject) jsonParser.parse( request.getReader().readLine() );
+        System.out.println( jsonObject.toString() );
+        if( jsonObject.get("convid") == null || jsonObject.get("message") == null ){
+          return;
+        }
+
+        String userEmail = userService.getCurrentUser().getEmail();
+        String convid = (String) jsonObject.get("convid");
+        String msg = (String) jsonObject.get("message");
+        Long timestamp = (new Date()).getTime();
+
+        System.out.println("Storing " + convid + " " + msg);
       } catch( ParseException e){
         e.printStackTrace();
       }
