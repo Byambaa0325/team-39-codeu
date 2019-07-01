@@ -78,6 +78,8 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
+
+  document.getElementById('message-convid').value = id;
 }
 
 function sendMessage(){
