@@ -4,7 +4,7 @@ function createNewConversation(){
 
   console.log('Doing POST');
 
-  fetch( '/chat/new/', {
+  fetch( '/chat/new/conversation/', {
     method: 'POST',
     body: JSON.stringify({
       nickname: nicknameDom.value, 

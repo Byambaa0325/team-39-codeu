@@ -57,7 +57,7 @@ public class ChatManagerServlet extends HttpServlet{
       return;
     }
 
-    if( request.getPathInfo().equals( "/new/" ) ){
+    if( request.getPathInfo().equals( "/new/conversation/" ) ){
       JSONParser jsonParser = new JSONParser();
 
       try {
