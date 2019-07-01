@@ -19,7 +19,7 @@ function createNewConversation(){
 
 function buildConversations(){
   let conversatoinDom = document.getElementById('conversation-wrapper');
-  let chatDom = document.getElementById('chat');
+  let chatDom = document.getElementById('chat-container');
   fetch( 'chat/conversations/' )
     .then( response => response.json() )
     .then( data => {
@@ -78,6 +78,10 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
+}
+
+function sendMessage(){
+  console.log("Sending");
 }
 
 function buildChat(){
