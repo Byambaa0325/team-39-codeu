@@ -37,7 +37,7 @@ public class ChatManagerServlet extends HttpServlet{
     }
 
     // Gets all conversations of the current user
-    if( request.getPathInfo().equals( "/conversations/" ) ){
+    if( request.getPathInfo().equals( "/get/conversations/" ) ){
       response.setContentType("application/json");
       String email = userService.getCurrentUser().getEmail();
       List<Conversation> conversations = datastore.getAllConversations( email );

@@ -20,7 +20,7 @@ function createNewConversation(){
 function buildConversations(){
   let conversatoinDom = document.getElementById('conversation-wrapper');
   let chatDom = document.getElementById('chat-container');
-  fetch( 'chat/conversations/' )
+  fetch( 'chat/get/conversations/' )
     .then( response => response.json() )
     .then( data => {
       // Sort the conversations by the most recent
