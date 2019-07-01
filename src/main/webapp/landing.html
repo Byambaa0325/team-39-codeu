@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hikers</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  <script src="scrolling.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript">
+     $(document).on('click','.navbar-collapse.in',function(e) {
+    if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
+        $(this).collapse('hide');
+    }
+    });
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand"></a>
+      </div><!---End of navbar header-->
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#connect">Connect</a></li>
+        </ul>
+      </div><!--End of navbar collapse--->
+    </div><!---End of container-->
+  </nav><!-- end of nav-->
+
+    <div id="home">
+      <img src="img/desktop.png" class="banner">
+    </div>
+
+    <div id="about" class="container-fluid text-center">
+      <h1>Welcome to the Hikers Website</h1>
+      <h3>Our website will be a hub for hikers around the world. Specifically, we will connect local hiking communities.
+      Our users will be able to navigate to their region by the map and select their intended region</h3>
+      <br><br>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Each year, more and more people go, and although there are no formal figures, it’s estimated that [US] National Park
+            usage increases each year and that these days probably some 35 million people go hiking each year in our 14 National Parks.
+            Of those, around 10 million go regularly – at least once a month</p>
+        </div>
+        <div class="col-md-6">
+          <img src="img/code.png" id="code">
+        </div>
+      </div><!---End of row--->
+      <br>
+      <h3>"A walk in nature walks the soul back home" - Mary Davis</h3>
+    </div> <!--End of container---->
+    <img src="img/charts.png" class="banner">
+
+    <div id="features" class="container-fluid text-center">
+      <h2>Get to know our Features</h2>
+      <div class="row">
+        <div class="col-sm-4">
+          <img src="img/coollogo.jpg" id="icon">
+          <h3>Explore trails</h3>
+        </div>
+        <div class="col-sm-4">
+          <img src="img/icons/calendar.png" id="icon">
+          <h3>Hiking communities</h3>
+        </div>
+        <div class="col-sm-4">
+          <img src="img/icons/phone.png" id="icon">
+          <h3>Chat rooms for everyone</h3>
+        </div>
+      </div><!--End of row--->
+      <br>
+      <h3>If our website was available, the user would have been
+        able to navigate to the city and see the region with markers.
+        User will be able to instantly get an oversight of popular
+        destinations and hiking spots. Ideally, the user will be
+        presented with the most popular posts </h3>
+
+    </div><!---End of container--->
+    <img src="img/people.png" class="banner">
+    <img src="img/social.png" class="banner">
+    <footer id="connect" class="container-fluid text-center">
+      <div class="row">
+        <h2>Connect</h2>
+        <div class="social">
+          <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+
+        </div>
+      </div><!---End of row--->
+    </footer><!--End of container-->
+
+</body>
+</html>
