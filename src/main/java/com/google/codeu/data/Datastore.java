@@ -22,9 +22,11 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
+import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -329,5 +331,24 @@ public class Datastore {
     }
 
     return conversations;
+  }
+
+  /*
+  * Checks if user is in the conversation
+  */
+  public boolean checkUserIsInConversation(String email, String convid){
+    Query query = new Query("UserConversation")
+      .setFilter(
+        CompositeFilterOperator.and(
+          new FilterPredicate( "user", FilterOperator.EQUAL, email ),
+          new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
+        )
+      );
+    
+    PreparedQuery results = datastore.prepare(query);
+    System.out.println( results.countEntities() );
+    Entity entity = results.asSingleEntity();
+
+    return entity != null;
   }
 }

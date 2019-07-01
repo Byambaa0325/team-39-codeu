@@ -112,6 +112,11 @@ public class ChatManagerServlet extends HttpServlet{
         String msg = (String) jsonObject.get("message");
         Long timestamp = (new Date()).getTime();
 
+        if( datastore.checkUserIsInConversation(userEmail, convid) == false ){
+          System.out.println("Wrong conversation.");
+          return;
+        }
+
         System.out.println("Storing " + convid + " " + msg);
       } catch( ParseException e){
         e.printStackTrace();
