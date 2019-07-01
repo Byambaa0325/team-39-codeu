@@ -346,9 +346,20 @@ public class Datastore {
       );
     
     PreparedQuery results = datastore.prepare(query);
-    System.out.println( results.countEntities() );
     Entity entity = results.asSingleEntity();
 
     return entity != null;
+  }
+
+  /*
+  * Store chat message
+  */
+  public void storeChatMessage(ChatMessage chatMsg){
+    Entity entity = new Entity("ChatMessage");
+    entity.setProperty("user", chatMsg.getUser());
+    entity.setProperty("message", chatMsg.getMessage());
+    entity.setProperty("convid", chatMsg.getConvid());
+    entity.setProperty("timestamp", chatMsg.getTimestamp());
+    datastore.put(entity);
   }
 }

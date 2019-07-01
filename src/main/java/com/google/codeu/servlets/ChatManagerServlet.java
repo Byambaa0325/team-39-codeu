@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.codeu.data.Conversation;
-import com.google.codeu.data.Datastore;
+import com.google.codeu.data.*;
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -110,7 +109,6 @@ public class ChatManagerServlet extends HttpServlet{
         String userEmail = userService.getCurrentUser().getEmail();
         String convid = (String) jsonObject.get("convid");
         String msg = (String) jsonObject.get("message");
-        Long timestamp = (new Date()).getTime();
 
         if( datastore.checkUserIsInConversation(userEmail, convid) == false ){
           System.out.println("Wrong conversation.");
@@ -124,6 +122,7 @@ public class ChatManagerServlet extends HttpServlet{
         }
 
         System.out.println("Storing " + convid + " " + msg);
+        datastore.storeChatMessage( new ChatMessage( userEmail, msg, convid ) );
       } catch( ParseException e){
         e.printStackTrace();
       }
