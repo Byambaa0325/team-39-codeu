@@ -117,6 +117,12 @@ public class ChatManagerServlet extends HttpServlet{
           return;
         }
 
+        msg = Jsoup.clean( msg, Whitelist.none() );
+        if( msg.length() == 0 ){
+          System.out.println("Empty message, skipping");
+          return;
+        }
+
         System.out.println("Storing " + convid + " " + msg);
       } catch( ParseException e){
         e.printStackTrace();
