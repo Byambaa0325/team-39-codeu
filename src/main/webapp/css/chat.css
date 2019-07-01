@@ -35,6 +35,15 @@
   padding-right: 8px;
 }
 
+#chat-container {
+  height: 760px;
+  overflow-y: scroll;
+}
+
+#message-input {
+  border-top: 1px black solid;
+}
+
 /* Dropdown CSS */
 .dropbtn {
   background-color: deepskyblue;

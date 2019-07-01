@@ -28,7 +28,7 @@
       </div>
       <div id="chat">
         <div id="chat-container"></div>
-        <div id="message-input" class="message-input">
+        <div id="message-input">
           <input type="text" id="message-convid" value="" hidden>
           <input type="text" id="message-message">
           <button onclick="sendMessage()">Send</button>
