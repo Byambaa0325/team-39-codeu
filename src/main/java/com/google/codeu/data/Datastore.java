@@ -16,11 +16,7 @@
 
 package com.google.codeu.data;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.cloud.language.v1.Document;
@@ -28,11 +24,7 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -178,23 +170,60 @@ public class Datastore {
     List<Message> messages = new ArrayList<>();
 
     for( Entity entity : results.asIterable()){
-      try{
-
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String user = (String) entity.getProperty("user");
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-
-        Message message = new Message(id, user, text, timestamp);
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
+     messages.add(entityToMessage(entity));
     }
     return messages;
+  }
+
+  /**
+   * Read messages of a post
+   *
+   * @param comments
+   * @return
+   * @throws EntityNotFoundException
+   */
+  public List<Message> getCommentsPost(List<String> comments) throws EntityNotFoundException {
+    List<Entity> result= queryByList(comments,"Message");
+    return readMessagesFromList(result);
+  }
+
+  /**
+   * List of entities to messages objects
+   *
+   * @param results
+   * @return
+   */
+  private List<Message> readMessagesFromList(List<Entity> results){
+    List<Message> messages = new ArrayList<>();
+
+    for( Entity entity : results){
+      messages.add(entityToMessage(entity));
+    }
+    return messages;
+  }
+
+  /**
+   * Builds a message from entity
+   *
+   * @param entity
+   * @return
+   */
+  private Message entityToMessage(Entity entity){
+    Message message = null;
+    try{
+      String idString = entity.getKey().getName();
+      UUID id = UUID.fromString(idString);
+      String user = (String) entity.getProperty("user");
+      String text = (String) entity.getProperty("text");
+      long timestamp = (long) entity.getProperty("timestamp");
+      message = new Message(id, user, text, timestamp);
+      return message;
+    } catch (Exception e) {
+      System.err.println("Error reading message.");
+      System.err.println(entity.toString());
+      e.printStackTrace();
+    }
+    return message;
   }
 
   /** Stores the User in Datastore. */
@@ -298,24 +327,138 @@ public class Datastore {
     List<Article> articles = new ArrayList<>();
 
     for( Entity entity : results.asIterable()){
-      try{
-
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String authors = (String) entity.getProperty("authors");
-        String tags = (String) entity.getProperty("tags");
-        String header = (String) entity.getProperty("header");
-        String body = (String) entity.getProperty("body");
-        long timestamp = (long) entity.getProperty("timestamp");
-
-        Article article = new Article(id, authors, tags, header, body, timestamp);
-        articles.add(article);
-      } catch (Exception e) {
-        System.err.println("Error reading article.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
+      articles.add(entityToArticle(entity));
     }
     return articles;
+  }
+
+  public List<Forum> getAllForumList(){
+    Query query =
+            new Query("Forum");
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Forum> forums = new ArrayList<>();
+    for(Entity forumEntity : results.asIterable()) {
+      String idString = forumEntity.getKey().getName();
+      UUID uuid = UUID.fromString(idString);
+      String title = (String) forumEntity.getProperty("title");
+      List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+      List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+      List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+      List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
+      Forum forum = new Forum(uuid, title, owners, members, keywords, articleIds);
+      forums.add(forum);
+    }
+    return forums;
+  }
+
+  /**
+   * Stores a forum in the Datastore
+   *
+   * @param forum forum to be stored
+   */
+  public void storeForum(Forum forum) {
+    Entity forumEntity = new Entity("Forum", forum.getId().toString());
+    forumEntity.setProperty("title", forum.getTitle());
+    forumEntity.setProperty("ownersId", String.join(",",forum.getOwnersId()));
+    forumEntity.setProperty("membersId", String.join(",",forum.getMembersId()));
+    forumEntity.setProperty("keywords", String.join(",",forum.getKeywords()));
+    forumEntity.setProperty("articleIds", String.join(",",forum.getArticleIds()));
+
+    datastore.put(forumEntity);
+  }
+
+  /**
+   * Retrieves a Forum by string id
+   *
+   * @param id id of a forum
+   * @return Forum object
+   * @throws EntityNotFoundException when no such forum with id is found
+   */
+  public Forum getForum(String id) throws EntityNotFoundException {
+    Key key = KeyFactory.createKey("Forum", id);
+    Entity forumEntity = datastore.get(key);
+    UUID uuid = UUID.fromString(id);
+    String title = (String) forumEntity.getProperty("title");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
+
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
+  }
+
+  /**
+   * Read articles of a forum
+   *
+   * @param forum
+   * @return
+   * @throws EntityNotFoundException
+   */
+  public List<Article> getArticlesOfForum(Forum forum) throws EntityNotFoundException {
+    List<Entity> result= queryByList(forum.getArticleIds(),"Article");
+    return readArticlesFromList(result);
+  }
+
+  /**
+   * Utility code to query a list of ids of a kind
+   *
+   * @param ids ids to match
+   * @param kind kind in datastore
+   * @return resulting entities as a list
+   * @throws EntityNotFoundException id has not been found
+   */
+  private List<Entity> queryByList(List<String> ids,String kind) throws EntityNotFoundException {
+    List<Entity> results = new ArrayList<>();
+    for (String id : ids){
+      Key key = KeyFactory.createKey(kind,id);
+      Entity entity = datastore.get(key);
+      results.add(entity);
+    }
+    return results;
+  }
+
+  /**
+   * List of entities to articles objects
+   *
+   * @param results
+   * @return
+   */
+  private List<Article> readArticlesFromList(List<Entity> results){
+    List<Article> articles = new ArrayList<>();
+
+    for( Entity entity : results){
+      articles.add(entityToArticle(entity));
+    }
+    return articles;
+  }
+
+  /**
+   * Builds a article from entity
+   *
+   * @param entity
+   * @return
+   */
+  private Article entityToArticle(Entity entity){
+    Article article = null;
+    try{
+
+      String idString = entity.getKey().getName();
+      UUID id = UUID.fromString(idString);
+      String authors = (String) entity.getProperty("authors");
+      String tags = (String) entity.getProperty("tags");
+      String header = (String) entity.getProperty("header");
+      String body = (String) entity.getProperty("body");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+
+      article = new Article(id, authors, tags, header, body, timestamp);
+      return article;
+    } catch (Exception e) {
+      System.err.println("Error reading article.");
+      System.err.println(entity.toString());
+      e.printStackTrace();
+    }
+    return article;
   }
 }
