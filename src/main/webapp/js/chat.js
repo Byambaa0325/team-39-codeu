@@ -32,6 +32,7 @@ function buildConversations(){
         }
       });
 
+      conversatoinDom.innerHTML = '';
       for( let conv of data ){
         conversatoinDom.appendChild( buildConversationDom(conv) );
         chatDom.appendChild( buildChatDom(conv) );
