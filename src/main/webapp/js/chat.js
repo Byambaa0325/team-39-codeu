@@ -62,6 +62,10 @@ function buildChatDom( conv ){
   dom.classList.add('chat');
   dom.style.display = 'none';
   dom.id = `chat-${conv.id}`;
+  dom.innerHTML = `
+    <div class="chat-header">${conv.nickname}</div>
+    <div class="chat-container">Loading...</div>
+  `;
   return dom;
 }
 
@@ -69,7 +73,13 @@ function loadChat( id ){
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
 
-  dom.innerHTML = `This is chat ${id}`;
+  let domChatEl = dom.getElementsByClassName('chat-container')[0];
+  fetch( `/chat/get/messages/?convid=${id}` )
+    .then( response => response.json() )
+    .then( data => {
+      console.log(data);
+      domChatEl.innerHTML = data;
+    });
 }
 
 function showChat( id ){
