@@ -13,7 +13,7 @@ function createNewConversation(){
   }).then(() => {
     nicknameDom.value = '';
     inviteesDom.value = '';
-    buildConversations();
+    setTimeout( buildConversations(), 500);
   });
 }
 
