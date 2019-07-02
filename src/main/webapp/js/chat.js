@@ -78,7 +78,12 @@ function loadChat( id ){
     .then( response => response.json() )
     .then( data => {
       console.log(data);
-      domChatEl.innerHTML = data;
+      data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
+      domChatEl.innerHTML = '';
+      for( let message of data ){
+        let currDom = buildMessageDom(message);
+        domChatEl.appendChild(currDom);
+      }
     });
 }
 
@@ -89,8 +94,18 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
-
   document.getElementById('message-convid').value = id;
+}
+
+function buildMessageDom( message ){
+  let dom = document.createElement('div');
+  dom.classList.add('chat-message-wrapper');
+  dom.innerHTML = `
+    <p class="chat-user">${message.user}</p>
+    <p class="chat-message">${message.message}</p>
+    <p class="chat-date">${new Date(message.timestamp).toLocaleString()}</p>
+  `
+  return dom;
 }
 
 function sendMessage(){
