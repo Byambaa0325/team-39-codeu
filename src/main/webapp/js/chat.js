@@ -77,7 +77,6 @@ function loadChat( id ){
   fetch( `/chat/get/messages/?convid=${id}` )
     .then( response => response.json() )
     .then( data => {
-      console.log(data);
       data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
       domChatEl.innerHTML = '';
       for( let message of data ){
