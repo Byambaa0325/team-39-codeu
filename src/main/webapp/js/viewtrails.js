@@ -1,4 +1,5 @@
 $(window).load(function(){
+  let map;
   function initTrails() {
     var mapOptions = {
       disableDoubleClickZoom: true,
@@ -7,26 +8,39 @@ $(window).load(function(){
       mapTypeId: 'terrain'
     };
 
-    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    var destinations = new google.maps.MVCArray();
-    destinations.push(new google.maps.LatLng(47.64, 107.061)); //icn
-    destinations.push(new google.maps.LatLng(47.8522, 106.759));
-    destinations.push(new google.maps.LatLng(47.920, 106.941));
-    destinations.push(new google.maps.LatLng(47.926079, 106.953844));
-    destinations.push(new google.maps.LatLng(47.77, 107.154));
-    destinations.push(new google.maps.LatLng(48.14, 108.26));
-
-    var polyline = new google.maps.Polyline({
-      path: destinations,
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    
+    fetchTrails();
+  }
+  function fetchTrails(){
+    fetch('/trails').then((response) => {
+      return response.json();
+    }).then((trails) => {
+      trails.forEach((trail) => {
+       createTrailForDisplay(trail.coordinates)
+      });
+    });
+  }
+  /** Creates a trail on map. */
+  function createTrailForDisplay(coordinates){
+    console.log(coordinates);
+    let arr = coordinates.split(',');
+    console.log(arr.length / 2);
+    let trail = new google.maps.MVCArray();
+    for (let i = 0; i < arr.length; i+=2) {
+      trail.push(new google.maps.LatLng(parseFloat(arr[i]), parseFloat(arr[i + 1])));
+    }
+    const poly = new google.maps.Polyline({
+      path: trail,
       editable: false,
       strokeColor: '#FF0000',
       strokeOpacity: 1.0,
       strokeWeight: 2,
       map: map
     });
-
-    polyline.setMap(map);
+    poly.setMap(map);
+    //click event -> jump to Article
+    //........
   }
   initTrails();
 

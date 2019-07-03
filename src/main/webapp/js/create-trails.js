@@ -9,13 +9,7 @@ $(window).load(function(){
 
     var map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    var destinations = new google.maps.MVCArray();
-    destinations.push(new google.maps.LatLng(47.64, 107.061)); //icn
-    destinations.push(new google.maps.LatLng(47.8522, 106.759));
-    destinations.push(new google.maps.LatLng(47.920, 106.941));
-
     var polyline = new google.maps.Polyline({
-      path: destinations,
       editable: true,
       strokeColor: '#FF0000',
       strokeOpacity: 1.0,
@@ -37,6 +31,37 @@ $(window).load(function(){
       var currentPath = polyline.getPath();
       currentPath.push(e.latLng);
     });
+
+    const containerDiv = document.getElementById('savepath');
+    const button = document.createElement('button');
+    button.appendChild(document.createTextNode('Submit'));
+    button.onclick = () => {
+      postTrail(polyline);
+    };
+    containerDiv.appendChild(button);
+  }
+
+  function postTrail(poly) {
+
+    var coordinate_poly = poly.getPath().getArray();
+    var newCoordinates_poly = [];
+    for (var i = 0; i < coordinate_poly.length; i++) {
+      lat_poly = coordinate_poly[i].lat();
+      lng_poly = coordinate_poly[i].lng();
+
+      newCoordinates_poly.push(lat_poly);
+      newCoordinates_poly.push(lng_poly);
+    }
+    var str_coordinates_poly = JSON.stringify(newCoordinates_poly);
+    var json_poly = "{\"coordinates\":" + str_coordinates_poly + "}";
+    document.getElementById('json_polyline').value = json_poly;
+    const params = new URLSearchParams();
+    params.append('coordinates', newCoordinates_poly);
+    fetch('/trails', {
+      method: 'POST',
+      body: params
+    });
+    window.location.replace("/explore.html");
   }
 
   /**
