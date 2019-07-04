@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Post extends Article {
-    private List<Message> comments;
+    private List<String> comments;
 
     public Post(String authors, String header, String body) {
         super(authors, header, body);
@@ -22,15 +22,15 @@ public class Post extends Article {
         comments = new ArrayList<>();
     }
 
-    public List<Message> getComments() {
+    public List<String> getComments() {
         return comments;
     }
 
-    public void addComment(Message message){
+    public void addComment(String message){
         comments.add(message);
     }
 
-    public void deleteComment(Message message){
+    public void deleteComment(String message){
         comments.remove(message);
     }
 
