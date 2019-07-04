@@ -8,6 +8,9 @@ html, body {
   margin: 0;
   padding: 0;
 }
+.pathinfo {
+  color: black;
+}
 .delete-menu {
   position: absolute;
   background: white;

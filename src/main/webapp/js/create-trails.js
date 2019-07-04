@@ -42,7 +42,13 @@ $(window).load(function(){
   }
 
   function postTrail(poly) {
+    //Article infos
+    const header = document.getElementsByName("header")[0].value;
+    const authors = document.getElementsByName("authors")[0].value;
+    const tags = document.getElementsByName("tags")[0].value;
+    const body = document.getElementsByName("body")[0].value;
 
+    //trail coordinates
     var coordinate_poly = poly.getPath().getArray();
     var newCoordinates_poly = [];
     for (var i = 0; i < coordinate_poly.length; i++) {
@@ -56,8 +62,12 @@ $(window).load(function(){
     var json_poly = "{\"coordinates\":" + str_coordinates_poly + "}";
     document.getElementById('json_polyline').value = json_poly;
     const params = new URLSearchParams();
+    params.append('header', header);
+    params.append('authors', authors);
+    params.append('tags', tags);
+    params.append('body', body);
     params.append('coordinates', newCoordinates_poly);
-    fetch('/trails', {
+    fetch('/article', {
       method: 'POST',
       body: params
     });

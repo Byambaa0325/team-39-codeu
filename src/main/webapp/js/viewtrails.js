@@ -9,15 +9,14 @@ $(window).load(function(){
     };
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    
     fetchTrails();
   }
   function fetchTrails(){
-    fetch('/trails').then((response) => {
+    fetch('/article').then((response) => {
       return response.json();
-    }).then((trails) => {
-      trails.forEach((trail) => {
-       createTrailForDisplay(trail.coordinates)
+    }).then((articles) => {
+      articles.forEach((article) => {
+       createTrailForDisplay(article.coordinates)
       });
     });
   }

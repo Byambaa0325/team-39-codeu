@@ -8,7 +8,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   <script src="js/scrolling.js"></script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/landing-style.css">
   <script type="text/javascript">
      $(document).on('click','.navbar-collapse.in',function(e) {
     if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
@@ -43,9 +43,23 @@
     </div><!---End of container-->
   </nav><!-- end of nav-->
   <div id="map"></div>
+  <div class="pathinfo">
+    Enter a new article:<br/>
+    Header
+    <input type="text" name="header">
+    <br/>
+    Authors
+    <input type="text" name="authors">
+    <br/>
+    tags
+    <input type="text" name="tags">
+    <br/>
+    text
+    <textarea name="body" id="article-input"></textarea>
+    <br/>
+  </div>
+
   <div id="savepath"></div>
   <textarea id="json_polyline" style="height:10%; width:100%"></textarea>
-
-  </div>
 </body>
 </html>

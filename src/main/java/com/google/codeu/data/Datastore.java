@@ -303,6 +303,7 @@ public class Datastore {
     articleEntity.setProperty("header",article.getHeader());
     articleEntity.setProperty("body", article.getBody());
     articleEntity.setProperty("timestamp", article.getTimestamp());
+    articleEntity.setProperty("coords", article.getCoords());
 
     datastore.put(articleEntity);
   }
@@ -491,7 +492,7 @@ public class Datastore {
   public Conversation getConversation(String id){
     Query query = new Query("Conversation")
       .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, id ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity convEntity = results.asSingleEntity();
     if( convEntity == null ){
@@ -521,7 +522,7 @@ public class Datastore {
   public List<Conversation> getAllConversations(String email){
     Query query = new Query("UserConversation")
       .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
     List<Conversation> conversations = new ArrayList<Conversation>();
 
@@ -543,13 +544,13 @@ public class Datastore {
           new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
         )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
     return entity != null;
   }
-  
+
   /*
   * Checks if conversation is public
   */
@@ -558,7 +559,7 @@ public class Datastore {
       .setFilter(
         new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
@@ -605,7 +606,7 @@ public class Datastore {
 
     return messages;
   }
-  
+
   /**
    * Builds a article from entity
    *
@@ -623,9 +624,10 @@ public class Datastore {
       String header = (String) entity.getProperty("header");
       String body = (String) entity.getProperty("body");
       long timestamp = (long) entity.getProperty("timestamp");
+      String coordinates = (String) entity.getProperty("coords");
 
 
-      article = new Article(id, authors, tags, header, body, timestamp);
+      article = new Article(id, authors, tags, header, body, timestamp, coordinates);
       return article;
     } catch (Exception e) {
       System.err.println("Error reading article.");
