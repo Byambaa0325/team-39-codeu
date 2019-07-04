@@ -38,21 +38,15 @@ public class ForumServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String id = request.getParameter("id");
-        Forum forum = null;
-        try {
-            forum = datastore.getForum(id);
-        } catch (EntityNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
 
-        request.setAttribute("forum",forum);
         try {
             request.getRequestDispatcher("/Forum.jsp").forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         }
+        /*
+        e(
+         */
 
     }
     /** Stores a new {@link Forum}. */
