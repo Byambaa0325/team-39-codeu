@@ -13,7 +13,7 @@ function createNewConversation(){
   }).then(() => {
     nicknameDom.value = '';
     inviteesDom.value = '';
-    buildConversations();
+    setTimeout( buildConversations(), 500);
   });
 }
 
@@ -32,6 +32,7 @@ function buildConversations(){
         }
       });
 
+      conversatoinDom.innerHTML = '';
       for( let conv of data ){
         conversatoinDom.appendChild( buildConversationDom(conv) );
         chatDom.appendChild( buildChatDom(conv) );
@@ -61,6 +62,10 @@ function buildChatDom( conv ){
   dom.classList.add('chat');
   dom.style.display = 'none';
   dom.id = `chat-${conv.id}`;
+  dom.innerHTML = `
+    <div class="chat-header">${conv.nickname}</div>
+    <div class="chat-container">Loading...</div>
+  `;
   return dom;
 }
 
@@ -68,7 +73,17 @@ function loadChat( id ){
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
 
-  dom.innerHTML = `This is chat ${id}`;
+  let domChatEl = dom.getElementsByClassName('chat-container')[0];
+  fetch( `/chat/get/messages/?convid=${id}` )
+    .then( response => response.json() )
+    .then( data => {
+      data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
+      domChatEl.innerHTML = '';
+      for( let message of data ){
+        let currDom = buildMessageDom(message);
+        domChatEl.appendChild(currDom);
+      }
+    });
 }
 
 function showChat( id ){
@@ -78,8 +93,18 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
-
   document.getElementById('message-convid').value = id;
+}
+
+function buildMessageDom( message ){
+  let dom = document.createElement('div');
+  dom.classList.add('chat-message-wrapper');
+  dom.innerHTML = `
+    <p class="chat-user">${message.user}</p>
+    <p class="chat-message">${message.message}</p>
+    <p class="chat-date">${new Date(message.timestamp).toLocaleString()}</p>
+  `
+  return dom;
 }
 
 function sendMessage(){
