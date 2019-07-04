@@ -38,7 +38,7 @@ $(window).load(function(){
       map: map
     });
     poly.setMap(map);
-    //click event -> jump to Article
+    //click event -> shows up Article on the left side
     //........
   }
   initTrails();

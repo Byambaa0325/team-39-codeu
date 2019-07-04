@@ -52,29 +52,6 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
-  /** Fetches trails from Datastore. */
-  public List<Trail> getTrails() {
-    List<Trail> trails = new ArrayList<>();
-
-    Query query = new Query("Trail");
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      String coords = (String) entity.getProperty("coords");
-
-      Trail trail = new Trail(coords);
-      trails.add(trail);
-    }
-    return trails;
-  }
-
-  /** Stores a trail in Datastore. */
-  public void storeTrail(Trail trail) {
-    Entity markerEntity = new Entity("Trail");
-    markerEntity.setProperty("coords", trail.getCoords());
-    datastore.put(markerEntity);
-  }
-
   /** Retrieves all articles and score them. Then, put
   the score in datastore indexed by article's id*/
   public void scoreArticles(){
