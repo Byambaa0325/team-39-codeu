@@ -66,7 +66,6 @@ function buildChatDom( convid, callback ){
     .then( resp => resp.json() )
     .then( conv => {
       let dom = document.createElement('div');
-      console.log("Okay");
       dom.classList.add('chat');
       dom.style.display = 'none';
       dom.id = `chat-${conv.id}`;
