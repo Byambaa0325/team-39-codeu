@@ -24,8 +24,13 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
+
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -445,6 +450,119 @@ public class Datastore {
     return articles;
   }
 
+  /*
+  * Stores new conversation
+  */
+  public void storeConversation(Conversation conv){
+    Entity entity = new Entity("Conversation");
+    entity.setProperty("nickname", conv.getNickname());
+    entity.setProperty("id", conv.getId().toString());
+    entity.setProperty("latesttime", conv.getLatestTime());
+    datastore.put( entity );
+  }
+
+  /*
+  * Gets conversation with id
+  */
+  public Conversation getConversation(String id){
+    Query query = new Query("Conversation")
+      .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, id ) );
+    
+    PreparedQuery results = datastore.prepare(query);
+    Entity convEntity = results.asSingleEntity();
+    if( convEntity == null ){
+      return null;
+    }
+
+    return new Conversation(
+      (String) convEntity.getProperty("nickname"),
+      (Long) convEntity.getProperty("latesttime"),
+      (String) convEntity.getProperty("id")
+    );
+  }
+
+  /*
+  * Adds person to Conversation
+  */
+  public void addPersonToConversation(Conversation conversation, String email){
+    Entity entity = new Entity("UserConversation");
+    entity.setProperty("user", email);
+    entity.setProperty("convid", conversation.getIdAsString());
+    datastore.put( entity );
+  }
+
+  /*
+  * Gets all Conversation of the current user
+  */
+  public List<Conversation> getAllConversations(String email){
+    Query query = new Query("UserConversation")
+      .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
+    
+    PreparedQuery results = datastore.prepare(query);
+    List<Conversation> conversations = new ArrayList<Conversation>();
+
+    for( Entity entity : results.asIterable() ){
+      conversations.add( getConversation( (String) entity.getProperty("convid") ) );
+    }
+
+    return conversations;
+  }
+
+  /*
+  * Checks if user is in the conversation
+  */
+  public boolean checkUserIsInConversation(String email, String convid){
+    Query query = new Query("UserConversation")
+      .setFilter(
+        CompositeFilterOperator.and(
+          new FilterPredicate( "user", FilterOperator.EQUAL, email ),
+          new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
+        )
+      );
+    
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+
+    return entity != null;
+  }
+
+  /*
+  * Store chat message
+  */
+  public void storeChatMessage(ChatMessage chatMsg){
+    Entity entity = new Entity("ChatMessage");
+    entity.setProperty("user", chatMsg.getUser());
+    entity.setProperty("message", chatMsg.getMessage());
+    entity.setProperty("convid", chatMsg.getConvid());
+    entity.setProperty("timestamp", chatMsg.getTimestamp());
+    datastore.put(entity);
+  }
+
+  /*
+  * Gets messages of conversation
+  */
+  public List <ChatMessage> getChatMessages(String email, String convid){
+    List <ChatMessage> messages = new ArrayList<>();
+    if( checkUserIsInConversation(email, convid) == false ){
+      return messages;
+    }
+
+    Query query = new Query("ChatMessage")
+      .setFilter(new FilterPredicate("convid", FilterOperator.EQUAL, convid));
+    PreparedQuery results = datastore.prepare(query);
+
+    for( Entity entity : results.asIterable()) {
+      messages.add( new ChatMessage(
+          (String) entity.getProperty("user"),
+          (String) entity.getProperty("message"),
+          (String) entity.getProperty("convid"),
+          (Long) entity.getProperty("timestamp")
+        ));
+    }
+
+    return messages;
+  }
+}
   /**
    * Builds a article from entity
    *
