@@ -7,6 +7,7 @@ import com.google.codeu.data.Article;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Forum;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,60 +39,21 @@ public class ForumServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String id = request.getParameter("id");
-        Forum forum;
+        Forum forum = null;
         try {
             forum = datastore.getForum(id);
-
-
-            List<Article> articles = datastore.getArticlesOfForum(forum);
-
-            response.setContentType("text/html;");
-            response.getOutputStream().println("<!DOCTYPE html>");
-            response.getOutputStream().println("<html>");
-            response.getOutputStream().println("<head>");
-            response.getOutputStream().println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-            response.getOutputStream().println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>");
-            response.getOutputStream().println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">");
-            response.getOutputStream().println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>");
-            response.getOutputStream().println("<title>Forum</title>");
-            response.getOutputStream().println("</head>");
-            response.getOutputStream().println("<body>");
-            response.getOutputStream().println("<h1>"+forum.getTitle()+"</h1>");
-            response.getOutputStream().println("<hr>");
-            response.getOutputStream().println("<div class=\"container\">");
-            response.getOutputStream().println("<div id='articles-container'>");
-
-
-            for (Article article : articles) {
-                response.getOutputStream().println("<div class='article'>");
-
-                response.getOutputStream().println("<a href = \"/article?id=" + article.getId().toString() + "\">");
-                response.getOutputStream().println("<h3>");
-                response.getOutputStream().println(article.getHeader());
-                response.getOutputStream().println("</h3>");
-                response.getOutputStream().println("</a>");
-
-                response.getOutputStream().println("<sub>");
-                response.getOutputStream().println(article.getAuthors());
-                response.getOutputStream().println("</sub>");
-
-                response.getOutputStream().println(article.getTimestamp());
-
-                response.getOutputStream().println("</div>");
-            }
-            response.getOutputStream().println("</div>");
-
-            response.getOutputStream().println("<div>");
-            response.getOutputStream().println("</div>");
-            
-            response.getOutputStream().println("</div>");
-
-            response.getOutputStream().println("</body>");
-            response.getOutputStream().println("</html>");
-
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
+            return;
         }
+
+        request.setAttribute("forum",forum);
+        try {
+            request.getRequestDispatcher("/Forum.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
     }
     /** Stores a new {@link Forum}. */
     @Override
