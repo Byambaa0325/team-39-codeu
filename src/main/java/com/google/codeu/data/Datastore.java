@@ -526,6 +526,25 @@ public class Datastore {
 
     return entity != null;
   }
+  
+  /*
+  * Checks if conversation is public
+  */
+  public boolean checkIfConversationIsPublic(String convid){
+    Query query = new Query("UserConversation")
+      .setFilter(
+        new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
+      );
+    
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+
+    if( entity == null ){
+      return false;
+    }
+
+    return (boolean) entity.getProperty("isPublic");
+  }
 
   /*
   * Store chat message
