@@ -68,8 +68,7 @@ function buildChatDom( conv ){
       <div class="chat-container">Loading...</div>
     </div>
     <div id="message-input">
-      <input type="text" id="message-convid" value="${conv.id}" hidden>
-      <input type="text" id="message-message">
+      <input type="text" id="message-${conv.id}">
       <button onclick="sendMessage('${conv.id}')">Send</button>
     </div>
   `;
@@ -100,7 +99,6 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
-  document.getElementById('message-convid').value = id;
 }
 
 function buildMessageDom( message ){
@@ -114,11 +112,10 @@ function buildMessageDom( message ){
   return dom;
 }
 
-function sendMessage(){
-  let msgInputDom = document.getElementById('message-message');
-  let convid = document.getElementById('message-convid').value;
+function sendMessage( convid ){
+  let msgInputDom = document.getElementById(`message-${convid}`);
 
-  console.log('Sending message');
+  console.log(`Sending message to ${convid}`);
 
   fetch( '/chat/new/message/', {
     method: 'POST',
