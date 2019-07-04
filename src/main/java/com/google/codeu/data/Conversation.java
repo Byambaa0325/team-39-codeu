@@ -49,7 +49,7 @@ public class Conversation {
     return id.toString();
   }
 
-  public String isPublic(){
+  public boolean isPublic(){
     return isPublic;
   }
 }
