@@ -63,6 +63,12 @@ limitations under the License.
 
     <dependency>
       <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-language</artifactId>
+      <version>1.55.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-vision</artifactId>
       <version>1.55.0</version>
     </dependency>
@@ -71,6 +77,12 @@ limitations under the License.
       <groupId>com.googlecode.json-simple</groupId>
       <artifactId>json-simple</artifactId>
       <version>1.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-translate</artifactId>
+      <version>1.55.0</version>
     </dependency>
 
   </dependencies>
