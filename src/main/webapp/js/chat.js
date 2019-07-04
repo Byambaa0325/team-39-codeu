@@ -63,8 +63,10 @@ function buildChatDom( conv ){
   dom.style.display = 'none';
   dom.id = `chat-${conv.id}`;
   dom.innerHTML = `
-    <div class="chat-header">${conv.nickname}</div>
-    <div class="chat-container">Loading...</div>
+    <div style="height: 760px; overflow-y: scroll;">
+      <div class="chat-header">${conv.nickname}</div>
+      <div class="chat-container">Loading...</div>
+    </div>
     <div id="message-input">
       <input type="text" id="message-convid" value="${conv.id}" hidden>
       <input type="text" id="message-message">
