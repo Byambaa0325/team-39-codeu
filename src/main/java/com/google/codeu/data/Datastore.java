@@ -385,6 +385,13 @@ public class Datastore {
     datastore.put(forumEntity);
   }
 
+  /**
+   * Query Forum by the name from database
+   *
+   * @param name
+   * @return
+   * @throws EntityNotFoundException
+   */
   public Forum getForumByName(String name) throws EntityNotFoundException{
     Query query =
             new Query("Forum")
