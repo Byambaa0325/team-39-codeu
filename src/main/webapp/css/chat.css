@@ -1,4 +1,5 @@
 #chat-wrapper{
+  display: flex;
   height: 800px;
   width: 100%;
   border: 1px black solid;
@@ -6,10 +7,24 @@
 
 #conversations{
   height: 800px;
-  width: 200px;
+  width: 300px;
   border-right: 1px black solid;
   overflow-y: scroll;
   padding-left: 8px;
+}
+
+.conversation{
+  border-bottom: 1px skyblue solid;
+}
+
+.conv-nickname{
+  margin: 4px;
+}
+
+.conv-date{
+  font-size: 12px;
+  margin: 2px;
+  text-align: end;
 }
 
 #chat {
@@ -18,6 +33,38 @@
   overflow-y: scroll;
   padding-left: 8px;
   padding-right: 8px;
+}
+
+#chat-container {
+  height: 760px;
+  overflow-y: scroll;
+}
+
+#message-input {
+  border-top: 1px black solid;
+}
+
+.chat-header {
+  text-align: center;
+  border-bottom: 1px black solid;
+}
+
+.chat-message-wrapper {
+  width: 80%;
+  border: 1px black solid;
+  border-radius: 5%;
+  padding: 8px;
+  margin: 8px;
+}
+
+.chat-message{
+  margin: 4px;
+}
+
+.chat-date{
+  font-size: 12px;
+  margin: 2px;
+  text-align: end;
 }
 
 /* Dropdown CSS */
