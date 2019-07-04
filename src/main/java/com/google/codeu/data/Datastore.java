@@ -385,6 +385,25 @@ public class Datastore {
     datastore.put(forumEntity);
   }
 
+  public Forum getForumByName(String name) throws EntityNotFoundException{
+    Query query =
+            new Query("Forum")
+            .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, name));
+    PreparedQuery results = datastore.prepare(query);
+    Entity forumEntity = results.asSingleEntity();
+    if (forumEntity == null){
+      throw new EntityNotFoundException(KeyFactory.createKey("Forum",name));
+    }
+    String idString = forumEntity.getKey().getName();
+    UUID uuid = UUID.fromString(idString);
+    String title = (String) forumEntity.getProperty("title");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
+  }
+
   /**
    * Retrieves a Forum by string id
    *
@@ -468,7 +487,7 @@ public class Datastore {
   public Conversation getConversation(String id){
     Query query = new Query("Conversation")
       .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, id ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity convEntity = results.asSingleEntity();
     if( convEntity == null ){
@@ -498,7 +517,7 @@ public class Datastore {
   public List<Conversation> getAllConversations(String email){
     Query query = new Query("UserConversation")
       .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
     List<Conversation> conversations = new ArrayList<Conversation>();
 
@@ -520,13 +539,13 @@ public class Datastore {
           new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
         )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
     return entity != null;
   }
-  
+
   /*
   * Checks if conversation is public
   */
@@ -535,7 +554,7 @@ public class Datastore {
       .setFilter(
         new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
@@ -582,7 +601,7 @@ public class Datastore {
 
     return messages;
   }
-  
+
   /**
    * Builds a article from entity
    *
