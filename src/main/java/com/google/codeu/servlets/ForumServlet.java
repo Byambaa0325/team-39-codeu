@@ -56,24 +56,29 @@ public class ForumServlet extends HttpServlet {
             response.getOutputStream().println("<body>");
             response.getOutputStream().println("<h1>"+forum.getTitle()+"</h1>");
             response.getOutputStream().println("<hr>");
+            response.getOutputStream().println("<a href = \"\\article-write.html\"><button>+Add</button></a>");
 
+            if(articles.isEmpty()){
+                response.getOutputStream().println("<h2>No Posts Here</h2>");
+            }
+            else {
+                for (Article article : articles) {
+                    response.getOutputStream().println("<div class='article'>");
 
-            for (Article article : articles) {
-                response.getOutputStream().println("<div class='article'>");
+                    response.getOutputStream().println("<a href = \"/article?id=" + article.getId().toString() + "\">");
+                    response.getOutputStream().println("<h3>");
+                    response.getOutputStream().println(article.getHeader());
+                    response.getOutputStream().println("</h3>");
+                    response.getOutputStream().println("</a>");
 
-                response.getOutputStream().println("<a href = \"/article?id=" + article.getId().toString() + "\">");
-                response.getOutputStream().println("<h3>");
-                response.getOutputStream().println(article.getHeader());
-                response.getOutputStream().println("</h3>");
-                response.getOutputStream().println("</a>");
+                    response.getOutputStream().println("<sub>");
+                    response.getOutputStream().println(article.getAuthors());
+                    response.getOutputStream().println("</sub>");
 
-                response.getOutputStream().println("<sub>");
-                response.getOutputStream().println(article.getAuthors());
-                response.getOutputStream().println("</sub>");
+                    response.getOutputStream().println(article.getTimestamp());
 
-                response.getOutputStream().println(article.getTimestamp());
-
-                response.getOutputStream().println("</div>");
+                    response.getOutputStream().println("</div>");
+                }
             }
 
             response.getOutputStream().println("</body>");
