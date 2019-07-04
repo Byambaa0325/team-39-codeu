@@ -582,7 +582,7 @@ public class Datastore {
 
     return messages;
   }
-}
+  
   /**
    * Builds a article from entity
    *
