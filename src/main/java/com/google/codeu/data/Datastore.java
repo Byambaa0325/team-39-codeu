@@ -531,7 +531,7 @@ public class Datastore {
   * Checks if conversation is public
   */
   public boolean checkIfConversationIsPublic(String convid){
-    Query query = new Query("UserConversation")
+    Query query = new Query("Conversation")
       .setFilter(
         new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
       );
