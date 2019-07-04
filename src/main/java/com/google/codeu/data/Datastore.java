@@ -458,6 +458,7 @@ public class Datastore {
     entity.setProperty("nickname", conv.getNickname());
     entity.setProperty("id", conv.getId().toString());
     entity.setProperty("latesttime", conv.getLatestTime());
+    entity.setProperty("isPublic", conv.isPublic());
     datastore.put( entity );
   }
 
