@@ -49,11 +49,16 @@ public class ForumServlet extends HttpServlet {
             response.getOutputStream().println("<!DOCTYPE html>");
             response.getOutputStream().println("<html>");
             response.getOutputStream().println("<head>");
+            response.getOutputStream().println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+            response.getOutputStream().println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>");
+            response.getOutputStream().println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">");
+            response.getOutputStream().println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>");
             response.getOutputStream().println("<title>Forum</title>");
             response.getOutputStream().println("</head>");
             response.getOutputStream().println("<body>");
             response.getOutputStream().println("<h1>"+forum.getTitle()+"</h1>");
             response.getOutputStream().println("<hr>");
+            response.getOutputStream().println("<div class=\"container\">");
             response.getOutputStream().println("<div id='articles-container'>");
 
 
@@ -74,6 +79,11 @@ public class ForumServlet extends HttpServlet {
 
                 response.getOutputStream().println("</div>");
             }
+            response.getOutputStream().println("</div>");
+
+            response.getOutputStream().println("<div>");
+            response.getOutputStream().println("</div>");
+            
             response.getOutputStream().println("</div>");
 
             response.getOutputStream().println("</body>");
