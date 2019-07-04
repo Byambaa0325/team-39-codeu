@@ -54,6 +54,7 @@ public class ForumServlet extends HttpServlet {
             response.getOutputStream().println("<body>");
             response.getOutputStream().println("<h1>"+forum.getTitle()+"</h1>");
             response.getOutputStream().println("<hr>");
+            response.getOutputStream().println("<div id='articles-container'>");
 
 
             for (Article article : articles) {
@@ -73,6 +74,7 @@ public class ForumServlet extends HttpServlet {
 
                 response.getOutputStream().println("</div>");
             }
+            response.getOutputStream().println("</div>");
 
             response.getOutputStream().println("</body>");
             response.getOutputStream().println("</html>");
