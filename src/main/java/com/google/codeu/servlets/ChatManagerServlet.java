@@ -126,7 +126,7 @@ public class ChatManagerServlet extends HttpServlet{
         String convid = (String) jsonObject.get("convid");
         String msg = (String) jsonObject.get("message");
 
-        if( datastore.checkUserIsInConversation(userEmail, convid) == false ){
+        if( datastore.checkIfConversationIsPublic(convid) == false && datastore.checkUserIsInConversation(userEmail, convid) == false ){
           System.out.println("Wrong conversation.");
           return;
         }

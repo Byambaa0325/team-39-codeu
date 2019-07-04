@@ -458,6 +458,7 @@ public class Datastore {
     entity.setProperty("nickname", conv.getNickname());
     entity.setProperty("id", conv.getId().toString());
     entity.setProperty("latesttime", conv.getLatestTime());
+    entity.setProperty("isPublic", conv.isPublic());
     datastore.put( entity );
   }
 
@@ -524,6 +525,25 @@ public class Datastore {
     Entity entity = results.asSingleEntity();
 
     return entity != null;
+  }
+  
+  /*
+  * Checks if conversation is public
+  */
+  public boolean checkIfConversationIsPublic(String convid){
+    Query query = new Query("UserConversation")
+      .setFilter(
+        new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
+      );
+    
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+
+    if( entity == null ){
+      return false;
+    }
+
+    return (boolean) entity.getProperty("isPublic");
   }
 
   /*
