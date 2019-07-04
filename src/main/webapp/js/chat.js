@@ -65,6 +65,11 @@ function buildChatDom( conv ){
   dom.innerHTML = `
     <div class="chat-header">${conv.nickname}</div>
     <div class="chat-container">Loading...</div>
+    <div id="message-input">
+      <input type="text" id="message-convid" value="${conv.id}" hidden>
+      <input type="text" id="message-message">
+      <button onclick="sendMessage('${conv.id}')">Send</button>
+    </div>
   `;
   return dom;
 }
