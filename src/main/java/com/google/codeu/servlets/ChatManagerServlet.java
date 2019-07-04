@@ -5,11 +5,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.codeu.data.Conversation;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.ChatMessage;
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -38,7 +40,7 @@ public class ChatManagerServlet extends HttpServlet{
     }
 
     // Gets all conversations of the current user
-    if( request.getPathInfo().equals( "/conversations/" ) ){
+    if( request.getPathInfo().equals( "/get/conversations/" ) ){
       response.setContentType("application/json");
       String email = userService.getCurrentUser().getEmail();
       List<Conversation> conversations = datastore.getAllConversations( email );
@@ -46,6 +48,19 @@ public class ChatManagerServlet extends HttpServlet{
       Gson gson = new Gson();
       response.getOutputStream().println(gson.toJson(conversations));
     }
+
+    // Gets all chat messages of the current user's convid
+    if( request.getPathInfo().equals( "/get/messages/" ) ){
+      response.setContentType("application/json");
+      String email = userService.getCurrentUser().getEmail();
+      String convid = (String) request.getParameter("convid");
+      List<ChatMessage> messages = datastore.getChatMessages( email, convid );
+
+      Gson gson = new Gson();
+      response.getOutputStream().println(gson.toJson(messages));
+    }
+
+    
   }
 
   @Override 
@@ -56,10 +71,10 @@ public class ChatManagerServlet extends HttpServlet{
       response.sendRedirect("/index.html");
       return;
     }
+    
+    JSONParser jsonParser = new JSONParser();
 
-    if( request.getPathInfo().equals( "/new/" ) ){
-      JSONParser jsonParser = new JSONParser();
-
+    if( request.getPathInfo().equals( "/new/conversation/" ) ){
       try {
         JSONObject jsonObject = (JSONObject) jsonParser.parse( request.getReader().readLine() );
         if( jsonObject.get("nickname") == null || jsonObject.get("invitee") == null ){
@@ -94,6 +109,36 @@ public class ChatManagerServlet extends HttpServlet{
 
         System.out.println("Nickname : " + nicknameConv);
         System.out.println("Invitees : " + inviteesList.toString());
+      } catch( ParseException e){
+        e.printStackTrace();
+      }
+    }
+
+    if( request.getPathInfo().equals( "/new/message/" ) ){
+      try {
+        JSONObject jsonObject = (JSONObject) jsonParser.parse( request.getReader().readLine() );
+        System.out.println( jsonObject.toString() );
+        if( jsonObject.get("convid") == null || jsonObject.get("message") == null ){
+          return;
+        }
+
+        String userEmail = userService.getCurrentUser().getEmail();
+        String convid = (String) jsonObject.get("convid");
+        String msg = (String) jsonObject.get("message");
+
+        if( datastore.checkUserIsInConversation(userEmail, convid) == false ){
+          System.out.println("Wrong conversation.");
+          return;
+        }
+
+        msg = Jsoup.clean( msg, Whitelist.none() );
+        if( msg.length() == 0 ){
+          System.out.println("Empty message, skipping");
+          return;
+        }
+
+        System.out.println("Storing " + convid + " " + msg);
+        datastore.storeChatMessage( new ChatMessage( userEmail, msg, convid ) );
       } catch( ParseException e){
         e.printStackTrace();
       }
