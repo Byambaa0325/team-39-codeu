@@ -5,11 +5,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.codeu.data.Conversation;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.ChatMessage;
 import java.util.*;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -38,7 +40,7 @@ public class ChatManagerServlet extends HttpServlet{
     }
 
     // Gets all conversations of the current user
-    if( request.getPathInfo().equals( "/conversations/" ) ){
+    if( request.getPathInfo().equals( "/get/conversations/" ) ){
       response.setContentType("application/json");
       String email = userService.getCurrentUser().getEmail();
       List<Conversation> conversations = datastore.getAllConversations( email );
@@ -46,6 +48,19 @@ public class ChatManagerServlet extends HttpServlet{
       Gson gson = new Gson();
       response.getOutputStream().println(gson.toJson(conversations));
     }
+
+    // Gets all chat messages of the current user's convid
+    if( request.getPathInfo().equals( "/get/messages/" ) ){
+      response.setContentType("application/json");
+      String email = userService.getCurrentUser().getEmail();
+      String convid = (String) request.getParameter("convid");
+      List<ChatMessage> messages = datastore.getChatMessages( email, convid );
+
+      Gson gson = new Gson();
+      response.getOutputStream().println(gson.toJson(messages));
+    }
+
+    
   }
 
   @Override 
@@ -110,9 +125,20 @@ public class ChatManagerServlet extends HttpServlet{
         String userEmail = userService.getCurrentUser().getEmail();
         String convid = (String) jsonObject.get("convid");
         String msg = (String) jsonObject.get("message");
-        Long timestamp = (new Date()).getTime();
+
+        if( datastore.checkUserIsInConversation(userEmail, convid) == false ){
+          System.out.println("Wrong conversation.");
+          return;
+        }
+
+        msg = Jsoup.clean( msg, Whitelist.none() );
+        if( msg.length() == 0 ){
+          System.out.println("Empty message, skipping");
+          return;
+        }
 
         System.out.println("Storing " + convid + " " + msg);
+        datastore.storeChatMessage( new ChatMessage( userEmail, msg, convid ) );
       } catch( ParseException e){
         e.printStackTrace();
       }
