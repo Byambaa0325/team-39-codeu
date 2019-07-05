@@ -561,7 +561,7 @@ public class Datastore {
   */
   public List <ChatMessage> getChatMessages(String email, String convid){
     List <ChatMessage> messages = new ArrayList<>();
-    if( checkUserIsInConversation(email, convid) == false ){
+    if(!checkUserIsInConversation(email, convid)){
       return messages;
     }
 
