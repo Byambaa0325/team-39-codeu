@@ -128,4 +128,5 @@ function sendMessage(){
 
 function buildChat(){
   buildConversations();
+  loadNavbar(document.getElementById('navbar'));
 }
