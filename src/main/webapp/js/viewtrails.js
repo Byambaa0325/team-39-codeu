@@ -16,12 +16,17 @@ $(window).load(function(){
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
-       createTrailForDisplay(article.coordinates)
+        console.log(article);
+        console.log(article.authors);
+        console.log(article.tags);
+        console.log(article.header);
+        console.log(article.body);
+        createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates)
       });
     });
   }
   /** Creates a trail on map. */
-  function createTrailForDisplay(coordinates){
+  function createTrailForDisplay(authors, tags, header, body, coordinates){
     console.log(coordinates);
     let arr = coordinates.split(',');
     console.log(arr.length / 2);
@@ -39,7 +44,36 @@ $(window).load(function(){
     });
     poly.setMap(map);
     //click event -> shows up Article on the left side
-    //........
+    google.maps.event.addListener(poly, 'click', function() {
+      pathInfo(authors, tags, header, body);
+    });
+  }
+  function pathInfo(authors, tags, header, body){
+    const containerDiv = document.getElementById('pathinfo');
+    containerDiv.innerHTML = '';
+    const h3 = document.createElement('h3');
+    h3.innerHTML = 'Trail info';
+    containerDiv.appendChild(h3);
+
+    var ul = document.createElement('ul');
+    ul.setAttribute('id', 'path');
+    var li_authors = document.createElement('li');
+    li_authors.innerHTML = 'Authors: ' + authors[0];
+    ul.appendChild(li_authors);
+
+    var li_tags = document.createElement('li');
+    li_tags.innerHTML = 'Tags: ' + tags[0];
+    ul.appendChild(li_tags);
+
+    var li_header = document.createElement('li');
+    li_header.innerHTML = 'Header: ' + header;
+    ul.appendChild(li_header);
+
+    var li_body = document.createElement('li');
+    li_body.innerHTML = 'Body: ' + body;
+    ul.appendChild(li_body);
+
+    containerDiv.appendChild(ul);
   }
   initTrails();
 

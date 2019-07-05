@@ -74,6 +74,9 @@ img {
   max-width: 200px;
   margin: 1% auto;
 }
+#pathinfo {
+  color: black;
+}
 .social {
   font-size: 500%;
 }
