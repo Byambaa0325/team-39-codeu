@@ -55,8 +55,7 @@ public class Article {
 
     public String getAuthors() {
 
-        String authorsCommaSeparated = String.join(",", authors);
-        return authorsCommaSeparated;
+        return String.join(",", authors);
     }
 
     public List<String> getAuthorsList() {
@@ -65,9 +64,7 @@ public class Article {
 
     public String getTags() {
 
-        String tagsCommaSeparated = String.join(",", tags);
-
-        return tagsCommaSeparated;
+        return String.join(",", tags);
     }
 
     public String getHeader() {
