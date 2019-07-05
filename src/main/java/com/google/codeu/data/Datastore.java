@@ -498,7 +498,7 @@ public class Datastore {
       .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
     
     PreparedQuery results = datastore.prepare(query);
-    List<Conversation> conversations = new ArrayList<Conversation>();
+    List<Conversation> conversations = new ArrayList<>();
 
     for( Entity entity : results.asIterable() ){
       conversations.add( getConversation( (String) entity.getProperty("convid") ) );
