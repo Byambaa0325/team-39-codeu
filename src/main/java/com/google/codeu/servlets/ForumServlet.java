@@ -39,11 +39,20 @@ public class ForumServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      if (request.getParameter("country")==null){
         try {
-            request.getRequestDispatcher("/Forum.jsp").forward(request, response);
+            request.getRequestDispatcher("/Forum-id.jsp").forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         }
+      }
+      else{
+        try {
+            request.getRequestDispatcher("/Forum-name.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+      }
 
     }
 
