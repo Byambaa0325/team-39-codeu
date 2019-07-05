@@ -1,5 +1,6 @@
 $(window).load(function(){
   let map;
+  var geocoder = new google.maps.Geocoder;
   function initTrails() {
     var mapOptions = {
       disableDoubleClickZoom: true,
@@ -9,7 +10,31 @@ $(window).load(function(){
     };
 
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    map.addListener('dragend', function() {
+        var latlng = map.getCenter().toJSON();
+        console.log(latlng);
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var currentLocationElement = document.getElementById('current-location');
+              var country = ""
+              results[0].address_components.forEach((component) => {
+                if (component.types.toString().includes('country')){
+                  country = component.long_name;
+                }
+              });
+              currentLocationElement.innerHTML = "<h1>"+country+"</h1>";
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+
+        });
     fetchTrails();
+
   }
   function fetchTrails(){
     fetch('/article').then((response) => {
