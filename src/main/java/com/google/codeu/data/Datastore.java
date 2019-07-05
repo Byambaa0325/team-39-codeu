@@ -346,7 +346,8 @@ public class Datastore {
 
   public List<Forum> getAllForumList(){
     Query query =
-            new Query("Forum");
+            new Query("Forum")
+            .addSort("title",SortDirection.ASCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     List<Forum> forums = new ArrayList<>();
