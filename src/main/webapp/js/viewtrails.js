@@ -22,7 +22,7 @@ $(window).load(function(){
                   country = component.long_name;
                 }
               });
-              currentLocationElement.innerHTML = "<h1>"+country+"</h1>";
+              currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
             } else {
               window.alert('No results found');
             }
