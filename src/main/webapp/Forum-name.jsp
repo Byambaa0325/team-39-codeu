@@ -11,10 +11,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% Datastore datastore = new Datastore();%>
-<%  String id = request.getParameter("id");
+<%  String country = request.getParameter("country");
     Forum forum = null;
     try {
-        forum = datastore.getForum(id);
+        forum = datastore.getForumByName(id);
     } catch (EntityNotFoundException e) {
         e.printStackTrace();
     }
