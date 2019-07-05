@@ -31,22 +31,28 @@ public class Article {
     private String header;
     private String body;
     private long timestamp;
+    private String coordinates;
 
     public Article(String authors, String header, String body) {
-        this(UUID.randomUUID(), authors, "", header, body, System.currentTimeMillis());
+        this(UUID.randomUUID(), authors, "", header, body, System.currentTimeMillis(), "");
     }
 
     public Article(String authors, String tags, String header, String body) {
-        this(UUID.randomUUID(), authors, tags, header, body, System.currentTimeMillis());
+        this(UUID.randomUUID(), authors, tags, header, body, System.currentTimeMillis(), "");
     }
 
-    public Article(UUID id, String authors, String tags, String header, String body, long timestamp) {
+    public Article(String authors, String tags, String header, String body, String coordinates) {
+        this(UUID.randomUUID(), authors, tags, header, body, System.currentTimeMillis(), coordinates);
+    }
+
+    public Article(UUID id, String authors, String tags, String header, String body, long timestamp, String coordinates) {
         this.id = id;
         this.authors = Arrays.asList(authors.replace(" ", "").split(","));
         this.tags = Arrays.asList(tags.replace(" ", "").split(","));
         this.header = header;
         this.body = body;
         this.timestamp = timestamp;
+        this.coordinates = coordinates;
     }
 
     public UUID getId() {
@@ -82,5 +88,8 @@ public class Article {
         return timestamp;
     }
 
+    public String getCoords() {
+      return coordinates;
+    }
 
 }

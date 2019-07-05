@@ -17,8 +17,13 @@ public class Post extends Article {
         comments = new ArrayList<>();
     }
 
-    public Post(UUID id, String authors, String tags, String header, String body, long timestamp) {
-        super(id, authors, tags, header, body, timestamp);
+    public Post(String authors, String tags, String header, String body, String coordinates) {
+        super(authors, tags, header, body, coordinates);
+        comments = new ArrayList<>();
+    }
+
+    public Post(UUID id, String authors, String tags, String header, String body, long timestamp, String coordinates) {
+        super(id, authors, tags, header, body, timestamp, coordinates);
         comments = new ArrayList<>();
     }
 
