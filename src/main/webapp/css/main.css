@@ -21,10 +21,14 @@ body {
   font-family: 'Dosis', sans-serif;
 }
 
+#navbar {
+  height: 61px;
+}
+
 .navbar {
   background-color: #297fb8;
   border-bottom: 1px solid #5398c6;
-  padding: 1% 0;
+  padding: 4px;
 }
 
 .navbar-brand {
