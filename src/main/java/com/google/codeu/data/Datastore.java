@@ -28,6 +28,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+
 import com.google.appengine.api.datastore.Text;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
@@ -350,7 +351,8 @@ public class Datastore {
 
   public List<Forum> getAllForumList(){
     Query query =
-            new Query("Forum");
+            new Query("Forum")
+            .addSort("title",SortDirection.ASCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     List<Forum> forums = new ArrayList<>();
@@ -401,6 +403,32 @@ public class Datastore {
     List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
     List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
 
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
+  }
+
+  /**
+   * Query Forum by the name from database
+   *
+   * @param name
+   * @return
+   * @throws EntityNotFoundException
+   */
+  public Forum getForumByName(String name) throws EntityNotFoundException{
+    Query query =
+            new Query("Forum")
+                    .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, name));
+    PreparedQuery results = datastore.prepare(query);
+    Entity forumEntity = results.asSingleEntity();
+    if (forumEntity == null){
+      throw new EntityNotFoundException(KeyFactory.createKey("Forum",name));
+    }
+    String idString = forumEntity.getKey().getName();
+    UUID uuid = UUID.fromString(idString);
+    String title = (String) forumEntity.getProperty("title");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
     return new Forum(uuid, title, owners, members, keywords, articleIds);
   }
 
@@ -610,5 +638,30 @@ public class Datastore {
       e.printStackTrace();
     }
     return article;
+  }
+
+  public void updateFieldForum(String forumName, String fieldToAppend, String valueToAppend, boolean updateAll){
+    PreparedQuery results = null;
+    if(updateAll){
+      Query query =
+              new Query("Forum")
+              .addSort("title",SortDirection.ASCENDING);
+      results = datastore.prepare(query);
+    }
+    else{
+      Query query =
+              new Query("Forum")
+                      .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
+      results = datastore.prepare(query);
+    }
+
+    for(Entity forumEntity : results.asIterable()) {
+
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToAppend);
+      fieldBeingUpdated+=","+valueToAppend;
+      forumEntity.setProperty(fieldToAppend,fieldBeingUpdated);
+
+      datastore.put(forumEntity);
+    }
   }
 }

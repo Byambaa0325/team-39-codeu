@@ -1,22 +1,19 @@
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.gson.Gson;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Article;
 import com.google.codeu.data.Datastore;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.Gson;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Handles {@link Article} instances.
@@ -51,24 +48,33 @@ public class ArticleServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // UserService userService = UserServiceFactory.getUserService();
-        // if (!userService.isUserLoggedIn()) {
-        //     response.sendRedirect("/index.html");
-        //     return;
-        // }
+         UserService userService = UserServiceFactory.getUserService();
+         if (!userService.isUserLoggedIn()) {
+             response.sendRedirect("/index.html");
+             return;
+         }
 
-        //String authors = userService.getCurrentUser().getEmail() + ",";
-        String authors = "1234qewrt@gmail.com";
-        authors += Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+        String authors = userService.getCurrentUser().getEmail();
+         if(!request.getParameter("authors").equals("")) {
+             authors += ","+Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+         }
         String tags = Jsoup.clean(request.getParameter("tags"), Whitelist.none());
         String header = Jsoup.clean(request.getParameter("header"), Whitelist.none());
         String body = Jsoup.clean(request.getParameter("body"), Whitelist.none());
         String coordinates = Jsoup.clean(request.getParameter("coordinates"), Whitelist.none());
         System.out.println(body + coordinates);
         Article article = new Article(authors, tags, header, body, coordinates);
+        String id = article.getId().toString();
         datastore.storeArticle(article);
 
-        //response.sendRedirect("/article?id=" + article.getId());
+        if(request.getParameter("forum") != null){
+          datastore.updateFieldForum(request.getParameter("forum"),"articleIds",id,false);
+        }
+        else{
+          datastore.updateFieldForum("","articleIds",id,true);
+        }
+
+        response.sendRedirect("/article?id=" + article.getId());
 
     }
 }
