@@ -19,18 +19,15 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
-
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -38,10 +35,10 @@ import com.google.cloud.language.v1.Sentiment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -639,5 +636,30 @@ public class Datastore {
       e.printStackTrace();
     }
     return article;
+  }
+
+  public void updateFieldForum(String forumName, String fieldToAppend, String valueToAppend, boolean updateAll){
+    PreparedQuery results = null;
+    if(updateAll){
+      Query query =
+              new Query("Forum")
+              .addSort("title",SortDirection.ASCENDING);
+      results = datastore.prepare(query);
+    }
+    else{
+      Query query =
+              new Query("Forum")
+                      .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
+      results = datastore.prepare(query);
+    }
+
+    for(Entity forumEntity : results.asIterable()) {
+
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToAppend);
+      fieldBeingUpdated+=","+valueToAppend;
+      forumEntity.setProperty(fieldToAppend,fieldBeingUpdated);
+
+      datastore.put(forumEntity);
+    }
   }
 }
