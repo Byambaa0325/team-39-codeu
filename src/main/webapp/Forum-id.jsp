@@ -15,8 +15,10 @@
     Forum forum = null;
     try {
         forum = datastore.getForum(id);
+        System.out.println("found forum");
     } catch (EntityNotFoundException e) {
         e.printStackTrace();
+        return;
     }
     List<Article> articles = null;
     try {
@@ -34,16 +36,20 @@
 <hr>
 <div class="container">
     <div id="article-container">
-        <% for (Article article : articles){%>
-            <div class="article">
-                <a href = "article?id=<%=article.getId().toString()%>">
-                    <h3><%= article.getHeader()%></h3>
-                </a>
+      <% if(!articles.isEmpty()){
+      for (Article article : articles){%>
+          <div class="article">
+              <a href = "article?id=<%=article.getId().toString()%>">
+                  <h3><%= article.getHeader()%></h3>
+              </a>
 
-                <sub><%=article.getAuthors()%></sub>
-                <%=article.getTimestamp()%>
-            </div>
-        <%}%>
+              <sub><%=article.getAuthors()%></sub>
+              <%=article.getTimestamp()%>
+          </div>
+      <%}}
+      else{%>
+        <h1>No Posts Here Yet!</h1>
+      <%}%>
     </div>
     <div id = "chat-container"></div>
 </div>

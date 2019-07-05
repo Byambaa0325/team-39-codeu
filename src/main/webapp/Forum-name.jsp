@@ -14,7 +14,7 @@
 <%  String country = request.getParameter("country");
     Forum forum = null;
     try {
-        forum = datastore.getForumByName(id);
+        forum = datastore.getForumByName(country);
     } catch (EntityNotFoundException e) {
         e.printStackTrace();
     }
@@ -34,16 +34,20 @@
 <hr>
 <div class="container">
     <div id="article-container">
-        <% for (Article article : articles){%>
-            <div class="article">
-                <a href = "article?id=<%=article.getId().toString()%>">
-                    <h3><%= article.getHeader()%></h3>
-                </a>
+      <% if(!articles.isEmpty()){
+      for (Article article : articles){%>
+          <div class="article">
+              <a href = "article?id=<%=article.getId().toString()%>">
+                  <h3><%= article.getHeader()%></h3>
+              </a>
 
-                <sub><%=article.getAuthors()%></sub>
-                <%=article.getTimestamp()%>
-            </div>
-        <%}%>
+              <sub><%=article.getAuthors()%></sub>
+              <%=article.getTimestamp()%>
+          </div>
+      <%}}
+      else{%>
+        <h1>No Posts Here Yet!</h1>
+      <%}%>
     </div>
     <div id = "chat-container"></div>
 </div>
