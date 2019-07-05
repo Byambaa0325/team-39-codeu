@@ -64,7 +64,7 @@ public class ArticleServlet extends HttpServlet {
         String header = Jsoup.clean(request.getParameter("header"), Whitelist.none());
         String body = Jsoup.clean(request.getParameter("body"), Whitelist.none());
         String coordinates = Jsoup.clean(request.getParameter("coordinates"), Whitelist.none());
-        System.out.println("qwery : " + coordinates);
+        System.out.println(body + coordinates);
         Article article = new Article(authors, tags, header, body, coordinates);
         datastore.storeArticle(article);
 

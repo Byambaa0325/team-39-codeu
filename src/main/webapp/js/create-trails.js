@@ -58,15 +58,16 @@ $(window).load(function(){
       newCoordinates_poly.push(lat_poly);
       newCoordinates_poly.push(lng_poly);
     }
-    var str_coordinates_poly = JSON.stringify(newCoordinates_poly);
-    var json_poly = "{\"coordinates\":" + str_coordinates_poly + "}";
-    document.getElementById('json_polyline').value = json_poly;
+    // var str_coordinates_poly = JSON.stringify(newCoordinates_poly);
+    // var json_poly = "{\"coordinates\":" + str_coordinates_poly + "}";
+    // document.getElementById('json_polyline').value = json_poly;
     const params = new URLSearchParams();
     params.append('header', header);
     params.append('authors', authors);
     params.append('tags', tags);
     params.append('body', body);
     params.append('coordinates', newCoordinates_poly);
+    console.log(newCoordinates_poly);
     fetch('/article', {
       method: 'POST',
       body: params
