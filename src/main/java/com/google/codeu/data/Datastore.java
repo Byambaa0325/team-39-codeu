@@ -19,18 +19,16 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
-
+import com.google.appengine.api.datastore.Text;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -38,10 +36,10 @@ import com.google.cloud.language.v1.Sentiment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -278,7 +276,7 @@ public class Datastore {
     articleEntity.setProperty("authors", article.getAuthors());
     articleEntity.setProperty("tags",article.getTags());
     articleEntity.setProperty("header",article.getHeader());
-    articleEntity.setProperty("body", article.getBody());
+    articleEntity.setProperty("body", new Text(article.getBody()));
     articleEntity.setProperty("timestamp", article.getTimestamp());
     articleEntity.setProperty("coords", article.getCoords());
 
@@ -501,7 +499,7 @@ public class Datastore {
       .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
 
     PreparedQuery results = datastore.prepare(query);
-    List<Conversation> conversations = new ArrayList<Conversation>();
+    List<Conversation> conversations = new ArrayList<>();
 
     for( Entity entity : results.asIterable() ){
       conversations.add( getConversation( (String) entity.getProperty("convid") ) );
@@ -564,7 +562,7 @@ public class Datastore {
   */
   public List <ChatMessage> getChatMessages(String email, String convid){
     List <ChatMessage> messages = new ArrayList<>();
-    if( checkUserIsInConversation(email, convid) == false ){
+    if(!checkUserIsInConversation(email, convid)){
       return messages;
     }
 
@@ -599,7 +597,7 @@ public class Datastore {
       String authors = (String) entity.getProperty("authors");
       String tags = (String) entity.getProperty("tags");
       String header = (String) entity.getProperty("header");
-      String body = (String) entity.getProperty("body");
+      String body = ((Text) entity.getProperty("body")).toString();
       long timestamp = (long) entity.getProperty("timestamp");
       String coordinates = (String) entity.getProperty("coords");
 
