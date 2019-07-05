@@ -6,6 +6,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Article;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Forum;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,18 +39,14 @@ public class ForumServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-
         try {
             request.getRequestDispatcher("/Forum.jsp").forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         }
-        /*
-        e(
-         */
 
     }
+
     /** Stores a new {@link Forum}. */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -59,18 +57,23 @@ public class ForumServlet extends HttpServlet {
             return;
         }
 
-        String[] continents = {"Africa", "America", "Asia", "Europe", "Australia"};
+        String title = Jsoup.clean(request.getParameter("title"), Whitelist.none());
 
-        List<String> testInput = Arrays.asList(continents);
-        for( String continent : continents){
-            List<Article> articles = datastore.getAllArticles();
-            List<String> articleIds = new ArrayList<>();
-            for( Article article: articles){
-                articleIds.add(article.getId().toString());
-            }
-            Forum forum = new Forum(UUID.randomUUID(), continent, testInput,testInput,testInput,articleIds);
-            datastore.storeForum(forum);
+        String keywordString = Jsoup.clean(request.getParameter("keywords"), Whitelist.none());
+        List<String> keywords = Arrays.asList(keywordString.split(","));
+
+        String owner = userService.getCurrentUser().getEmail();
+        List<String> owners = new ArrayList<>();
+        owners.add(owner);
+
+        List<Article> articles = datastore.getAllArticles();
+        List<String> articleIds = new ArrayList<>();
+        for (Article article : articles) {
+            articleIds.add(article.getId().toString());
         }
+
+        Forum forum = new Forum(UUID.randomUUID(), title, owners, new ArrayList<>(), keywords, articleIds);
+        datastore.storeForum(forum);
     }
 
 }
