@@ -17,10 +17,8 @@
  @import url('https://fonts.googleapis.com/css?family=Dosis:600,800');
 
 body {
+  max-width: 1200px;
   font-family: 'Dosis', sans-serif;
-  font-size: 200%;
-  color: #fff;
-  text-shadow: 1px 1px 1px#666;
 }
 
 .navbar {
