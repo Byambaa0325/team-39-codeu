@@ -15,7 +15,6 @@
     Forum forum = null;
     try {
         forum = datastore.getForum(id);
-        System.out.println("found forum");
     } catch (EntityNotFoundException e) {
         e.printStackTrace();
         return;
@@ -27,8 +26,12 @@
         e.printStackTrace();
     }%>
 <head>
-
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  <link rel="stylesheet" href="css/forum.css">
     <title><%=forum.getTitle()%></title>
 </head>
 <body>
