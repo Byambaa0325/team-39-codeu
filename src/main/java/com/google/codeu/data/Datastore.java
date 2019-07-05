@@ -21,16 +21,13 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
-
+import com.google.appengine.api.datastore.Text;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -278,7 +275,7 @@ public class Datastore {
     articleEntity.setProperty("authors", article.getAuthors());
     articleEntity.setProperty("tags",article.getTags());
     articleEntity.setProperty("header",article.getHeader());
-    articleEntity.setProperty("body", article.getBody());
+    articleEntity.setProperty("body", new Text(article.getBody()));
     articleEntity.setProperty("timestamp", article.getTimestamp());
 
     datastore.put(articleEntity);
@@ -598,7 +595,7 @@ public class Datastore {
       String authors = (String) entity.getProperty("authors");
       String tags = (String) entity.getProperty("tags");
       String header = (String) entity.getProperty("header");
-      String body = (String) entity.getProperty("body");
+      String body = ((Text) entity.getProperty("body")).toString();
       long timestamp = (long) entity.getProperty("timestamp");
 
 
