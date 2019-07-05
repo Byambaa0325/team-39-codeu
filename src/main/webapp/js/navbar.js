@@ -1,4 +1,4 @@
-function getNavbar( dom ){
+function loadNavbar( dom ){
   fetch('/navbar')
     .then( response => response.text() )
     .then( text => {
