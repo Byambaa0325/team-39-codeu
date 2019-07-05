@@ -401,6 +401,32 @@ public class Datastore {
   }
 
   /**
+   * Query Forum by the name from database
+   *
+   * @param name
+   * @return
+   * @throws EntityNotFoundException
+   */
+  public Forum getForumByName(String name) throws EntityNotFoundException{
+    Query query =
+            new Query("Forum")
+                    .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, name));
+    PreparedQuery results = datastore.prepare(query);
+    Entity forumEntity = results.asSingleEntity();
+    if (forumEntity == null){
+      throw new EntityNotFoundException(KeyFactory.createKey("Forum",name));
+    }
+    String idString = forumEntity.getKey().getName();
+    UUID uuid = UUID.fromString(idString);
+    String title = (String) forumEntity.getProperty("title");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
+  }
+
+  /**
    * Read articles of a forum
    *
    * @param forum
