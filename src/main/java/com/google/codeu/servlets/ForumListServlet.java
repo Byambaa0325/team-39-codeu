@@ -90,7 +90,7 @@ public class ForumListServlet extends HttpServlet {
             for (Article article : articles) {
                 articleIds.add(article.getId().toString());
             }
-            Forum forum = new Forum(UUID.randomUUID(), country, testInput, testInput, keywords, articleIds);
+            Forum forum = new Forum(UUID.randomUUID(), country.toLowerCase(), testInput, testInput, keywords, articleIds);
             datastore.storeForum(forum);
         }
     }
