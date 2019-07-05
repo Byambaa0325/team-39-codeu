@@ -49,6 +49,24 @@ public class ChatManagerServlet extends HttpServlet{
       response.getOutputStream().println(gson.toJson(conversations));
     }
 
+    // Gets conversation info of given convid
+    if( request.getPathInfo().equals( "/get/conversation/" ) ){
+      if( request.getParameter("convid") == null ) return;
+
+      String userEmail = userService.getCurrentUser().getEmail();
+      String convid =  request.getParameter("convid");
+      
+      if( datastore.checkIfConversationIsPublic(convid) == false && datastore.checkUserIsInConversation(userEmail, convid) == false ){
+        System.out.println("Wrong conversation.");
+        return;
+      }
+
+      response.setContentType("application/json");
+
+      Gson gson = new Gson();
+      response.getOutputStream().println(gson.toJson( datastore.getConversation(convid) ));
+    }
+
     // Gets all chat messages of the current user's convid
     if( request.getPathInfo().equals( "/get/messages/" ) ){
       response.setContentType("application/json");
