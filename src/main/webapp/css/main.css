@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-/* Prevent the page from becoming too wide. */
+ @import url('https://fonts.googleapis.com/css?family=Dosis:600,800');
+
 body {
-  max-width: 600px;
-  font-family: 'Dosis', sans-serif;
   font-size: 200%;
-  color: #fff;
+  font-family: 'Dosis', sans-serif;
 }
 
-/* Remove bullet points from navigation bar. */
-nav ul {
-  list-style-type: none;
-  padding-left: 0;
+#navbar {
+  height: 61px;
 }
-
-/* Keep navigation menu on one line. */
-nav li {
-  display: inline-block;
-  margin-right: 10px
-}
-
-@import url('https://fonts.googleapis.com/css?family=Dosis:600,800');
 
 .navbar {
   background-color: #297fb8;
   border-bottom: 1px solid #5398c6;
-  padding: 1% 0;
+  padding: 4px;
 }
 
 .navbar-brand {
@@ -54,7 +43,6 @@ nav li {
 .navbar-inverse .navbar-nav li a {
   color: #fff;
 }
-
 
 .navbar-inverse .navbar-nav li a:hover {
   background-color: #5398c6;

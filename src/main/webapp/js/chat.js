@@ -140,4 +140,5 @@ function sendMessage( convid ){
 
 function buildChat(){
   buildConversations();
+  loadNavbar(document.getElementById('navbar'));
 }
