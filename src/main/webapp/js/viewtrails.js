@@ -70,7 +70,12 @@ $(window).load(function(){
     poly.setMap(map);
     //click event -> shows up Article on the left side
     google.maps.event.addListener(poly, 'click', function() {
-      pathInfo(authors, tags, header, body);
+      var containerDiv = pathInfo(authors, tags, header, body);
+      var infowindow = new google.maps.InfoWindow({
+          content: containerDiv.innerHTML;
+        });
+      infowindow.open(map,poly);
+
     });
   }
   function pathInfo(authors, tags, header, body){
@@ -99,6 +104,7 @@ $(window).load(function(){
     ul.appendChild(li_body);
 
     containerDiv.appendChild(ul);
+    return containerDiv;
   }
   initTrails();
 
