@@ -37,7 +37,7 @@ $(window).load(function(){
 
   }
   function fetchTrails(){
-    fetch('/article').then((response) => {
+    fetch('/articles').then((response) => {
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
