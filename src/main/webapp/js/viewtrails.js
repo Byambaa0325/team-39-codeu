@@ -12,7 +12,6 @@ $(window).load(function(){
     map = new google.maps.Map(document.getElementById('map'), mapOptions);
     map.addListener('dragend', function() {
         var latlng = map.getCenter().toJSON();
-        console.log(latlng);
         geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === 'OK') {
             if (results[0]) {
@@ -23,7 +22,7 @@ $(window).load(function(){
                   country = component.long_name;
                 }
               });
-              currentLocationElement.innerHTML = "<h1>"+country+"</h1>";
+              currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
             } else {
               window.alert('No results found');
             }
@@ -41,20 +40,13 @@ $(window).load(function(){
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
-        console.log(article);
-        console.log(article.authors);
-        console.log(article.tags);
-        console.log(article.header);
-        console.log(article.body);
         createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates)
       });
     });
   }
   /** Creates a trail on map. */
   function createTrailForDisplay(authors, tags, header, body, coordinates){
-    console.log(coordinates);
     let arr = coordinates.split(',');
-    console.log(arr.length / 2);
     let trail = new google.maps.MVCArray();
     for (let i = 0; i < arr.length; i+=2) {
       trail.push(new google.maps.LatLng(parseFloat(arr[i]), parseFloat(arr[i + 1])));
