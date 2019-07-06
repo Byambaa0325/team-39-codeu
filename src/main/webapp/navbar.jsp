@@ -1,3 +1,5 @@
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -16,9 +18,13 @@
         <li><a href="/article-feed">Articles</a></li>
         <li><a href="/explore.html">Explore</a></li>
         <li><a href="/chat">Chat</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/logout">Logout</a></li>
-        
+        <%UserService userService = UserServiceFactory.getUserService();
+          if (userService.isUserLoggedIn()) {
+        %>
+          <li><a href="/logout">Logout</a></li>
+        <% } else {   %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
       </ul>
     </div><!--End of navbar collapse--->
   </div><!---End of container-->
