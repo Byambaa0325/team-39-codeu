@@ -72,22 +72,12 @@ $(window).load(function(){
     });
     poly.setMap(map);
     //click event -> shows up Article on the left side
-<<<<<<< HEAD
     google.maps.event.addListener(poly, 'click', function(event) {
       var containerDiv = pathInfo(authors, tags, header, body);
       infowindow.setContent(containerDiv.outerHTML);
       infowindow.setPosition(event.latLng);
       infowindow.open(map);
       console.log("Clicked on trail");
-=======
-    google.maps.event.addListener(poly, 'click', function() {
-      var containerDiv = pathInfo(authors, tags, header, body);
-      var infowindow = new google.maps.InfoWindow({
-          content: containerDiv.innerHTML;
-        });
-      infowindow.open(map,poly);
-
->>>>>>> 14629fe75072c0b2df18f495a3fcd13a63c31b76
     });
   }
   function pathInfo(authors, tags, header, body){
