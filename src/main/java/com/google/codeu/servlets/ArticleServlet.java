@@ -4,10 +4,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Article;
 import com.google.codeu.data.Datastore;
-import com.google.gson.Gson;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,12 +34,33 @@ public class ArticleServlet extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        List<Article> articles = datastore.getAllArticles();
-        Gson gson = new Gson();
-        String json = gson.toJson(articles);
 
-        response.getOutputStream().println(json);
+        String id = request.getParameter("id");
+
+        List<Article> articles = datastore.getArticleById(id);
+
+        if (articles.size() == 0) {
+            response.getOutputStream().println("<h1>");
+            response.getOutputStream().println("Article Not Found");
+            response.getOutputStream().println("</h1>");
+            return;
+        }
+
+        Article article = articles.get(0);
+
+        request.setAttribute("id", article.getId().toString());
+        request.setAttribute("authors", article.getAuthors());
+        request.setAttribute("tags", article.getTags());
+        request.setAttribute("header", article.getHeader());
+        request.setAttribute("body", article.getBody());
+        request.setAttribute("timestamp", article.getTimestamp());
+
+        try {
+            request.getRequestDispatcher("/article.jsp").forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

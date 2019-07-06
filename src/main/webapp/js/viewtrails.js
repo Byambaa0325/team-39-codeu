@@ -1,6 +1,9 @@
 $(window).load(function(){
   let map;
   var geocoder = new google.maps.Geocoder;
+  var infowindow = new google.maps.InfoWindow({
+      content: ""
+    });
   function initTrails() {
     var mapOptions = {
       disableDoubleClickZoom: true,
@@ -9,7 +12,7 @@ $(window).load(function(){
       mapTypeId: 'terrain'
     };
 
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    map = new google.maps.Map(document.getElementById('mapFull'), mapOptions);
     map.addListener('dragend', function() {
         var latlng = map.getCenter().toJSON();
         geocoder.geocode({'location': latlng}, function(results, status) {
@@ -36,7 +39,7 @@ $(window).load(function(){
 
   }
   function fetchTrails(){
-    fetch('/article').then((response) => {
+    fetch('/articles').then((response) => {
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
@@ -61,12 +64,17 @@ $(window).load(function(){
     });
     poly.setMap(map);
     //click event -> shows up Article on the left side
-    google.maps.event.addListener(poly, 'click', function() {
-      pathInfo(authors, tags, header, body);
+    google.maps.event.addListener(poly, 'click', function(event) {
+      var containerDiv = pathInfo(authors, tags, header, body);
+      infowindow.setContent(containerDiv.outerHTML);
+      infowindow.setPosition(event.latLng);
+      infowindow.open(map);
+      console.log("Clicked on trail");
     });
   }
   function pathInfo(authors, tags, header, body){
-    const containerDiv = document.getElementById('pathinfo');
+    const containerDiv = document.createElement("div");
+    containerDiv.id = 'pathinfo';
     containerDiv.innerHTML = '';
     const h3 = document.createElement('h3');
     h3.innerHTML = 'Trail info';
@@ -91,6 +99,7 @@ $(window).load(function(){
     ul.appendChild(li_body);
 
     containerDiv.appendChild(ul);
+    return containerDiv;
   }
   initTrails();
 
