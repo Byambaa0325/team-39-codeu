@@ -12,7 +12,7 @@ $(window).load(function(){
       mapTypeId: 'terrain'
     };
 
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    map = new google.maps.Map(document.getElementById('mapFull'), mapOptions);
     map.addListener('dragend', function() {
         var latlng = map.getCenter().toJSON();
         console.log(latlng);
