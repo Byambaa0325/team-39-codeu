@@ -27,23 +27,16 @@
         </div>
       </div>
 
-      <div id="chat-wrapper">
-        <div id="conversations">
-          <div style="border-bottom: 1px black solid">Conversations</div>
-          <div id="conversation-wrapper"></div>
-        </div>
-        <div id="chat">
-          <div id="chat-container"></div>
-          <div id="message-input">
-            <input type="text" id="message-convid" value="" hidden>
-            <input type="text" id="message-message">
-            <button onclick="sendMessage()">Send</button>
-          </div>
-        </div>
+    <div id="chat-wrapper">
+      <div id="conversations">
+        <div style="border-bottom: 1px black solid">Conversations</div>
+        <div id="conversation-wrapper"></div>
       </div>
-
-      <script src="/js/chat.js"></script>
-      <script src="/js/navbar.js"></script>
-    </div>    
+      <div id="chat">
+        <div id="chat-container"></div>
+      </div>
+    </div>
+    <script src="/js/chat.js"></script>
+    <script src="/js/navbar.js"></script>
   </body>
 </html>

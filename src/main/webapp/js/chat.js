@@ -35,7 +35,11 @@ function buildConversations(){
       conversatoinDom.innerHTML = '';
       for( let conv of data ){
         conversatoinDom.appendChild( buildConversationDom(conv) );
-        chatDom.appendChild( buildChatDom(conv) );
+        buildChatDom( conv.id, dom => {
+          chatDom.appendChild(dom);
+          loadChat(conv.id);
+        })
+        // chatDom.appendChild( buildChatDom(conv.id) );
         console.log( 'Created :', conv.nickname );
       }
     });
@@ -57,16 +61,26 @@ function buildConversationDom( conv ){
   return dom;
 }
 
-function buildChatDom( conv ){
-  let dom = document.createElement('div');
-  dom.classList.add('chat');
-  dom.style.display = 'none';
-  dom.id = `chat-${conv.id}`;
-  dom.innerHTML = `
-    <div class="chat-header">${conv.nickname}</div>
-    <div class="chat-container">Loading...</div>
-  `;
-  return dom;
+function buildChatDom( convid, callback ){
+  fetch( `/chat/get/conversation/?convid=${convid}` )
+    .then( resp => resp.json() )
+    .then( conv => {
+      let dom = document.createElement('div');
+      dom.classList.add('chat');
+      dom.style.display = 'none';
+      dom.id = `chat-${conv.id}`;
+      dom.innerHTML = `
+        <div style="height: 760px; overflow-y: scroll;">
+          <div class="chat-header">${conv.nickname}</div>
+          <div class="chat-container">Loading...</div>
+        </div>
+        <div id="message-input">
+          <input type="text" id="message-${conv.id}">
+          <button onclick="sendMessage('${conv.id}')">Send</button>
+        </div>
+      `;
+      callback(dom);
+    });
 }
 
 function loadChat( id ){
@@ -93,7 +107,6 @@ function showChat( id ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
-  document.getElementById('message-convid').value = id;
 }
 
 function buildMessageDom( message ){
@@ -107,11 +120,10 @@ function buildMessageDom( message ){
   return dom;
 }
 
-function sendMessage(){
-  let msgInputDom = document.getElementById('message-message');
-  let convid = document.getElementById('message-convid').value;
+function sendMessage( convid ){
+  let msgInputDom = document.getElementById(`message-${convid}`);
 
-  console.log('Sending message');
+  console.log(`Sending message to ${convid}`);
 
   fetch( '/chat/new/message/', {
     method: 'POST',

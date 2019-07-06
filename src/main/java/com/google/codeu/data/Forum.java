@@ -11,14 +11,22 @@ public class Forum {
   private List<String> keywords;
   private List<String> articleIds;
 
-  public Forum(UUID id, String title, List<String> ownersId, List<String> membersId, List<String> keywords, List<String> articleIds) {
-    this.id = id;
-    this.title = title;
-    this.ownersId = ownersId;
-    this.membersId = membersId;
-    this.keywords = keywords;
-    this.articleIds = articleIds;
-  }
+    /**
+     * @param id
+     * @param title
+     * @param ownersId
+     * @param membersId
+     * @param keywords
+     * @param articleIds
+     */
+    public Forum(UUID id, String title, List<String> ownersId, List<String> membersId, List<String> keywords, List<String> articleIds) {
+        this.id = id;
+        this.title = title;
+        this.ownersId = ownersId;
+        this.membersId = membersId;
+        this.keywords = keywords;
+        this.articleIds = articleIds;
+    }
 
   public UUID getId() {
     return id;

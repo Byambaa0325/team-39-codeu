@@ -19,18 +19,17 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.repackaged.com.google.datastore.v1.CompositeFilter;
 
+import com.google.appengine.api.datastore.Text;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -38,10 +37,10 @@ import com.google.cloud.language.v1.Sentiment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -280,6 +279,7 @@ public class Datastore {
     articleEntity.setProperty("header",article.getHeader());
     articleEntity.setProperty("body", article.getBody());
     articleEntity.setProperty("timestamp", article.getTimestamp());
+    articleEntity.setProperty("coords", article.getCoords());
 
     datastore.put(articleEntity);
   }
@@ -351,7 +351,8 @@ public class Datastore {
 
   public List<Forum> getAllForumList(){
     Query query =
-            new Query("Forum");
+            new Query("Forum")
+            .addSort("title",SortDirection.ASCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     List<Forum> forums = new ArrayList<>();
@@ -402,6 +403,32 @@ public class Datastore {
     List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
     List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
 
+    return new Forum(uuid, title, owners, members, keywords, articleIds);
+  }
+
+  /**
+   * Query Forum by the name from database
+   *
+   * @param name
+   * @return
+   * @throws EntityNotFoundException
+   */
+  public Forum getForumByName(String name) throws EntityNotFoundException{
+    Query query =
+            new Query("Forum")
+                    .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, name));
+    PreparedQuery results = datastore.prepare(query);
+    Entity forumEntity = results.asSingleEntity();
+    if (forumEntity == null){
+      throw new EntityNotFoundException(KeyFactory.createKey("Forum",name));
+    }
+    String idString = forumEntity.getKey().getName();
+    UUID uuid = UUID.fromString(idString);
+    String title = (String) forumEntity.getProperty("title");
+    List<String> owners = Arrays.asList(((String) forumEntity.getProperty("ownersId")).split(","));
+    List<String> members = Arrays.asList(((String) forumEntity.getProperty("membersId")).split(","));
+    List<String> keywords = Arrays.asList(((String) forumEntity.getProperty("keywords")).split(","));
+    List<String> articleIds = Arrays.asList(((String) forumEntity.getProperty("articleIds")).split(","));
     return new Forum(uuid, title, owners, members, keywords, articleIds);
   }
 
@@ -468,7 +495,7 @@ public class Datastore {
   public Conversation getConversation(String id){
     Query query = new Query("Conversation")
       .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, id ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity convEntity = results.asSingleEntity();
     if( convEntity == null ){
@@ -498,9 +525,9 @@ public class Datastore {
   public List<Conversation> getAllConversations(String email){
     Query query = new Query("UserConversation")
       .setFilter( new FilterPredicate( "user", FilterOperator.EQUAL, email ) );
-    
+
     PreparedQuery results = datastore.prepare(query);
-    List<Conversation> conversations = new ArrayList<Conversation>();
+    List<Conversation> conversations = new ArrayList<>();
 
     for( Entity entity : results.asIterable() ){
       conversations.add( getConversation( (String) entity.getProperty("convid") ) );
@@ -520,22 +547,22 @@ public class Datastore {
           new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
         )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
     return entity != null;
   }
-  
+
   /*
   * Checks if conversation is public
   */
   public boolean checkIfConversationIsPublic(String convid){
-    Query query = new Query("UserConversation")
+    Query query = new Query("Conversation")
       .setFilter(
         new FilterPredicate( "convid", FilterOperator.EQUAL, convid )
       );
-    
+
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
 
@@ -563,7 +590,7 @@ public class Datastore {
   */
   public List <ChatMessage> getChatMessages(String email, String convid){
     List <ChatMessage> messages = new ArrayList<>();
-    if( checkUserIsInConversation(email, convid) == false ){
+    if(!checkUserIsInConversation(email, convid)){
       return messages;
     }
 
@@ -582,7 +609,7 @@ public class Datastore {
 
     return messages;
   }
-  
+
   /**
    * Builds a article from entity
    *
@@ -600,9 +627,10 @@ public class Datastore {
       String header = (String) entity.getProperty("header");
       String body = (String) entity.getProperty("body");
       long timestamp = (long) entity.getProperty("timestamp");
+      String coordinates = (String) entity.getProperty("coords");
 
 
-      article = new Article(id, authors, tags, header, body, timestamp);
+      article = new Article(id, authors, tags, header, body, timestamp, coordinates);
       return article;
     } catch (Exception e) {
       System.err.println("Error reading article.");
@@ -610,5 +638,30 @@ public class Datastore {
       e.printStackTrace();
     }
     return article;
+  }
+
+  public void updateFieldForum(String forumName, String fieldToAppend, String valueToAppend, boolean updateAll){
+    PreparedQuery results = null;
+    if(updateAll){
+      Query query =
+              new Query("Forum")
+              .addSort("title",SortDirection.ASCENDING);
+      results = datastore.prepare(query);
+    }
+    else{
+      Query query =
+              new Query("Forum")
+                      .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
+      results = datastore.prepare(query);
+    }
+
+    for(Entity forumEntity : results.asIterable()) {
+
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToAppend);
+      fieldBeingUpdated+=","+valueToAppend;
+      forumEntity.setProperty(fieldToAppend,fieldBeingUpdated);
+
+      datastore.put(forumEntity);
+    }
   }
 }
