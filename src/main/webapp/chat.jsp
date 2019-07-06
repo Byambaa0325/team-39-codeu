@@ -12,7 +12,9 @@
   </head>
   <body onload="buildChat()">
     <div class="container">
-      <div id="navbar"></div>
+      <div id="navbar">
+        <%@ include file="navbar.jsp" %>
+      </div>
       <h3>Welcome to chat!</h3>
       <div>
         <div class="dropdown">
