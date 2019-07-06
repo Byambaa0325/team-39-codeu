@@ -12,16 +12,16 @@
 <body>
 
 <h1><%= request.getAttribute("header") %></h1>
-<h2><%= request.getAttribute("authors") %></h2>
-<sub><%= request.getAttribute("tags") %></sub>
+<sub><%= request.getAttribute("authors") %></sub>
+<i><sub><%= request.getAttribute("tags") %></sub></i>
 <hr>
 <div class = "container">
 <main>
-    <p><%= request.getAttribute("body") %></p>
+    <%= request.getAttribute("body") %>
 </main>
 </div>
 
-<h3><%= request.getAttribute("timestamp") %></h3>
+<h6><%= request.getAttribute("timestamp") %></h6>
 <sub><%= request.getAttribute("id") %></sub>
 
 </body>
