@@ -277,7 +277,7 @@ public class Datastore {
     articleEntity.setProperty("authors", article.getAuthors());
     articleEntity.setProperty("tags",article.getTags());
     articleEntity.setProperty("header",article.getHeader());
-    articleEntity.setProperty("body", new Text(article.getBody()));
+    articleEntity.setProperty("body", article.getBody());
     articleEntity.setProperty("timestamp", article.getTimestamp());
     articleEntity.setProperty("coords", article.getCoords());
 
@@ -625,7 +625,7 @@ public class Datastore {
       String authors = (String) entity.getProperty("authors");
       String tags = (String) entity.getProperty("tags");
       String header = (String) entity.getProperty("header");
-      String body = ((Text) entity.getProperty("body")).toString();
+      String body = (String) entity.getProperty("body");
       long timestamp = (long) entity.getProperty("timestamp");
       String coordinates = (String) entity.getProperty("coords");
 
