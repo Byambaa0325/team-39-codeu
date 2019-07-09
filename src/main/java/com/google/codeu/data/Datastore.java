@@ -640,7 +640,7 @@ public class Datastore {
     return article;
   }
 
-  public void updateFieldForum(String forumName, String fieldToAppend, String valueToAppend, boolean updateAll){
+  public void updateFieldForum(String forumName, String fieldToRemove, String valueToRemove, boolean updateAll){
     PreparedQuery results = null;
     if(updateAll){
       Query query =
@@ -657,9 +657,34 @@ public class Datastore {
 
     for(Entity forumEntity : results.asIterable()) {
 
-      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToAppend);
-      fieldBeingUpdated+=","+valueToAppend;
-      forumEntity.setProperty(fieldToAppend,fieldBeingUpdated);
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToRemove);
+      fieldBeingUpdated+=","+valueToRemove;
+      forumEntity.setProperty(fieldToRemove,fieldBeingUpdated);
+
+      datastore.put(forumEntity);
+    }
+  }
+
+  public void removeFieldForum(String forumName, String fieldToRemove, String valueToRemove, boolean updateAll){
+    PreparedQuery results = null;
+    if(updateAll){
+      Query query =
+              new Query("Forum")
+              .addSort("title",SortDirection.ASCENDING);
+      results = datastore.prepare(query);
+    }
+    else{
+      Query query =
+              new Query("Forum")
+                      .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
+      results = datastore.prepare(query);
+    }
+
+    for(Entity forumEntity : results.asIterable()) {
+
+      List<String> fieldBeingUpdated = Arrays.asList(((String) forumEntity.getProperty(fieldToRemove)).split(","));
+      fieldBeingUpdated.remove(valueToRemove);
+      forumEntity.setProperty(fieldToRemove,String.join(",",fieldBeingUpdated));
 
       datastore.put(forumEntity);
     }
