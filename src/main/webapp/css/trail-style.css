@@ -29,3 +29,25 @@ html, body {
 .delete-menu:hover {
   background: #eee;
 }
+
+#floating-navbar {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  margin: 20px;
+  z-index: 1;
+  font-size: 48px;
+}
+
+#floating-navbar button{
+  font-size: 48px;
+}
+
+.goy-box{
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  height: 100%;
+  background: #eee;
+}
