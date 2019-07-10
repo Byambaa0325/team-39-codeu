@@ -46,20 +46,20 @@
   <div id="pathinfo">
     Enter a new article:<br/>
     Header
-    <input type="text" name="header">
+    <input type="text" name="header" required>
     <br/>
     Authors
     <input type="text" name="authors">
     <br/>
     tags
-    <input type="text" name="tags">
+    <input type="text" name="tags"required>
     <br/>
     text
-    <textarea name="body" id="article-input"></textarea>
+    <textarea name="body" id="article-input" required></textarea>
     <br/>
   </div>
 
   <div id="savepath"></div>
-  <textarea id="json_polyline" style="height:10%; width:100%"></textarea>
+  <textarea id="json_polyline" style="height:10%; width:100%; display:none"></textarea>
 </body>
 </html>
