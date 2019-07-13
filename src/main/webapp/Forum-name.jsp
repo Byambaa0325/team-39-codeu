@@ -34,7 +34,7 @@
     <title><%=forum.getTitle()%></title>
 </head>
 <body>
-<h1><%=forum.getTitle()%></h1>
+<h1><%=forum.getTitle().toUpperCase()%></h1>
 <hr>
 <div class="container">
     <div id="article-container">
