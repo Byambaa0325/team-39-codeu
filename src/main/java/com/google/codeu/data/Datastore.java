@@ -449,10 +449,13 @@ public class Datastore {
       }
       //An entity was not found
       catch (EntityNotFoundException e) {
+          //Remove from the forum entity stored in datastore
           removeFieldForum(forum.getTitle(), "articleIds", e.getKey().getName(), true);
+          //Update the forum object being passed
           ArrayList<String> ids = new ArrayList<>(forum.getArticleIds());
           ids.remove(e.getKey().getName());
           forum.setArticleIds(ids);
+          //Recursion to continue
           return getArticlesOfForum(forum);
           }
 
