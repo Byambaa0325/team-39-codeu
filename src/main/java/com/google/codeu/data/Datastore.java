@@ -448,23 +448,14 @@ public class Datastore {
           result = queryByList(forum.getArticleIds(), "Article");
       }
       //An entity was not found
-      catch (Exception e) {
-          //Get list of separate ids
-          List<String> ids = forum.getArticleIds();
-          //For every id of the forum's articles
-          for (String id : ids) {
-              Key key = KeyFactory.createKey("Article", id);
-              //Query the id
-              try {
-                  Entity entity = datastore.get(key);
-                  result.add(entity);
-              }
-              //if the id not found remove it from the forum
-              catch (Exception f) {
-                  removeFieldForum(forum.getTitle(), "Article", id, true);
-              }
+      catch (EntityNotFoundException e) {
+          removeFieldForum(forum.getTitle(), "articleIds", e.getKey().getName(), true);
+          ArrayList<String> ids = new ArrayList<>(forum.getArticleIds());
+          ids.remove(e.getKey().getName());
+          forum.setArticleIds(ids);
+          return getArticlesOfForum(forum);
           }
-      }
+
     return readArticlesFromList(result);
   }
 
@@ -480,7 +471,12 @@ public class Datastore {
     List<Entity> results = new ArrayList<>();
     for (String id : ids){
       Key key = KeyFactory.createKey(kind,id);
-      Entity entity = datastore.get(key);
+        Entity entity;
+        try {
+            entity = datastore.get(key);
+        } catch (Exception e) {
+            throw new EntityNotFoundException(key);
+        }
       results.add(entity);
     }
     return results;
@@ -678,15 +674,17 @@ public class Datastore {
                       .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
       results = datastore.prepare(query);
     }
+      int count = 0;
 
     for(Entity forumEntity : results.asIterable()) {
-
+        count++;
       String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToRemove);
       fieldBeingUpdated+=","+valueToRemove;
       forumEntity.setProperty(fieldToRemove,fieldBeingUpdated);
 
       datastore.put(forumEntity);
     }
+      System.out.println("Updated " + count + " forums.");
   }
 
   public void removeFieldForum(String forumName, String fieldToRemove, String valueToRemove, boolean updateAll){
@@ -706,7 +704,7 @@ public class Datastore {
 
     for(Entity forumEntity : results.asIterable()) {
 
-      List<String> fieldBeingUpdated = Arrays.asList(((String) forumEntity.getProperty(fieldToRemove)).split(","));
+        ArrayList<String> fieldBeingUpdated = new ArrayList<>(Arrays.asList(((String) forumEntity.getProperty(fieldToRemove)).split(",")));
       fieldBeingUpdated.remove(valueToRemove);
       forumEntity.setProperty(fieldToRemove,String.join(",",fieldBeingUpdated));
 
