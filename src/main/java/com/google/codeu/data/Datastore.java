@@ -440,7 +440,21 @@ public class Datastore {
    * @throws EntityNotFoundException
    */
   public List<Article> getArticlesOfForum(Forum forum) throws EntityNotFoundException {
-    List<Entity> result= queryByList(forum.getArticleIds(),"Article");
+      List<Entity> result = new ArrayList<>();
+      try {
+          result = queryByList(forum.getArticleIds(), "Article");
+      } catch (Exception e) {
+          List<String> ids = forum.getArticleIds();
+          for (String id : ids) {
+              Key key = KeyFactory.createKey("Article", id);
+              try {
+                  Entity entity = datastore.get(key);
+                  result.add(entity);
+              } catch (Exception f) {
+                  removeFieldForum(forum.getTitle(), "Article", id, true);
+              }
+          }
+      }
     return readArticlesFromList(result);
   }
 
