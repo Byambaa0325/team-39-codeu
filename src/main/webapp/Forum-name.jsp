@@ -36,6 +36,7 @@
 <body>
 <h1><%=forum.getTitle()%></h1>
 <hr>
+<a href = "/createTrail.html"><button><h4>+Add Article</h4></button></a>
 <div class="container">
     <div id="article-container">
       <% if(!articles.isEmpty()){
