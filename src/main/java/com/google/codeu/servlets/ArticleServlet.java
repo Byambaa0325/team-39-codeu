@@ -69,17 +69,16 @@ public class ArticleServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-         // UserService userService = UserServiceFactory.getUserService();
-         // if (!userService.isUserLoggedIn()) {
-         //     response.sendRedirect("/index.html");
-         //     return;
-         // }
-
-        //String authors = userService.getCurrentUser().getEmail();
-        String authors = "qwerty";
-         if(!request.getParameter("authors").equals("")) {
-             authors += ","+Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+         UserService userService = UserServiceFactory.getUserService();
+         if (!userService.isUserLoggedIn()) {
+             response.sendRedirect("/index.html");
+             return;
          }
+
+        String authors = userService.getCurrentUser().getEmail();
+        if(!request.getParameter("authors").equals("")) {
+             authors += ","+Jsoup.clean(request.getParameter("authors"), Whitelist.none());
+        }
         String tags = Jsoup.clean(request.getParameter("tags"), Whitelist.none());
         String header = Jsoup.clean(request.getParameter("header"), Whitelist.none());
         String body = Jsoup.clean(request.getParameter("body"), Whitelist.none());
