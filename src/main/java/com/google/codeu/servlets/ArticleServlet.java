@@ -76,9 +76,9 @@ public class ArticleServlet extends HttpServlet {
          }
 
         String authors = userService.getCurrentUser().getEmail();
-         if(!request.getParameter("authors").equals("")) {
+        if(!request.getParameter("authors").equals("")) {
              authors += ","+Jsoup.clean(request.getParameter("authors"), Whitelist.none());
-         }
+        }
         String tags = Jsoup.clean(request.getParameter("tags"), Whitelist.none());
         String header = Jsoup.clean(request.getParameter("header"), Whitelist.none());
         String body = Jsoup.clean(request.getParameter("body"), Whitelist.none());

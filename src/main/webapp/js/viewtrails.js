@@ -54,22 +54,29 @@ $(window).load(function(){
     for (let i = 0; i < arr.length; i+=2) {
       trail.push(new google.maps.LatLng(parseFloat(arr[i]), parseFloat(arr[i + 1])));
     }
+    var startingPoint = {lat:parseFloat(arr[0]), lng:parseFloat(arr[1])};
+    var marker = new google.maps.Marker({
+      position: startingPoint,
+      map: map
+    });
     const poly = new google.maps.Polyline({
       path: trail,
       editable: false,
       strokeColor: '#FF0000',
       strokeOpacity: 1.0,
-      strokeWeight: 2,
-      map: map
+      strokeWeight: 2
     });
-    poly.setMap(map);
-    //click event -> shows up Article on the left side
-    google.maps.event.addListener(poly, 'click', function(event) {
-      var containerDiv = pathInfo(authors, tags, header, body);
+    var containerDiv = pathInfo(authors, tags, header, body);
+    marker.addListener('mouseover', function(){
+      poly.setMap(map);
       infowindow.setContent(containerDiv.outerHTML);
-      infowindow.setPosition(event.latLng);
+      infowindow.setPosition(startingPoint);
       infowindow.open(map);
       console.log("Clicked on trail");
+    });
+    marker.addListener('mouseout', function(){
+      poly.setMap(null);
+      infowindow.close();
     });
   }
   function pathInfo(authors, tags, header, body){
