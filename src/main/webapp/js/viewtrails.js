@@ -66,17 +66,21 @@ $(window).load(function(){
       strokeOpacity: 1.0,
       strokeWeight: 2
     });
-    var containerDiv = pathInfo(authors, tags, header, body);
+    
     marker.addListener('mouseover', function(){
       poly.setMap(map);
+    });
+    
+    var containerDiv = pathInfo(authors, tags, header, body);
+    marker.addListener('click', function(){
       infowindow.setContent(containerDiv.outerHTML);
       infowindow.setPosition(startingPoint);
       infowindow.open(map);
       console.log("Clicked on trail");
     });
+    
     marker.addListener('mouseout', function(){
       poly.setMap(null);
-      infowindow.close();
     });
   }
   function pathInfo(authors, tags, header, body){
