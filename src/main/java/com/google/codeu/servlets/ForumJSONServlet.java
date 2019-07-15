@@ -25,7 +25,7 @@ import java.util.UUID;
  * Handles fetching and saving {@link Forum} instances.
  */
 @WebServlet("/forumJSON")
-public class ForumServlet extends HttpServlet {
+public class ForumJSONServlet extends HttpServlet {
 
     private Datastore datastore;
 
