@@ -25,13 +25,15 @@ $(window).load(function(){
                   country = component.long_name;
                 }
               });
+              if(country != ""){
               currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
+            }
               fetchForum();
             } else {
-              window.alert('No results found');
+              console.log('No results found');
             }
           } else {
-            window.alert('Geocoder failed due to: ' + status);
+            console.log('Geocoder failed due to: ' + status);
           }
         });
 
