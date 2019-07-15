@@ -2,7 +2,9 @@
 <%@ page import="com.google.codeu.data.Datastore" %>
 <%@ page import="com.google.codeu.data.Article" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.google.appengine.api.datastore.EntityNotFoundException" %><%--
+<%@ page import="com.google.appengine.api.datastore.EntityNotFoundException" %>
+<%@ page errorPage="error404.jsp" %>  
+<%--
   Created by IntelliJ IDEA.
   User: Byambaa Bayarmandakh
   Date: 7/4/2019
