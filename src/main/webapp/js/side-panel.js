@@ -1,3 +1,7 @@
+
+var sidePanelForum;
+var locationDiv;
+
 function buildArticleDiv(article){
   const containerDiv = document.createElement("div");
   containerDiv.classList.add('pathinfo');
@@ -13,19 +17,32 @@ function buildArticleDiv(article){
   const author = document.createElement("sub");
   author.innerHTML = article.authors[0];
   containerDiv.appendChild(author);
-  var date = new Date(article.timestamp*1000);
+  var date = new Date(article.timestamp);
   containerDiv.innerHTML += date.toDateString();
   return containerDiv;
 }
 
-function fetchForum(countryName){
+function fetchForum(){
+  sidePanelForum.innerHTML = "";
+  var countryName = locationDiv.childNodes[0].childNodes[0].innerHTML.toLowerCase();
   fetch('/forumJSON?country='+countryName).then((response) => {
     return response.json();
   }).then((articles) => {
     articles.forEach((article) => {
-      buildArticleDiv(article)
+      const articleDiv = buildArticleDiv(article)
+      sidePanelForum.appendChild(articleDiv);
     });
   });
 }
 
-const sidePanelForum = document.getElementById("")
+$(window).load(function(){
+
+
+function initForumPanel(){
+  fetchForum();
+}
+sidePanelForum = document.getElementById("forum-content");
+locationDiv = document.getElementById("current-location");
+
+initForumPanel();
+});

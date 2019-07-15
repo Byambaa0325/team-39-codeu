@@ -26,6 +26,7 @@ $(window).load(function(){
                 }
               });
               currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
+              fetchForum();
             } else {
               window.alert('No results found');
             }

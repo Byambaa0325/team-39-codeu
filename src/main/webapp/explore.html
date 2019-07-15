@@ -23,6 +23,7 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
     async defer></script>
   <script type="text/javascript" src="js/viewtrails.js"></script>
+  <script src="js/side-panel.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-expand-md">
@@ -33,7 +34,7 @@
   </nav>
 
   <div id="floating-navbar">
-    <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container">forum</button>
+    <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container" onclick="fetchForum()">forum</button>
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="false" aria-controls="chat-container">chat</button>
   </div><!-- End of floating navbar -->
   <div>
