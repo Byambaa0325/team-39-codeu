@@ -113,6 +113,9 @@ img {
   z-index: 1;
   top:80px;
 }
+#forum-container{
+  overflow: scroll;
+}
 
 @media(max-width: 768px) {
   h1 {
