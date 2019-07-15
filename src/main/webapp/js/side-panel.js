@@ -38,11 +38,11 @@ function fetchForum(){
 $(window).load(function(){
 
 
-function initForumPanel(){
-  fetchForum();
-}
-sidePanelForum = document.getElementById("forum-content");
-locationDiv = document.getElementById("current-location");
+  function initForumPanel(){
+    fetchForum();
+  }
+  sidePanelForum = document.getElementById("forum-content");
+  locationDiv = document.getElementById("current-location");
 
-initForumPanel();
+  initForumPanel();
 });
