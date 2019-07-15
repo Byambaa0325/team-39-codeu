@@ -663,7 +663,7 @@ public class Datastore {
     return article;
   }
 
-  public void updateFieldForum(String forumName, String fieldToRemove, String valueToRemove, boolean updateAll){
+  public void updateFieldForum(String forumName, String fieldToUpdate, String valueToUpdate, boolean updateAll){
     PreparedQuery results = null;
     if(updateAll){
       Query query =
@@ -681,9 +681,9 @@ public class Datastore {
 
     for(Entity forumEntity : results.asIterable()) {
         count++;
-      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToRemove);
-      fieldBeingUpdated+=","+valueToRemove;
-      forumEntity.setProperty(fieldToRemove,fieldBeingUpdated);
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToUpdate);
+      fieldBeingUpdated+=","+valueToUpdate;
+      forumEntity.setProperty(fieldToUpdate,fieldBeingUpdated);
 
       datastore.put(forumEntity);
     }
