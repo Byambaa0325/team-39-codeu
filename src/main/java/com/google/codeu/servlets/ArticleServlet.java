@@ -69,13 +69,14 @@ public class ArticleServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-         UserService userService = UserServiceFactory.getUserService();
-         if (!userService.isUserLoggedIn()) {
-             response.sendRedirect("/index.html");
-             return;
-         }
+         // UserService userService = UserServiceFactory.getUserService();
+         // if (!userService.isUserLoggedIn()) {
+         //     response.sendRedirect("/index.html");
+         //     return;
+         // }
 
-        String authors = userService.getCurrentUser().getEmail();
+        //String authors = userService.getCurrentUser().getEmail();
+        String authors = "qwerty";
          if(!request.getParameter("authors").equals("")) {
              authors += ","+Jsoup.clean(request.getParameter("authors"), Whitelist.none());
          }
