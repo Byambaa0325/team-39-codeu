@@ -2,8 +2,9 @@
 <%@ page import="com.google.codeu.data.Datastore" %>
 <%@ page import="com.google.codeu.data.Article" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="com.google.appengine.api.datastore.EntityNotFoundException" %>
-<%@ page errorPage="error404.jsp" %>  
+<%@ page errorPage="error404.jsp" %>
 <%--
   Created by IntelliJ IDEA.
   User: Byambaa Bayarmandakh
@@ -41,14 +42,15 @@
 <div class="container">
     <div id="article-container">
       <% if(!articles.isEmpty()){
-      for (Article article : articles){%>
+      for (Article article : articles){
+        Date date = new Date((long)article.getTimestamp());%>
           <div class="article">
               <a href = "article?id=<%=article.getId().toString()%>">
                   <h3><%= article.getHeader()%></h3>
               </a>
 
               <sub><%=article.getAuthors()%></sub>
-              <%=article.getTimestamp()%>
+              <%=date.toString()%>
           </div>
       <%}}
       else{%>
