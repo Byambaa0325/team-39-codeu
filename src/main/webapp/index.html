@@ -9,6 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   <script src="js/scrolling.js"></script>
+  <script src="js/navigation-loader.js"></script>
   <link rel="stylesheet" href="css/landing-style.css">
   <script type="text/javascript">
      $(document).on('click','.navbar-collapse.in',function(e) {
@@ -18,7 +19,7 @@
     });
   </script>
 </head>
-<body>
+<body onload="addLoginOrLogoutLinkToNavigation();">
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -30,7 +31,7 @@
         <a href="#" class="navbar-brand"></a>
       </div><!---End of navbar header-->
       <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
+        <ul id="navigation" class="nav navbar-nav navbar-right">
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#features">Features</a></li>
