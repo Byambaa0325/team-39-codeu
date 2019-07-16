@@ -111,7 +111,8 @@ img {
 #current-location{
   position: absolute;
   z-index: 1;
-  top:80px;
+  top:95vh;
+  left:10px;
 }
 #forum-container{
   overflow: scroll;
