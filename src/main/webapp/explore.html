@@ -23,12 +23,15 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
     async defer></script>
   <script type="text/javascript" src="js/viewtrails.js"></script>
+  <script src="js/navigation-loader.js"></script>
 </head>
-<body>
+<body onload="addLoginOrLogoutLinkToNavigation();">
   <nav class="navbar navbar-expand-md">
     <div class="navbar-nav ml-auto mr-md-2">
-      <a class="nav-item nav-link active" href="index.html">Home</a>
-      <a class="nav-item nav-link" href="createTrail.html">Create Path</a>
+      <ul id="navigation"  class="nav navbar-nav navbar-right">
+        <li><a class="nav-item nav-link active" href="index.html">Home</a><li>
+        <li><a class="nav-item nav-link" href="createTrail.html">Create Path</a><li>
+      </ul>
     </div>
   </nav>
 
