@@ -48,7 +48,6 @@ public class ArticleServlet extends HttpServlet {
 
         Article article = articles.get(0);
 
-        request.setAttribute("id", article.getId().toString());
         request.setAttribute("authors", article.getAuthors());
         request.setAttribute("tags", article.getTags());
         request.setAttribute("header", article.getHeader());

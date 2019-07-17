@@ -26,7 +26,6 @@
 </div>
 
 <h6>Posted on: <%= date.toString() %></h6>
-<sub><%= request.getAttribute("id") %></sub>
 
 </body>
 </html>
