@@ -48,11 +48,13 @@ public class ArticleServlet extends HttpServlet {
 
         Article article = articles.get(0);
 
+        request.setAttribute("id", article.getId());
         request.setAttribute("authors", article.getAuthors());
         request.setAttribute("tags", article.getTags());
         request.setAttribute("header", article.getHeader());
         request.setAttribute("body", article.getBody());
         request.setAttribute("timestamp", article.getTimestamp());
+        request.setAttribute("coordinates", article.getCoords());
 
         try {
             request.getRequestDispatcher("/article.jsp").forward(request, response);
