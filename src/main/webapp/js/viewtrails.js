@@ -86,37 +86,36 @@ $(window).load(function(){
   }
   function pathInfo(authors, tags, header, body, id){
     const containerDiv = document.createElement("div");
-    containerDiv.id = 'pathinfo';
+    containerDiv.classList.add("pathinfo");
     containerDiv.innerHTML = '';
+
     const h3 = document.createElement('h3');
-    h3.innerHTML = 'Trail info';
+    h3.innerHTML = header;
     containerDiv.appendChild(h3);
 
-    var ul = document.createElement('ul');
-    ul.setAttribute('id', 'path');
-    var li_authors = document.createElement('li');
-    li_authors.innerHTML = 'Authors: ' + authors[0];
-    ul.appendChild(li_authors);
+    var li_authors = document.createElement('div');
+    li_authors.innerHTML = '<i><sub>Posted by ' + authors[0]+'</sub></i>';
+    containerDiv.appendChild(li_authors);
 
-    var li_tags = document.createElement('li');
-    li_tags.innerHTML = 'Tags: ' + tags[0];
-    ul.appendChild(li_tags);
+    var hr = document.createElement('hr');
+    containerDiv.appendChild(hr);
 
-    var li_header = document.createElement('li');
-    li_header.innerHTML = 'Header: ' + header;
-    ul.appendChild(li_header);
 
-    var li_body = document.createElement('li');
-    li_body.innerHTML = 'Body: ' + body;
-    ul.appendChild(li_body);
+
+    var li_body = document.createElement('p');
+    if(body.length>=30){
+    li_body.innerHTML = body;
+    }
+    else{
+      li_body.innerHTML = body.substring(0,30);
+    }
 
     var li_link = document.createElement('a');
     li_link.href = '/article?id='+id;
     li_link.style.color="black";
-    li_link.innerHTML = "Read more...";
-    ul.appendChild(li_link);
+    li_link.appendChild(li_body);
 
-    containerDiv.appendChild(ul);
+    containerDiv.appendChild(li_link);
     return containerDiv;
   }
   initTrails();

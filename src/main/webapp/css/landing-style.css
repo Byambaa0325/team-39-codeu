@@ -77,7 +77,7 @@ img {
   max-width: 200px;
   margin: 1% auto;
 }
-#pathinfo {
+.pathinfo {
   color: black;
 }
 .social {
