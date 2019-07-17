@@ -440,7 +440,25 @@ public class Datastore {
    * @throws EntityNotFoundException
    */
   public List<Article> getArticlesOfForum(Forum forum) throws EntityNotFoundException {
-    List<Entity> result= queryByList(forum.getArticleIds(),"Article");
+      //Initialize empty arraylist
+      List<Entity> result = new ArrayList<>();
+
+      try {
+          //Retrieve list of article entities
+          result = queryByList(forum.getArticleIds(), "Article");
+      }
+      //An entity was not found
+      catch (EntityNotFoundException e) {
+          //Remove from the forum entity stored in datastore
+          removeFieldForum(forum.getTitle(), "articleIds", e.getKey().getName(), true);
+          //Update the forum object being passed
+          ArrayList<String> ids = new ArrayList<>(forum.getArticleIds());
+          ids.remove(e.getKey().getName());
+          forum.setArticleIds(ids);
+          //Recursion to continue
+          return getArticlesOfForum(forum);
+          }
+
     return readArticlesFromList(result);
   }
 
@@ -456,7 +474,12 @@ public class Datastore {
     List<Entity> results = new ArrayList<>();
     for (String id : ids){
       Key key = KeyFactory.createKey(kind,id);
-      Entity entity = datastore.get(key);
+        Entity entity;
+        try {
+            entity = datastore.get(key);
+        } catch (Exception e) {
+            throw new EntityNotFoundException(key);
+        }
       results.add(entity);
     }
     return results;
@@ -640,7 +663,34 @@ public class Datastore {
     return article;
   }
 
-  public void updateFieldForum(String forumName, String fieldToAppend, String valueToAppend, boolean updateAll){
+  public void updateFieldForum(String forumName, String fieldToUpdate, String valueToUpdate, boolean updateAll){
+    PreparedQuery results = null;
+    if(updateAll){
+      Query query =
+              new Query("Forum")
+              .addSort("title",SortDirection.ASCENDING);
+      results = datastore.prepare(query);
+    }
+    else{
+      Query query =
+              new Query("Forum")
+                      .setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, forumName));
+      results = datastore.prepare(query);
+    }
+      int count = 0;
+
+    for(Entity forumEntity : results.asIterable()) {
+        count++;
+      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToUpdate);
+      fieldBeingUpdated+=","+valueToUpdate;
+      forumEntity.setProperty(fieldToUpdate,fieldBeingUpdated);
+
+      datastore.put(forumEntity);
+    }
+      System.out.println("Updated " + count + " forums.");
+  }
+
+  public void removeFieldForum(String forumName, String fieldToRemove, String valueToRemove, boolean updateAll){
     PreparedQuery results = null;
     if(updateAll){
       Query query =
@@ -657,9 +707,9 @@ public class Datastore {
 
     for(Entity forumEntity : results.asIterable()) {
 
-      String fieldBeingUpdated = (String) forumEntity.getProperty(fieldToAppend);
-      fieldBeingUpdated+=","+valueToAppend;
-      forumEntity.setProperty(fieldToAppend,fieldBeingUpdated);
+        ArrayList<String> fieldBeingUpdated = new ArrayList<>(Arrays.asList(((String) forumEntity.getProperty(fieldToRemove)).split(",")));
+      fieldBeingUpdated.remove(valueToRemove);
+      forumEntity.setProperty(fieldToRemove,String.join(",",fieldBeingUpdated));
 
       datastore.put(forumEntity);
     }
