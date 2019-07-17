@@ -47,6 +47,8 @@ $(window).load(function(){
     const authors = document.getElementsByName("authors")[0].value;
     const tags = document.getElementsByName("tags")[0].value;
     const body = document.getElementsByName("body")[0].value;
+    const forum = window.location.search;
+
 
     //trail coordinates
     var coordinate_poly = poly.getPath().getArray();
@@ -67,6 +69,11 @@ $(window).load(function(){
     params.append('tags', tags);
     params.append('body', body);
     params.append('coordinates', newCoordinates_poly);
+    //if there is variable for forum
+    if(forum !=""){
+      //Add parameter "forum" by slicing querystring 
+      params.append("forum", forum.slice(forum.indexOf("country=")+8));
+    }
     console.log(newCoordinates_poly);
     fetch('/article', {
       method: 'POST',

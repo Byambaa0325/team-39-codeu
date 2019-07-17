@@ -38,6 +38,10 @@
 <body>
 <h1><%=forum.getTitle().toUpperCase()%></h1>
 <hr>
+<form action="/createTrail.html" method="GET" id="AddArticle">
+<input type="hidden" name="forum" value="<%= forum.getTitle()%>">
+<button type = "submit" form="AddArticle" value="Submit"><h4>+Add Article</h4></button>
+</form>
 <div class="container">
     <div id="article-container">
       <% if(!articles.isEmpty()){
