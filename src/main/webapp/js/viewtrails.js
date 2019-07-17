@@ -43,12 +43,12 @@ $(window).load(function(){
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
-        createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates)
+        createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
       });
     });
   }
   /** Creates a trail on map. */
-  function createTrailForDisplay(authors, tags, header, body, coordinates){
+  function createTrailForDisplay(authors, tags, header, body, coordinates, id){
     let arr = coordinates.split(',');
     let trail = new google.maps.MVCArray();
     for (let i = 0; i < arr.length; i+=2) {
@@ -66,6 +66,7 @@ $(window).load(function(){
       strokeOpacity: 1.0,
       strokeWeight: 2
     });
+
     var infowindow = new google.maps.InfoWindow({
         content: ""
       });
@@ -83,7 +84,7 @@ $(window).load(function(){
       console.log("Clicked on trail");
     });
   }
-  function pathInfo(authors, tags, header, body){
+  function pathInfo(authors, tags, header, body, id){
     const containerDiv = document.createElement("div");
     containerDiv.id = 'pathinfo';
     containerDiv.innerHTML = '';
@@ -108,6 +109,12 @@ $(window).load(function(){
     var li_body = document.createElement('li');
     li_body.innerHTML = 'Body: ' + body;
     ul.appendChild(li_body);
+
+    var li_link = document.createElement('a');
+    li_link.href = '/article?id='+id;
+    li_link.style.color="black";
+    li_link.innerHTML = "Read more...";
+    ul.appendChild(li_link);
 
     containerDiv.appendChild(ul);
     return containerDiv;
