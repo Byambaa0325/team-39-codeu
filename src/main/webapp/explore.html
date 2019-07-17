@@ -11,18 +11,19 @@
   <script src="js/scrolling.js"></script>
   <link rel="stylesheet" href="css/landing-style.css">
   <script type="text/javascript">
-     $(document).on('click','.navbar-collapse.in',function(e) {
+  $(document).on('click','.navbar-collapse.in',function(e) {
     if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
-        $(this).collapse('hide');
+      $(this).collapse('hide');
     }
-    });
+  });
   </script>
   <title>View Trails</title>
   <link rel="stylesheet" href="css/trail-style.css">
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
-    async defer></script>
+  async defer></script>
   <script type="text/javascript" src="js/viewtrails.js"></script>
+  <script src="js/side-panel.js"></script>
   <script src="js/navigation-loader.js"></script>
 </head>
 <body onload="addLoginOrLogoutLinkToNavigation();">
@@ -36,7 +37,7 @@
   </nav>
 
   <div id="floating-navbar">
-    <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container">forum</button>
+    <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container" onclick="fetchForum()">forum</button>
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="false" aria-controls="chat-container">chat</button>
   </div><!-- End of floating navbar -->
   <div>

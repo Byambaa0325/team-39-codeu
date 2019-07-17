@@ -114,6 +114,9 @@ img {
   top:95vh;
   left:10px;
 }
+#forum-container{
+  overflow: scroll;
+}
 
 @media(max-width: 768px) {
   h1 {

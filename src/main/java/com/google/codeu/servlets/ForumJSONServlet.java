@@ -22,41 +22,41 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Handles fetching and saving {@link Forum} instances.
- */
+* Handles fetching and saving {@link Forum} instances.
+*/
 @WebServlet("/forumJSON")
 public class ForumJSONServlet extends HttpServlet {
 
-    private Datastore datastore;
+  private Datastore datastore;
 
-    @Override
-    public void init() {
-        datastore = new Datastore();
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
+
+  /**
+  * Return JSON {@link Forum. Responds with
+  * error if forum is not found.
+  */
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String country = request.getParameter("country");
+    Forum forum = null;
+    try {
+      forum = datastore.getForumByName(country);
+    } catch (EntityNotFoundException e) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
-
-    /**
-     * Return JSON {@link Forum. Responds with
-     * error if forum is not found.
-     */
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String country = request.getParameter("country");
-      Forum forum = null;
-      try {
-        forum = datastore.getForumByName(country);
-      } catch (EntityNotFoundException e) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      }
-      List<Article> articles = null;
-      try {
-        articles = datastore.getArticlesOfForum(forum);
-      } catch (EntityNotFoundException e) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      }
-      Gson gson = new Gson();
-      String json = gson.toJson(articles);
-
-      response.getOutputStream().println(json);
-
+    List<Article> articles = null;
+    try {
+      articles = datastore.getArticlesOfForum(forum);
+    } catch (EntityNotFoundException e) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
+    Gson gson = new Gson();
+    String json = gson.toJson(articles);
+
+    response.getOutputStream().println(json);
+
+  }
 }

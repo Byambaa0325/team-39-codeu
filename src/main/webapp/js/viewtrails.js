@@ -11,27 +11,30 @@ $(window).load(function(){
 
     map = new google.maps.Map(document.getElementById('mapFull'), mapOptions);
     map.addListener('dragend', function() {
-        var latlng = map.getCenter().toJSON();
-        geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-              var currentLocationElement = document.getElementById('current-location');
-              var country = ""
-              results[0].address_components.forEach((component) => {
-                if (component.types.toString().includes('country')){
-                  country = component.long_name;
-                }
-              });
+      var latlng = map.getCenter().toJSON();
+      geocoder.geocode({'location': latlng}, function(results, status) {
+        if (status === 'OK') {
+          if (results[0]) {
+            var currentLocationElement = document.getElementById('current-location');
+            var country = ""
+            results[0].address_components.forEach((component) => {
+              if (component.types.toString().includes('country')){
+                country = component.long_name;
+              }
+            });
+            if(country != ""){
               currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
-            } else {
-              window.alert('No results found');
             }
+            fetchForum();
           } else {
-            window.alert('Geocoder failed due to: ' + status);
+            console.log('No results found');
           }
-        });
+        } else {
+          console.log('Geocoder failed due to: ' + status);
+        }
+      });
 
-        });
+    });
     fetchTrails();
 
   }
