@@ -71,7 +71,7 @@ $(window).load(function(){
         content: ""
       });
 
-    var containerDiv = pathInfo(authors, tags, header, body);
+    var containerDiv = pathInfo(authors, tags, header, body, id);
     marker.addListener('mouseover', function(){
       poly.setMap(map);
       infowindow.setContent(containerDiv.outerHTML);
