@@ -72,7 +72,13 @@ $(window).load(function(){
       });
 
     var containerDiv = pathInfo(authors, tags, header, body, id);
-    marker.addListener('mouseover', function(){
+    poly.addListener('mouseover',function(){
+      infowindow.close();
+    });
+    poly.addListener('mouseout',function(){
+      infowindow.open(map);
+    });
+    marker.addListener('click', function(){
       poly.setMap(map);
       infowindow.setContent(containerDiv.outerHTML);
       infowindow.setPosition(startingPoint);
