@@ -16,8 +16,8 @@
 <body>
 
 <h1><%= request.getAttribute("header") %></h1>
-<sub><%= request.getAttribute("authors") %></sub><br/>
-<i><sub><%= request.getAttribute("tags") %></sub></i>
+<sub>Authors: <%= request.getAttribute("authors") %></sub><br/>
+<i><sub>Tags: <%= request.getAttribute("tags") %></sub></i>
 <hr>
 <div class = "container">
 <main>
