@@ -16,6 +16,7 @@ $(window).load(function(){
         if (status === 'OK') {
           if (results[0]) {
             var currentLocationElement = document.getElementById('current-location');
+            var currentLocationForumLink = document.getElementById('side-panel-forumlink');
             var country = ""
             results[0].address_components.forEach((component) => {
               if (component.types.toString().includes('country')){
@@ -24,6 +25,7 @@ $(window).load(function(){
             });
             if(country != ""){
               currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
+              currentLocationForumLink.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><em>"+"View Discussion in "+country+"</em></a>";
             }
             fetchForum();
           } else {
