@@ -1,5 +1,5 @@
+var map;
 $(window).load(function(){
-  let map;
   var geocoder = new google.maps.Geocoder;
   function initTrails() {
     var mapOptions = {
@@ -92,7 +92,7 @@ $(window).load(function(){
   }
   function pathInfo(authors, tags, header, body, id){
     const containerDiv = document.createElement("div");
-    containerDiv.classList.add("pathinfo");
+    containerDiv.classList.add("content");
     containerDiv.innerHTML = '';
 
     const h3 = document.createElement('h3');

@@ -40,7 +40,7 @@
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container" onclick="fetchForum()">forum</button>
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="false" aria-controls="chat-container">chat</button>
   </div><!-- End of floating navbar -->
-  <div>
+  <div id="side-panel">
     <div id="forum-container" class="goy-box col-md-4 collapse">
       <div class="row mr-md-2">
         <div class="col-md-2">Forum</div>
@@ -60,6 +60,12 @@
         </div>
       </div>
       <div id="chat-content">Chat content here</div>
+    </div>
+    <div id="article-container" class="goy-box col-md-4 collapse">
+      <div class="row">
+          <button class="material-icons" data-toggle="collapse" data-target="#article-container" aria-expanded="true" aria-controls="article-container" style="width:40px; padding:0;">arrow_backward</button>
+      </div>
+      <div id="article-content">Article content here</div>
     </div>
   </div>
   <div id="mapFull"></div>
