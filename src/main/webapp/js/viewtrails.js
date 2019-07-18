@@ -1,5 +1,7 @@
 var map;
+var markerCluster;
 $(window).load(function(){
+  var markers = [];
   var geocoder = new google.maps.Geocoder;
   function initTrails() {
     var mapOptions = {
@@ -36,6 +38,9 @@ $(window).load(function(){
 
     });
     fetchTrails();
+    console.log(markers);
+    markerCluster = new MarkerClusterer(map, markers,{imagePath: 'images/marker-cluster-icons'});
+
 
   }
   function fetchTrails(){
@@ -43,7 +48,9 @@ $(window).load(function(){
       return response.json();
     }).then((articles) => {
       articles.forEach((article) => {
-        createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
+        if(article.coordinates.length != 0){
+          createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
+        }
       });
     });
   }
@@ -59,6 +66,7 @@ $(window).load(function(){
       position: startingPoint,
       map: map
     });
+    markers.push(marker);
     const poly = new google.maps.Polyline({
       path: trail,
       editable: false,
