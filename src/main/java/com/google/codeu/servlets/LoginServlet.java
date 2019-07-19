@@ -38,6 +38,10 @@ public class LoginServlet extends HttpServlet {
 
     // If the user is already logged in, redirect to their page
     if (userService.isUserLoggedIn()) {
+      if(request.getParameter("redirectBack") != null){
+        response.sendRedirect(request.getParameter("redirectBack"));
+        return;
+      }
       String user = userService.getCurrentUser().getEmail();
       response.sendRedirect("/user-page.html?user=" + user);
       return;
@@ -46,6 +50,9 @@ public class LoginServlet extends HttpServlet {
     // Redirect to Google login page. That page will then redirect back to /login,
     // which will be handled by the above if statement.
     String googleLoginUrl = userService.createLoginURL("/login");
+    if(request.getParameter("redirectBack") != null){
+      googleLoginUrl+="?redirectBack="+request.getParameter("redirectBack");
+    }
     response.sendRedirect(googleLoginUrl);
   }
 }
