@@ -28,8 +28,6 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
-
-import com.google.appengine.api.datastore.Text;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
@@ -713,5 +711,36 @@ public class Datastore {
 
       datastore.put(forumEntity);
     }
+  }
+
+  /**
+   * Store a comment by linking message and article id
+   * @param articleId the article id of the comment
+   * @param comment the comment to be stored
+   */
+  public void storeComment(String articleId, Message comment){
+    Entity commentEntity = new Entity("Comment", comment.getId().toString());
+    commentEntity.setProperty("articleId", articleId);
+    commentEntity.setProperty("user", comment.getUser());
+    commentEntity.setProperty("text", comment.getText());
+    commentEntity.setProperty("timestamp", comment.getTimestamp());
+
+    datastore.put(commentEntity);
+  }
+
+  /**
+   * Retrieve a list of comments by article id
+   * @param articleId the article id to be matched
+   * @return list of comments stored with the id
+   */
+  public List<Message> getComments(String articleId){
+    Query query =
+        new Query("Comment")
+            .setFilter(new Query.FilterPredicate("articleId", FilterOperator.EQUAL, articleId))
+            .addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return readMessagesFromQuery(results);
   }
 }
