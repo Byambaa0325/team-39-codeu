@@ -81,6 +81,7 @@ $(window).load(function(){
       body: params
     }).then(function(response){
       toggleLoader(false);
+       window.location.replace("/explore.html");
     });
   }
   function toggleLoader(status){
