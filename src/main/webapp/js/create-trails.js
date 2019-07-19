@@ -1,3 +1,13 @@
+function toggleMap(){
+  var map = document.getElementById("map");
+  if(map.style.display=="block"){
+    map.style.display="none";
+  }
+  else{
+    map.style.display="block";
+  }
+}
+
 $(window).load(function(){
   function initialize() {
     var mapOptions = {

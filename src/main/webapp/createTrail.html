@@ -12,60 +12,93 @@
   <link rel="stylesheet" href="css/landing-style.css">
   <link rel="stylesheet" href="css/loader.css">
   <script type="text/javascript">
-     $(document).on('click','.navbar-collapse.in',function(e) {
+  $(document).on('click','.navbar-collapse.in',function(e) {
     if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
-        $(this).collapse('hide');
+      $(this).collapse('hide');
     }
-    });
+  });
   </script>
   <title>Create Trails</title>
   <link rel="stylesheet" href="css/trail-style.css">
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
-    async defer></script>
+  async defer></script>
   <script type="text/javascript" src="js/create-trails.js"></script>
   <script src="js/navigation-loader.js"></script>
+  <style>
+  body{
+    background-color: #96C3C5;
+  }
+  input, textarea{
+    border: 0px;
+    border-bottom: 1px solid black;
+    background-color: #E9DCC4;
+  }
+  textarea{
+    height: 60vh;
+    width: 100%;
+  }
+  </style>
 </head>
 <body onload="addLoginOrLogoutLinkToNavigation();">
   <div id="bodyContainer">
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a href="#" class="navbar-brand"></a>
-      </div><!---End of navbar header-->
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul id="navigation" class="nav navbar-nav navbar-right">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="explore.html">Explore</a></li>
-        </ul>
-      </div><!--End of navbar collapse--->
-    </div><!---End of container-->
-  </nav><!-- end of nav-->
-  <div id="map"></div>
-  <div id="pathinfo">
-    Enter a new article:<br/>
-    Header
-    <input type="text" name="header" required>
-    <br/>
-    Authors
-    <input type="text" name="authors">
-    <br/>
-    tags
-    <input type="text" name="tags"required>
-    <br/>
-    text
-    <textarea name="body" id="article-input" required></textarea>
-    <br/>
-  </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="#" class="navbar-brand"></a>
+        </div><!---End of navbar header-->
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul id="navigation" class="nav navbar-nav navbar-right">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="explore.html">Explore</a></li>
+          </ul>
+        </div><!--End of navbar collapse--->
+      </div><!---End of container-->
+    </nav><!-- end of nav-->
+    <div id="floating-navbar">
+      <button onclick="toggleMap()">Draw Trail</button>
+    </div>
 
-  <div id="savepath"></div>
-  <textarea id="json_polyline" style="height:10%; width:100%; display:none"></textarea>
-</div>
+    <div id="map" style="display:none"></div>
+    <!-- Page Content -->
+    <div class="container">
+      <h1>Enter a new article:</h1>
+      <div class="row">
+
+        <!-- Post Content Column -->
+        <div class="col-lg-8">
+
+          <!-- Title -->
+          <h1 class="mt-4"><input type="text" name="header" placeholder="Header"></h1>
+
+          <!-- Author -->
+          <p>
+            by
+            <input type="text" name="authors" title="Separate each author by comma" placeholder="Add extra authors">
+          </p>
+          Tags: <input type="text" name="tags" title="Separate each author by comma" placeholder="Tags">
+          <hr>
+          <!-- Post Content -->
+          <p class="lead"><textarea name="body" id="article-input" placeholder="Write Your Article Here..." ></textarea></p>
+
+          <hr>
+          <div id="savepath"></div>
+
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+
+
+    <textarea id="json_polyline" style="height:10%; width:100%; display:none"></textarea>
+  </div>
   <div id="loadDiv" class="loader" style="display:none"></div>
 </body>
 </html>
