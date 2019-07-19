@@ -17,7 +17,7 @@ function toggleArticleOnArticlePanel(id){
 function toggleMapCoordinates(coords){
   var coordsComp = coords.split(",");
   map.panTo(new google.maps.LatLng(coordsComp[0],coordsComp[1]));
-  map.setZoom(15);
+  map.setZoom(12);
 }
 
 function buildArticlePanel(article){

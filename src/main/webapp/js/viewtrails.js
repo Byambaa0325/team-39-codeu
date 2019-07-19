@@ -70,26 +70,30 @@ $(window).load(function(){
     });
 
     var infowindow = new google.maps.InfoWindow({
-        content: ""
+        content: "",
+        pixelOffset: new google.maps.Size(0, -40)
       });
 
     var containerDiv = pathInfo(authors, tags, header, body, id);
-    poly.addListener('mouseover',function(){
-      infowindow.close();
+
+    poly.addListener('click',function(){
+      poly.setMap(null);
     });
-    poly.addListener('mouseout',function(){
-      infowindow.open(map);
-    });
-    marker.addListener('click', function(){
-      poly.setMap(map);
+
+    marker.addListener('mouseover', function(){
       infowindow.setContent(containerDiv.outerHTML);
       infowindow.setPosition(startingPoint);
-      infowindow.addListener('closeclick',function(){
-        poly.setMap(null);
-        console.log("close Clicked");
-      });
       infowindow.open(map);
-      console.log("Clicked on trail");
+    });
+    marker.addListener('mouseout', function(){
+
+      infowindow.close();
+    });
+
+    marker.addListener('click', function(){
+      poly.setMap(map);
+      toggleArticleOnArticlePanel(id);
+      $("#article-container").collapse('show');
     });
   }
   function pathInfo(authors, tags, header, body, id){
@@ -110,7 +114,7 @@ $(window).load(function(){
 
 
 
-    var li_body = document.createElement('p');
+    var li_body = document.createElement('div');
     if(body.length>=30){
     li_body.innerHTML = body;
     }
@@ -121,7 +125,8 @@ $(window).load(function(){
     var li_link = document.createElement('a');
     li_link.href = '/article?id='+id;
     li_link.style.color="black";
-    li_link.appendChild(li_body);
+    li_link.innerHTML="<sub>Click to see more>>></sub>"
+    containerDiv.appendChild(li_body);
 
     containerDiv.appendChild(li_link);
     return containerDiv;
