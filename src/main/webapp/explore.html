@@ -13,7 +13,9 @@
   <script src="js/side-panel.js"></script>
   <script type="text/javascript" src="js/viewtrails.js"></script>
   <script src="js/navigation-loader.js"></script>
+  <script src = "/js/feed-loader.js"></script>
   <link rel="stylesheet" href="css/landing-style.css">
+  <link rel="stylesheet" href="/css/user-page.css">
   <script type="text/javascript">
   $(document).on('click','.navbar-collapse.in',function(e) {
     if( $(e.target).is('a') && ( $(e.target).attr('class') != 'dropdown-toggle' ) ) {
@@ -21,7 +23,7 @@
     }
   });
   </script>
-  <title>View Trails</title>
+  <title>Explore Trails</title>
   <link rel="stylesheet" href="css/trail-style.css">
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
   async defer></script>
@@ -38,7 +40,7 @@
 
   <div id="floating-navbar">
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container" onclick="fetchForum()">forum</button>
-    <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="false" aria-controls="chat-container">chat</button>
+    <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="false" aria-controls="chat-container" onclick="fetchMessages('chat-content')">chat</button>
   </div><!-- End of floating navbar -->
   <div id="side-panel">
     <div id="forum-container" class="goy-box col-md-4 collapse">
@@ -58,6 +60,13 @@
         <div class="col-md-2">
           <button type="button" class="material-icons" data-toggle="collapse" data-target="#chat-container" aria-expanded="true" aria-controls="chat-container">arrow_forward</button>
         </div>
+      </div>
+      <div id="message-form" class="hidden">
+        Enter a new message:
+        <br/>
+        <textarea name="text" id="message-input"></textarea>
+        <br/>
+        <button onclick="postMessage()">Submit</button>
       </div>
       <div id="chat-content">Chat content here</div>
     </div>

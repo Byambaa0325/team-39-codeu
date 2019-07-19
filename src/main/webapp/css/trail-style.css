@@ -50,4 +50,5 @@ html, body, #bodyContainer {
   right: 0;
   height: 91%;
   background: #eee;
+  overflow-y: scroll;
 }
