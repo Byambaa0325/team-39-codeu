@@ -13,6 +13,8 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <title><%= request.getAttribute("header") %></title>
         <script src="js/navigation-loader.js"></script>
+        <script src="js/comments.js"></script>
+        <link rel="stylesheet" href="/css/article.css">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
           async defer></script>
           <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
@@ -132,6 +134,18 @@
 
                     </div>
                     <!-- /.row -->
+                    <div class="row">
+                      <div id="comment-form" class="hidden">
+                        Enter a new comment:
+                        <br/>
+                        <textarea name="text" id="comment-input"></textarea>
+                        <br/>
+                        <button onclick="postComment('<%= request.getAttribute("id")%>')">Submit</button>
+                      </div>
+                      <div id="comments-container">
+                        No Comments Yet!
+                      </div>
+                    </div>
 
                   </div>
                   <!-- /.container -->
@@ -182,4 +196,7 @@
 
               </script>
               <%}%>
+              <script>
+              fetchComments("comments-container","<%= request.getAttribute("id")%>");
+              </script>
             </html>
