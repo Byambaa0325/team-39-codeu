@@ -50,11 +50,29 @@ a {
 .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
   background-color: #5398c6;
 }
-
-img.banner {
-  width: 100%;
+#home{
+  display: flex;flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../img/hikers.jpg');
+  background-size: cover;
+  min-height: 90vh;
+  color:white;
+  font-size: 400%;
+  cursor:pointer;
 }
+.pane{
+display: flex;flex-flow: row wrap;
+font-size: 12vw;
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin: auto;
+color: white;
 
+}
 h1 {
   font-size: 300%;
   font-weight: 800;
