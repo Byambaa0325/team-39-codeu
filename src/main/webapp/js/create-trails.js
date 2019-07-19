@@ -70,9 +70,7 @@ $(window).load(function(){
       newCoordinates_poly.push(lat_poly);
       newCoordinates_poly.push(lng_poly);
     }
-    // var str_coordinates_poly = JSON.stringify(newCoordinates_poly);
-    // var json_poly = "{\"coordinates\":" + str_coordinates_poly + "}";
-    // document.getElementById('json_polyline').value = json_poly;
+
     const params = new URLSearchParams();
     params.append('header', header);
     params.append('authors', authors);
@@ -120,7 +118,7 @@ $(window).load(function(){
       body: params
     }).then(function(response){
       toggleLoader(false);
-       window.location.replace("/explore.html");
+      window.location.replace("/explore.html");
     });
   }
   function toggleLoader(status){
@@ -136,9 +134,9 @@ $(window).load(function(){
   }
 
   /**
-   * A menu that lets a user delete a selected vertex of a path.
-   * @constructor
-   */
+  * A menu that lets a user delete a selected vertex of a path.
+  * @constructor
+  */
   function DeleteMenu() {
     this.div_ = document.createElement('div');
     this.div_.className = 'delete-menu';
@@ -193,8 +191,8 @@ $(window).load(function(){
   };
 
   /**
-   * Opens the menu at a vertex of a given path.
-   */
+  * Opens the menu at a vertex of a given path.
+  */
   DeleteMenu.prototype.open = function(map, path, vertex) {
     this.set('position', path.getAt(vertex));
     this.set('path', path);
@@ -204,8 +202,8 @@ $(window).load(function(){
   };
 
   /**
-   * Deletes the vertex from the path.
-   */
+  * Deletes the vertex from the path.
+  */
   DeleteMenu.prototype.removeVertex = function() {
     var path = this.get('path');
     var vertex = this.get('vertex');

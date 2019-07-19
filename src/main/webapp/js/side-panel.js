@@ -9,8 +9,8 @@ function toggleArticleOnArticlePanel(id){
     if (article.coordinates.length != 0){
       toggleMapCoordinates(article.coordinates);
     }
-      const articlePanel = buildArticlePanel(article)
-      sidePanelArticle.innerHTML = articlePanel.outerHTML;
+    const articlePanel = buildArticlePanel(article);
+    sidePanelArticle.innerHTML = articlePanel.outerHTML;
   });
 }
 
@@ -94,14 +94,12 @@ function fetchForum(){
       if (article.coordinates.length != 0){
         const articleDiv = buildArticleDiv(article)
         sidePanelForum.appendChild(articleDiv);
-    }
+      }
     });
   });
 }
 
 $(window).load(function(){
-
-
   function initForumPanel(){
     fetchForum();
   }
