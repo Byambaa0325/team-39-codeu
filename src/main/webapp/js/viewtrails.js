@@ -124,10 +124,10 @@ $(window).load(function(){
 
       var li_body = document.createElement('div');
       if(body.length>=30){
-        li_body.innerHTML = body;
+        li_body.innerHTML = body.substring(0,30);
       }
       else{
-        li_body.innerHTML = body.substring(0,30);
+        li_body.innerHTML = body;        
       }
 
       var li_link = document.createElement('a');
