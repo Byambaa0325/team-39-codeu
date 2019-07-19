@@ -14,7 +14,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% Datastore datastore = new Datastore();%>
-<%  String country = request.getParameter("country");
+<%  String country = request.getParameter("country").replace("%20"," ");
     Forum forum = null;
     try {
         forum = datastore.getForumByName(country);

@@ -90,7 +90,7 @@ public class ArticleServlet extends HttpServlet {
         datastore.storeArticle(article);
 
         if(request.getParameter("forum") != null){
-          datastore.updateFieldForum(request.getParameter("forum"),"articleIds",id,false);
+          datastore.updateFieldForum(request.getParameter("forum").replace("%20"," "),"articleIds",id,false);
         }
         else{
           datastore.updateFieldForum("","articleIds",id,true);

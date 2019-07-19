@@ -70,12 +70,41 @@ $(window).load(function(){
     params.append('body', body);
     params.append('coordinates', newCoordinates_poly);
     //if there is variable for forum
+    toggleLoader(true);
     if(forum !=""){
       //Add parameter "forum" by slicing querystring
       params.append("forum", forum.slice(forum.indexOf("country=")+8));
+      postArticle(params);
     }
-    console.log(newCoordinates_poly);
-    toggleLoader(true);
+    if(newCoordinates_poly.length ==0){
+      postArticle(params);
+    }
+    else{
+      var geocoder = new google.maps.Geocoder;
+      var latlng = {lat:coordinate_poly[0].lat(), lng:coordinate_poly[0].lng()}
+      geocoder.geocode({'location': latlng}, function(results, status) {
+        if (status === 'OK') {
+          if (results[0]) {
+            var country = ""
+            results[0].address_components.forEach((component) => {
+              if (component.types.toString().includes('country')){
+                country = component.long_name;
+              }
+            });
+            if(country != ""){
+              params.append("forum",country.toLowerCase())
+              postArticle(params);
+            }
+          } else {
+            console.log('No results found');
+          }
+        } else {
+          console.log('Geocoder failed due to: ' + status);
+        }
+      });
+    }
+  }
+  function postArticle(params){
     fetch('/article', {
       method: 'POST',
       body: params

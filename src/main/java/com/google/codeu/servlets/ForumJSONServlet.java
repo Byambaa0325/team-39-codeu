@@ -40,7 +40,8 @@ public class ForumJSONServlet extends HttpServlet {
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String country = request.getParameter("country");
+    String country = request.getParameter("country").replace("%20"," ");
+    System.out.println(country);
     Forum forum = null;
     try {
       forum = datastore.getForumByName(country);
