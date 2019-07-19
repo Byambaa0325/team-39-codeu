@@ -71,15 +71,28 @@ $(window).load(function(){
     params.append('coordinates', newCoordinates_poly);
     //if there is variable for forum
     if(forum !=""){
-      //Add parameter "forum" by slicing querystring 
+      //Add parameter "forum" by slicing querystring
       params.append("forum", forum.slice(forum.indexOf("country=")+8));
     }
     console.log(newCoordinates_poly);
+    toggleLoader(true);
     fetch('/article', {
       method: 'POST',
       body: params
+    }).then(function(response){
+      toggleLoader(false);
     });
-    window.location.replace("/explore.html");
+  }
+  function toggleLoader(status){
+    if(status == true){
+      document.getElementById('bodyContainer').style.display="none";
+      document.getElementById('loadDiv').style.display="block";
+    }
+    else{
+      document.getElementById('bodyContainer').style.display="block";
+      document.getElementById('loadDiv').style.display="none";
+    }
+
   }
 
   /**
