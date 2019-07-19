@@ -91,8 +91,10 @@ function fetchForum(){
     return response.json();
   }).then((articles) => {
     articles.forEach((article) => {
-      const articleDiv = buildArticleDiv(article)
-      sidePanelForum.appendChild(articleDiv);
+      if (article.coordinates.length != 0){
+        const articleDiv = buildArticleDiv(article)
+        sidePanelForum.appendChild(articleDiv);
+    }
     });
   });
 }
