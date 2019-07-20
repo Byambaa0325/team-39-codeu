@@ -79,13 +79,17 @@ $(window).load(function(){
     params.append('coordinates', newCoordinates_poly);
     //if there is variable for forum
     toggleLoader(true);
-    if(forum !=""){
-      //Add parameter "forum" by slicing querystring
-      params.append("forum", forum.slice(forum.indexOf("country=")+8));
-      postArticle(params);
-    }
+
+
     if(newCoordinates_poly.length ==0){
-      postArticle(params);
+      if(forum !=""){
+        //Add parameter "forum" by slicing querystring
+        params.append("forum", forum.slice(forum.indexOf("country=")+8));
+        postArticle(params);
+      }
+      else{
+        postArticle(params);
+      }
     }
     else{
       var geocoder = new google.maps.Geocoder;

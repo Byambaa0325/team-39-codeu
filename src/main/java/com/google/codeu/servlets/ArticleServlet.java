@@ -96,7 +96,7 @@ public class ArticleServlet extends HttpServlet {
           datastore.updateFieldForum("","articleIds",id,true);
         }
 
-        response.sendRedirect("/article?id=" + article.getId());
+        
 
     }
 }
