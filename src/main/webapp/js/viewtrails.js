@@ -33,7 +33,7 @@ $(window).load(function(){
               });
               if(country != ""){
                 currentLocationElement.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><h1>"+country+"</h1></a>";
-                currentLocationForumLink.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\"><em>"+"View Discussion in "+country+"</em></a>";
+                currentLocationForumLink.innerHTML = "<a href = \"forum?country="+country.toLowerCase()+"\" style=\"color:darkslateblue\" ><em>"+"View Discussion in "+country+"</em></a>";
               }
               fetchForum();
             } else {
