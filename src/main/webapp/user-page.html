@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,44 +16,58 @@ limitations under the License.
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>User Page</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/user-page.css">
-    <script src="/js/user-page-loader.js"></script>
-  </head>
-  <body onload="buildUI();">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About Our Team</a></li>
+<head>
+  <title>User Page</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/user-page.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="/js/user-page-loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body onload="buildUI();" style="color:black;">
+  <nav class="navbar navbar-expand-md">
+    <div class="navbar-nav ml-auto mr-md-2">
+      <ul id="navigation"  class="nav navbar-nav navbar-right">
+        <li><a href="index.html">Home</a><li>
+        <li><a href="explore.html">Explore</a><li>
       </ul>
-    </nav>
-    <h1 id="page-title">User Page</h1>
-
-    <div id="about-me-container">Loading...</div>
-    <hr/>
-
-    <div id="about-me-form" class="hidden">
-      <form action="/about" method="POST">
-        <textarea name="about-me" placeholder="about me" rows=4 required id="about-me-input"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-      </form>
     </div>
+  </nav>
 
-    <form id="message-form" action="/messages" method="POST" class="hidden">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
-      <br/>
-      <input type="hidden" name="source-page" value="user-page.html"> 
-      <input type="submit" value="Submit">
-    </form>
-    <hr/>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5">
+        <h1 id="page-title">User Page</h1>
+        <div id="about-me-container">Loading...</div>
+        <hr/>
+        <div id="about-me-form" class="hidden">
+          <form action="/about" method="POST">
+            <textarea name="about-me" placeholder="about me" rows=4 required id="about-me-input"></textarea>
+            <br/>
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+      </div>
 
-    <div id="message-container">Loading...</div>
+      <div class="col-lg-1"></div>
 
-  </body>
+      <div class="col-lg-5">
+        <div style="margin-top:9vh"></div>
+        <form id="message-form" action="/messages" method="POST" class="hidden">
+          Enter a new message:
+          <br/>
+          <textarea name="text" id="message-input"></textarea>
+          <br/>
+          <input type="hidden" name="source-page" value="user-page.html">
+          <input type="submit" value="Submit">
+        </form>
+        <hr/>
+        <div id="message-container">Loading...</div>
+      </div>
+    </div>
+  </div>
+</body>
 </html>
