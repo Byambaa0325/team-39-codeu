@@ -1,4 +1,42 @@
 .article{
-border: 1px solid black;
-padding: 20px;
+  border: 1px solid black;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+  background-color: #4CA0B8;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post{
+  border: 1px solid black;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+  background-color: #CFA68D;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.details{
+  display: flex;
+  flex-flow: row wrap;
+  max-width: 30vh;
+}
+.flex-item{
+  margin:10px;
+}
+#forum-title{
+  position: absolute;
+  z-index: 1;
+  top:0;
+  left:10px;
+  font-size: 150%;
+  color: white;
+}
+#forum-title h1{
+  margin: 0;
 }
