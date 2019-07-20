@@ -81,39 +81,40 @@ $(window).load(function(){
     toggleLoader(true);
 
 
-    if(newCoordinates_poly.length ==0){
-      if(forum !=""){
-        //Add parameter "forum" by slicing querystring
-        params.append("forum", forum.slice(forum.indexOf("country=")+8));
+
+    if(forum !=""){
+      //Add parameter "forum" by slicing querystring
+      params.append("forum", forum.slice(forum.indexOf("country=")+8));
+      postArticle(params);
+    }         
+    else{
+      if(newCoordinates_poly.length ==0){
         postArticle(params);
       }
       else{
-        postArticle(params);
-      }
-    }
-    else{
-      var geocoder = new google.maps.Geocoder;
-      var latlng = {lat:coordinate_poly[0].lat(), lng:coordinate_poly[0].lng()}
-      geocoder.geocode({'location': latlng}, function(results, status) {
-        if (status === 'OK') {
-          if (results[0]) {
-            var country = ""
-            results[0].address_components.forEach((component) => {
-              if (component.types.toString().includes('country')){
-                country = component.long_name;
+        var geocoder = new google.maps.Geocoder;
+        var latlng = {lat:coordinate_poly[0].lat(), lng:coordinate_poly[0].lng()}
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              var country = ""
+              results[0].address_components.forEach((component) => {
+                if (component.types.toString().includes('country')){
+                  country = component.long_name;
+                }
+              });
+              if(country != ""){
+                params.append("forum",country.toLowerCase())
+                postArticle(params);
               }
-            });
-            if(country != ""){
-              params.append("forum",country.toLowerCase())
-              postArticle(params);
+            } else {
+              console.log('No results found');
             }
           } else {
-            console.log('No results found');
+            console.log('Geocoder failed due to: ' + status);
           }
-        } else {
-          console.log('Geocoder failed due to: ' + status);
-        }
-      });
+        });
+      }
     }
   }
   function postArticle(params){
