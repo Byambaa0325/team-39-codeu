@@ -7,10 +7,10 @@
     <% Date date = new Date((long)request.getAttribute("timestamp"));
     %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+      
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <title><%= request.getAttribute("header") %></title>
         <script src="js/navigation-loader.js"></script>
         <script src="js/comments.js"></script>
@@ -23,56 +23,11 @@
               height: 600px;
               width: 100%;
             }
-
-            body{
-              padding-top:100px
-            }
-            a {
-              color: #fff;
-            }
-
-            .navbar {
-              background-color: #297fb8;
-              border-bottom: 1px solid #5398c6;
-              padding: 1% 0;
-            }
-
-            .navbar-brand {
-              min-height: 55px;
-              padding: 0 15px 5px;
-            }
-
-            .navbar-nav li {
-              padding-right: 20px;
-            }
-
-            .navbar-inverse .navbar-nav li a {
-              color: #fff;
-            }
-
-
-            .navbar-inverse .navbar-nav li a:hover {
-              background-color: #5398c6;
-            }
-
-            .navbar-header {
-              padding-bottom: 5px;
-            }
-
-            .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-              border-color: #5398c6;
-            }
-
-            .navbar-inverse .navbar-toggle {
-              border-color: #5398c6;
-            }
-
-            .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
-              background-color: #5398c6;
-            }
             </style>
           </head>
-          <body onload="addLoginOrLogoutLinkToNavigation();">
+          <body>
+            <%@include file="navbar.jsp" %>
+            <!--
             <nav class="navbar navbar-inverse navbar-fixed-top">
               <div class="container-fluid">
                 <div class="navbar-header">
@@ -82,14 +37,14 @@
                     <span class="icon-bar"></span>
                   </button>
                   <a href="#" class="navbar-brand"></a>
-                </div><!---End of navbar header-->
+                </div><!---End of navbar header
                 <div class="collapse navbar-collapse" id="myNavbar">
                   <ul id="navigation" class="nav navbar-nav navbar-right">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="explore.html">Explore</a></li>
                   </ul>
-                </div><!--End of navbar collapse--->
-              </div><!---End of container-->
+                </div><!--End of navbar collapse-
+              </div><!---End of container
             </nav><!-- end of nav-->
             <!-- Page Content -->
             <div class="container">
