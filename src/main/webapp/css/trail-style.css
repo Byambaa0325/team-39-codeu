@@ -37,11 +37,10 @@ html, body, #bodyContainer {
   right: 0;
   margin: 20px;
   z-index: 1;
-  font-size: 48px;
 }
 
 #floating-navbar button{
-  font-size: 48px;
+  font-size: 24px;
 }
 
 .goy-box{
