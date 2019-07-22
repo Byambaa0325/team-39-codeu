@@ -50,7 +50,7 @@ a {
 .navbar-inverse .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus {
   background-color: #5398c6;
 }
-#home{
+#explore{
   display: flex;flex-flow: row wrap;
   align-items: center;
   justify-content: center;
@@ -112,10 +112,10 @@ img {
 .social a:hover {
   color: #d5d5d5;
 }
-#home {
+#explore {
   padding-top: 60px;
 }
-#about {
+#home {
   padding: 70px 0;
   background-color: #1fb8eb;
 }
@@ -123,7 +123,7 @@ img {
   padding: 70px 0 50px;
   background-color: #ff9800;
 }
-#connect {
+#aboutus {
   padding: 0 0 12%;
   background-color: #673ab7;
 }
