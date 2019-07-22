@@ -71,7 +71,9 @@ left: 0;
 right: 0;
 margin: auto;
 color: white;
-
+}
+.pane:hover{
+  background-color: lightgray;
 }
 h1 {
   font-size: 300%;
