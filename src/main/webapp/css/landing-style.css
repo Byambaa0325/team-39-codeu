@@ -72,7 +72,7 @@ right: 0;
 margin: auto;
 color: white;
 }
-.pane:hover{
+.pane:hover, h1:hover{
   background-color: lightgray;
 }
 h1 {
