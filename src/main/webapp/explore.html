@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   <script src="js/scrolling.js"></script>
@@ -14,7 +14,7 @@
   <script type="text/javascript" src="js/viewtrails.js"></script>
   <script src="js/navigation-loader.js"></script>
   <script src = "/js/feed-loader.js"></script>
-  <link rel="stylesheet" href="css/landing-style.css">
+  <script src="/js/navbar.js"></script>
   <link rel="stylesheet" href="/css/user-page.css">
   <script type="text/javascript">
   $(document).on('click','.navbar-collapse.in',function(e) {
@@ -28,14 +28,9 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
   async defer></script>
 </head>
-<body onload="addLoginOrLogoutLinkToNavigation();">
-  <nav class="navbar navbar-expand-md">
-    <div class="navbar-nav ml-auto mr-md-2">
-      <ul id="navigation"  class="nav navbar-nav navbar-right">
-        <li><a href="index.html">Home</a><li>
-      </ul>
-    </div>
-  </nav>
+<body>
+  <div id="navbar"></div>
+  <script>loadNavbar(document.getElementById('navbar'));</script>
 
   <div id="floating-navbar">
     <button type="button" class="material-icons" data-toggle="collapse" data-target="#forum-container" aria-expanded="false" aria-controls="forum-container" onclick="fetchForum()">forum</button>
@@ -81,6 +76,39 @@
   <div id="mapFull"></div>
   <div id="current-location"><a href="forum?country=mongolia"><h1>Mongolia</h1></a></div>
   <a href="createTrail.html" id="add-trail"><button><h2>+Add Trail</h2></button></a>
+  <style>
+    hr {
+      display: block;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: inset;
+      border-top-color: rgba(0, 0, 0, 0.1);
+      border-top-style: solid;
+      border-top-width: 1px;
+    }
 
+    #current-location{
+      position: absolute;
+      z-index: 1;
+      top:0;
+      left:10px;
+    }
+
+    #current-location a{
+      color: #fff;
+    }
+    #add-trail{
+      position: absolute;
+      z-index: 1;
+      bottom:10px;;
+      left:10px;
+      font-size: 65%;
+    }
+    .content{
+      font-family: 'Lato', sans-serif;
+    }
+  </style>
 </body>
 </html>
