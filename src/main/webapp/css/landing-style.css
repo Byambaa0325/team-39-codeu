@@ -71,7 +71,9 @@ left: 0;
 right: 0;
 margin: auto;
 color: white;
-
+}
+.pane:hover, h1:hover{
+  background-color: lightgray;
 }
 h1 {
   font-size: 300%;
@@ -129,26 +131,6 @@ img {
 }
 .row {
   margin: 0;
-}
-#current-location{
-  position: absolute;
-  z-index: 1;
-  top:0;
-  left:10px;
-  font-size: 65%;
-}
-#add-trail{
-  position: absolute;
-  z-index: 1;
-  bottom:10px;;
-  left:10px;
-  font-size: 65%;
-}
-.content{
-  font-family: 'Lato', sans-serif;
-}
-#side-panel{
-  font-size: 60%;
 }
 @media(max-width: 768px) {
   h1 {
