@@ -24,7 +24,7 @@ import org.json.simple.parser.ParseException;
 public class ChatManagerServlet extends HttpServlet{
   private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
   private Datastore datastore;
-  
+
 
   @Override
   public void init(){
@@ -55,7 +55,7 @@ public class ChatManagerServlet extends HttpServlet{
 
       String userEmail = userService.getCurrentUser().getEmail();
       String convid =  request.getParameter("convid");
-      
+
       if( datastore.checkIfConversationIsPublic(convid) == false && datastore.checkUserIsInConversation(userEmail, convid) == false ){
         System.out.println("Wrong conversation.");
         return;
@@ -78,10 +78,10 @@ public class ChatManagerServlet extends HttpServlet{
       response.getOutputStream().println(gson.toJson(messages));
     }
 
-    
+
   }
 
-  @Override 
+  @Override
   public void doPost( HttpServletRequest request, HttpServletResponse response)
     throws IOException{
     UserService userService = UserServiceFactory.getUserService();
@@ -89,7 +89,7 @@ public class ChatManagerServlet extends HttpServlet{
       response.sendRedirect("/index.html");
       return;
     }
-    
+
     JSONParser jsonParser = new JSONParser();
 
     if( request.getPathInfo().equals( "/new/conversation/" ) ){
@@ -105,7 +105,7 @@ public class ChatManagerServlet extends HttpServlet{
 
         // Extracing and cleaning the invitees
         String inviteesString = (String) jsonObject.get("invitee");
-        inviteesString = inviteesString.replaceAll(" ", "");
+        inviteesString = inviteesString.toLowerCase().replaceAll(" ", "");
         List<String> inviteesList = new ArrayList<String>();
 
         for( String invitee : inviteesString.split(",") ) {
