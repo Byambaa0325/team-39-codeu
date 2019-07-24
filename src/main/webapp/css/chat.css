@@ -34,6 +34,11 @@
   border-top: 1px black solid;
 }
 
+.chat-container {
+  height: 680px;
+  overflow-y: scroll;
+}
+
 .chat-header {
   text-align: center;
   border-bottom: 1px black solid;

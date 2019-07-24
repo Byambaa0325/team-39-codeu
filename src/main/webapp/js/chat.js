@@ -70,7 +70,7 @@ function buildChatDom( convid, callback ){
       dom.style.display = 'none';
       dom.id = `chat-${conv.id}`;
       dom.innerHTML = `
-        <div style="height: 715px; overflow-y: scroll;">
+        <div>
           <div class="chat-header">${conv.nickname}</div>
           <div class="chat-container">Loading...</div>
         </div>
@@ -97,6 +97,8 @@ function loadChat( id ){
         let currDom = buildMessageDom(message);
         domChatEl.appendChild(currDom);
       }
+
+      domChatEl.scrollTop = domChatEl.scrollTopMax;
     });
 }
 
