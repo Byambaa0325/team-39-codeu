@@ -37,7 +37,7 @@ function buildConversations(){
         conversatoinDom.appendChild( buildConversationDom(conv) );
         buildChatDom( conv.id, dom => {
           chatDom.appendChild(dom);
-          loadChat(conv.id);
+          // loadChat(conv.id);
         })
         // chatDom.appendChild( buildChatDom(conv.id) );
         console.log( 'Created :', conv.nickname );
