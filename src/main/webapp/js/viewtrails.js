@@ -49,12 +49,15 @@ $(window).load(function(){
 
     }
     function fetchTrails(){
+      toggleLoader(true);
       fetch('/articles').then((response) => {
         return response.json();
       }).then((articles) => {
         articles.forEach((article) => {
           createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
         });
+      }).then(function(){
+        toggleLoader(false);
       });
     }
     /** Creates a trail on map. */
