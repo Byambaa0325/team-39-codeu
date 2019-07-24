@@ -12,6 +12,8 @@
   <script src="js/scrolling.js"></script>
   <script src="js/side-panel.js"></script>
   <script type="text/javascript" src="js/viewtrails.js"></script>
+  <script type="text/javascript" src="js/loader.js"></script>
+  <link rel="stylesheet" href="css/loader.css">
   <script src="js/navigation-loader.js"></script>
   <script src = "/js/feed-loader.js"></script>
   <script src="/js/navbar.js"></script>
@@ -83,8 +85,11 @@
       <div id="article-content">Article content here</div>
     </div>
   </div>
-  <div id="mapFull"></div>
+  <div id="bodyContainer">
+    <div id="mapFull"></div>
+  </div>
   <div id="current-location"><a href="forum?country=mongolia"><h1>Mongolia</h1></a></div>
+  <div id="loadDiv" class="loader" style="display:none"></div>
   <style>
     hr {
       display: block;

@@ -86,7 +86,7 @@ $(window).load(function(){
       //Add parameter "forum" by slicing querystring
       params.append("forum", forum.slice(forum.indexOf("country=")+8));
       postArticle(params);
-    }         
+    }
     else{
       if(newCoordinates_poly.length ==0){
         postArticle(params);
@@ -125,17 +125,6 @@ $(window).load(function(){
       toggleLoader(false);
       window.location.replace("/explore.html");
     });
-  }
-  function toggleLoader(status){
-    if(status == true){
-      document.getElementById('bodyContainer').style.display="none";
-      document.getElementById('loadDiv').style.display="block";
-    }
-    else{
-      document.getElementById('bodyContainer').style.display="block";
-      document.getElementById('loadDiv').style.display="none";
-    }
-
   }
 
   /**
