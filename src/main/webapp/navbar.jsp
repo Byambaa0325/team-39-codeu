@@ -19,7 +19,7 @@
         <%UserService userService = UserServiceFactory.getUserService();
           if (userService.isUserLoggedIn()) {
         %>
-          <li><a href="/user-page.html?user=<%=userService.getCurrentUser().getEmail();%>">Your Page</a></li>
+          <li><a href="/user-page.html?user=<%=userService.getCurrentUser().getEmail()%>">Your Page</a></li>
           <li><a href="/logout">Logout</a></li>
         <% } else {   %>
           <li><a href="/login">Login</a></li>
