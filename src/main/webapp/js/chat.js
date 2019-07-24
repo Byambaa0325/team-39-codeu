@@ -89,7 +89,7 @@ function getUser( callback ) {
     .then( data => callback(data) );
 }
 
-function loadChat( id ){
+function loadChat( id, init=true ){
   console.log(`Loading : ${id}`);
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
@@ -99,14 +99,17 @@ function loadChat( id ){
     fetch( `/chat/get/messages/?convid=${id}` )
       .then( response => response.json() )
       .then( data => {
+        let doScroll = init || (domChatEl.scrollTop == domChatEl.scrollTopMax);
         data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
         domChatEl.innerHTML = '';
         for( let message of data ){
           let currDom = buildMessageDom(message, user.username);
           domChatEl.appendChild(currDom);
         }
+        if( doScroll ){
+          domChatEl.scrollTop = domChatEl.scrollTopMax;
+        }
 
-        domChatEl.scrollTop = domChatEl.scrollTopMax;
       });
   })
 }
@@ -123,9 +126,10 @@ function showChat( id ){
   for( let chatDom of chatDoms ){
     chatDom.style.display = 'none';
   }
-  document.getElementById(`chat-${id}`).style.display = 'block';
+  let curDom = document.getElementById(`chat-${id}`);
+  curDom.style.display = 'block';
 
-  curInterval = setInterval( `loadChat('${id}')`, 1000 );
+  curInterval = setInterval( `loadChat('${id}', false)`, 1000 );
   curChatId = id;
 }
 
