@@ -11,10 +11,10 @@
     
   </head>
   <body onload="buildChat()">
+    <div id="navbar">
+      <%@ include file="navbar.jsp" %>
+    </div>
     <div class="container">
-      <div id="navbar">
-        <%@ include file="navbar.jsp" %>
-      </div>
       <h3>Welcome to chat!</h3>
       <div>
         <div class="dropdown">
@@ -29,16 +29,17 @@
         </div>
       </div>
 
-    <div id="chat-wrapper">
-      <div id="conversations">
-        <div style="border-bottom: 1px black solid">Conversations</div>
-        <div id="conversation-wrapper"></div>
+      <div id="chat-wrapper">
+        <div id="conversations" class="col-md-2">
+          <div style="border-bottom: 1px black solid">Conversations</div>
+          <div id="conversation-wrapper"></div>
+        </div>
+        <div id="chat" class="col-md-10">
+          <div id="chat-container"></div>
+        </div>
       </div>
-      <div id="chat">
-        <div id="chat-container"></div>
-      </div>
+      <script src="/js/chat.js"></script>
+      <script src="/js/navbar.js"></script>
     </div>
-    <script src="/js/chat.js"></script>
-    <script src="/js/navbar.js"></script>
   </body>
 </html>

@@ -157,6 +157,7 @@ public class ChatManagerServlet extends HttpServlet{
 
         System.out.println("Storing " + convid + " " + msg);
         datastore.storeChatMessage( new ChatMessage( userEmail, msg, convid ) );
+        datastore.updateConversation( convid );
       } catch( ParseException e){
         e.printStackTrace();
       }

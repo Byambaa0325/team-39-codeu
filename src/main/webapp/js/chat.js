@@ -37,7 +37,7 @@ function buildConversations(){
         conversatoinDom.appendChild( buildConversationDom(conv) );
         buildChatDom( conv.id, dom => {
           chatDom.appendChild(dom);
-          loadChat(conv.id);
+          // loadChat(conv.id);
         })
         // chatDom.appendChild( buildChatDom(conv.id) );
         console.log( 'Created :', conv.nickname );
@@ -70,7 +70,7 @@ function buildChatDom( convid, callback ){
       dom.style.display = 'none';
       dom.id = `chat-${conv.id}`;
       dom.innerHTML = `
-        <div style="height: 760px; overflow-y: scroll;">
+        <div>
           <div class="chat-header">${conv.nickname}</div>
           <div class="chat-container">Loading...</div>
         </div>
@@ -83,35 +83,62 @@ function buildChatDom( convid, callback ){
     });
 }
 
-function loadChat( id ){
+function getUser( callback ) {
+  fetch( '/login-status' )
+    .then( resp => resp.json() )
+    .then( data => callback(data) );
+}
+
+function loadChat( id, init=true ){
+  console.log(`Loading : ${id}`);
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
 
   let domChatEl = dom.getElementsByClassName('chat-container')[0];
-  fetch( `/chat/get/messages/?convid=${id}` )
-    .then( response => response.json() )
-    .then( data => {
-      data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
-      domChatEl.innerHTML = '';
-      for( let message of data ){
-        let currDom = buildMessageDom(message);
-        domChatEl.appendChild(currDom);
-      }
-    });
+  getUser( user => {
+    fetch( `/chat/get/messages/?convid=${id}` )
+      .then( response => response.json() )
+      .then( data => {
+        let doScroll = init || (domChatEl.scrollTop == domChatEl.scrollTopMax);
+        data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
+        domChatEl.innerHTML = '';
+        for( let message of data ){
+          let currDom = buildMessageDom(message, user.username);
+          domChatEl.appendChild(currDom);
+        }
+        if( doScroll ){
+          domChatEl.scrollTop = domChatEl.scrollTopMax;
+        }
+
+      });
+  })
 }
 
+var curChatId = '';
+var curInterval = setInterval( () => {}, 1000000 );
 function showChat( id ){
+  if( curChatId ) {
+    console.log(`Clearing : ${id}`);
+    clearInterval(curInterval);
+  }
   console.log( `Showing : ${id}` );
   let chatDoms = document.getElementsByClassName('chat');
   for( let chatDom of chatDoms ){
     chatDom.style.display = 'none';
   }
-  document.getElementById(`chat-${id}`).style.display = 'block';
+  let curDom = document.getElementById(`chat-${id}`);
+  curDom.style.display = 'block';
+
+  curInterval = setInterval( `loadChat('${id}', false)`, 1000 );
+  curChatId = id;
 }
 
-function buildMessageDom( message ){
+function buildMessageDom( message, username='' ){
   let dom = document.createElement('div');
   dom.classList.add('chat-message-wrapper');
+  if( username == message.user ){
+    dom.classList.add('ml-auto');
+  }
   dom.innerHTML = `
     <p class="chat-user">${message.user}</p>
     <p class="chat-message">${message.message}</p>
@@ -139,5 +166,5 @@ function sendMessage( convid ){
 
 
 function buildChat(){
-  buildConversations();
+  setInterval( 'buildConversations()', 1000);
 }

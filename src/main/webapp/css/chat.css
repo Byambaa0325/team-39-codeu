@@ -1,13 +1,10 @@
 #chat-wrapper{
-  display: flex;
-  height: 800px;
-  width: 100%;
+  height: 80vh;
   border: 1px black solid;
 }
 
 #conversations{
-  height: 800px;
-  width: 300px;
+  height: 80vh;
   border-right: 1px black solid;
   overflow-y: scroll;
   padding-left: 8px;
@@ -28,15 +25,18 @@
 }
 
 #chat {
-  height: 800px;
-  width: 600px;
-  overflow-y: scroll;
+  height: 80vh;
   padding-left: 8px;
   padding-right: 8px;
 }
 
 #message-input {
   border-top: 1px black solid;
+}
+
+.chat-container {
+  height: 680px;
+  overflow-y: scroll;
 }
 
 .chat-header {
@@ -60,6 +60,14 @@
   font-size: 12px;
   margin: 2px;
   text-align: end;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
 }
 
 /* Dropdown CSS */
