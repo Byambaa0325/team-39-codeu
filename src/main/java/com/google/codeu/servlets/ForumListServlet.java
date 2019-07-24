@@ -37,28 +37,29 @@ public class ForumListServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Forum> forums = datastore.getAllForumList();
 
-        response.setContentType("text/html;");
-        response.getOutputStream().println("<!DOCTYPE html>");
-        response.getOutputStream().println("<html>");
-        response.getOutputStream().println("<head>");
-        response.getOutputStream().println("<title>Servlet HTML Example</title>");
-        response.getOutputStream().println("</head>");
-        response.getOutputStream().println("<body>");
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().println("<!DOCTYPE html>");
+        response.getWriter().println("<html>");
+        response.getWriter().println("<head>");
+        response.getWriter().println("<title>Servlet HTML Example</title>");
+        response.getWriter().println("</head>");
+        response.getWriter().println("<body>");
 
         for (Forum forum: forums) {
-            response.getOutputStream().println("<div class='forum'>");
+            response.getWriter().println("<div class='forum'>");
 
-            response.getOutputStream().println("<a href = \"/forum?id=" + forum.getId().toString() + "\">");
-            response.getOutputStream().println("<h1>");
-            response.getOutputStream().println(forum.getTitle());
-            response.getOutputStream().println("</h1>");
-            response.getOutputStream().println("</a>");
+            response.getWriter().println("<a href = \"/forum?id=" + forum.getId().toString() + "\">");
+            response.getWriter().println("<h1>");
+            response.getWriter().println(forum.getTitle());
+            response.getWriter().println("</h1>");
+            response.getWriter().println("</a>");
 
-            response.getOutputStream().println("</div>");
+            response.getWriter().println("</div>");
         }
 
-        response.getOutputStream().println("</body>");
-        response.getOutputStream().println("</html>");
+        response.getWriter().println("</body>");
+        response.getWriter().println("</html>");
     }
 
     /**
