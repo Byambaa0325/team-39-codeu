@@ -595,6 +595,20 @@ public class Datastore {
   }
 
   /*
+  * Updates latesttime of conversation to current time
+  */
+  public void updateConversation(String convid){
+    Query query = new Query("Conversation")
+      .setFilter( new FilterPredicate( "id", FilterOperator.EQUAL, convid ) );
+
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+
+    entity.setProperty("latesttime", System.currentTimeMillis());
+    datastore.put( entity );
+  }
+
+  /*
   * Store chat message
   */
   public void storeChatMessage(ChatMessage chatMsg){
