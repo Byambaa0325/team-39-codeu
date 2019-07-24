@@ -70,7 +70,7 @@ function buildChatDom( convid, callback ){
       dom.style.display = 'none';
       dom.id = `chat-${conv.id}`;
       dom.innerHTML = `
-        <div style="height: 760px; overflow-y: scroll;">
+        <div style="height: 715px; overflow-y: scroll;">
           <div class="chat-header">${conv.nickname}</div>
           <div class="chat-container">Loading...</div>
         </div>
