@@ -59,7 +59,7 @@ a {
   background-size: cover;
   min-height: 90vh;
   color:white;
-  font-size: 400%;
+  font-size: 200%;
   cursor:pointer;
 }
 .pane{
@@ -105,6 +105,9 @@ img {
   max-width: 200px;
   margin: 1% auto;
 }
+#lead{
+  max-width: 60vw;
+}
 .pathinfo {
   color: black;
   cursor:pointer;
@@ -135,8 +138,15 @@ img {
   padding: 0 0 12%;
   background-color: #673ab7;
 }
+#message{
+  background-color: #f8c2dc;
+  padding-top: 60px;
+}
 .row {
   margin: 0;
+}
+.no-bottom{
+  margin-bottom: 0;
 }
 @media(max-width: 768px) {
   h1 {
