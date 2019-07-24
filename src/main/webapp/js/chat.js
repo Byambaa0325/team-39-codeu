@@ -90,6 +90,7 @@ function getUser( callback ) {
 }
 
 function loadChat( id ){
+  console.log(`Loading : ${id}`);
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
 
@@ -110,13 +111,22 @@ function loadChat( id ){
   })
 }
 
+var curChatId = '';
+var curInterval = setInterval( () => {}, 1000000 );
 function showChat( id ){
+  if( curChatId ) {
+    console.log(`Clearing : ${id}`);
+    clearInterval(curInterval);
+  }
   console.log( `Showing : ${id}` );
   let chatDoms = document.getElementsByClassName('chat');
   for( let chatDom of chatDoms ){
     chatDom.style.display = 'none';
   }
   document.getElementById(`chat-${id}`).style.display = 'block';
+
+  curInterval = setInterval( `loadChat('${id}')`, 1000 );
+  curChatId = id;
 }
 
 function buildMessageDom( message, username='' ){
