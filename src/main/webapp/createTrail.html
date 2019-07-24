@@ -9,8 +9,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
   <script src="js/scrolling.js"></script>
-  <link rel="stylesheet" href="css/landing-style.css">
   <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/main.css">
   <script type="text/javascript" src="js/loader.js"></script>
   <script type="text/javascript">
   $(document).on('click','.navbar-collapse.in',function(e) {
@@ -19,50 +19,45 @@
     }
   });
   </script>
+  <script src="/js/navbar.js"></script>
   <title>Create Trails</title>
   <link rel="stylesheet" href="css/trail-style.css">
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu9yGg9xNDrRaTumeiIWyOeUzdF5xISu4"
   async defer></script>
   <script type="text/javascript" src="js/create-trails.js"></script>
-  <script src="js/navigation-loader.js"></script>
   <style>
-  body{
-    background-color: #96C3C5;
-  }
-  input, textarea{
-    border: 0px;
-    border-bottom: 1px solid black;
-    background-color: #E9DCC4;
-  }
-  textarea{
-    height: 60vh;
-    width: 100%;
-  }
+    body{
+      background-color: #96C3C5;
+    }
+    input, textarea{
+      border: 0px;
+      border-bottom: 1px solid black;
+      background-color: #E9DCC4;
+    }
+    textarea{
+      height: 50vh;
+      width: 100%;
+    }
   </style>
 </head>
-<body onload="addLoginOrLogoutLinkToNavigation();">
+<body>
   <div id="bodyContainer">
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="#" class="navbar-brand"></a>
-        </div><!---End of navbar header-->
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul id="navigation" class="nav navbar-nav navbar-right">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="explore.html">Explore</a></li>
-          </ul>
-        </div><!--End of navbar collapse--->
-      </div><!---End of container-->
-    </nav><!-- end of nav-->
+    <div id="navbar"></div>
+    <script>loadNavbar(document.getElementById('navbar'));</script>
+
     <div id="floating-navbar">
-      <button onclick="toggleMap()">Draw Trail</button>
+      <div class="btn-group" style="margin-left: auto;">
+        <button onclick="toggleMap()">Draw Trail</button>
+        <button type="button" onclick="document.getElementById('trail-tip').hidden ^= 1">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div id="trail-tip" class="bg-info" hidden>
+        <p><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Double-click to draw a trail</p>
+        <p><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Click right mouse button on marks to delete</p>
+      </div>
     </div>
 
     <div id="map" style="display:none"></div>
@@ -79,10 +74,11 @@
 
           <!-- Author -->
           <p>
-            by
+            By:
             <input type="text" name="authors" title="Separate each author by comma" placeholder="Add extra authors">
           </p>
-          Tags: <input type="text" name="tags" title="Separate each author by comma" placeholder="Tags">
+            Tags:
+            <input type="text" name="tags" title="Separate each author by comma" placeholder="Tags">
           <hr>
           <!-- Post Content -->
           <p class="lead"><textarea name="body" id="article-input" placeholder="Write Your Article Here..." ></textarea></p>
