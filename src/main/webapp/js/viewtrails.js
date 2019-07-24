@@ -49,7 +49,7 @@ $(window).load(function(){
 
     }
     function fetchTrails(){
-      toggleLoader(true);
+      toggleLoader(true, 'mapFull', 'loadDiv');
       fetch('/articles').then((response) => {
         return response.json();
       }).then((articles) => {
@@ -57,7 +57,7 @@ $(window).load(function(){
           createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
         });
       }).then(function(){
-        toggleLoader(false);
+        toggleLoader(false, 'mapFull', 'loadDiv');
       });
     }
     /** Creates a trail on map. */

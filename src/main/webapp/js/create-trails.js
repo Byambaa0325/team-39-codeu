@@ -78,7 +78,7 @@ $(window).load(function(){
     params.append('body', body);
     params.append('coordinates', newCoordinates_poly);
     //if there is variable for forum
-    toggleLoader(true);
+    toggleLoader(true, 'bodyContainer', 'loadDiv');
 
 
 
@@ -122,7 +122,7 @@ $(window).load(function(){
       method: 'POST',
       body: params
     }).then(function(response){
-      toggleLoader(false);
+      toggleLoader(false, 'bodyContainer', 'loadDiv');
       window.location.replace("/explore.html");
     });
   }
