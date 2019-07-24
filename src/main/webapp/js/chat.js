@@ -166,5 +166,5 @@ function sendMessage( convid ){
 
 
 function buildChat(){
-  buildConversations();
+  setInterval( buildConversations(), 1000);
 }
