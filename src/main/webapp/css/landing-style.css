@@ -4,6 +4,7 @@
 body {
   font-family: 'Dosis', sans-serif;
   font-size: 200%;
+  color:white;
 }
 
 a {
@@ -72,13 +73,18 @@ right: 0;
 margin: auto;
 color: white;
 }
-.pane:hover, h1:hover{
-  background-color: lightgray;
+#explore h1:hover{
+  transform: scale(1.2);
+}
+#explore a{
+  color:white;
+
 }
 h1 {
   font-size: 300%;
   font-weight: 800;
   text-shadow: 2px 2px 2px #666;
+  transition: transform 0.3s ease-out;
 }
 h2 {
   font-size: 210%;
