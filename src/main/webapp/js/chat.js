@@ -83,23 +83,31 @@ function buildChatDom( convid, callback ){
     });
 }
 
+function getUser( callback ) {
+  fetch( '/login-status' )
+    .then( resp => resp.json() )
+    .then( data => callback(data) );
+}
+
 function loadChat( id ){
   let dom = document.getElementById(`chat-${id}`);
   if( dom == null ) return;
 
   let domChatEl = dom.getElementsByClassName('chat-container')[0];
-  fetch( `/chat/get/messages/?convid=${id}` )
-    .then( response => response.json() )
-    .then( data => {
-      data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
-      domChatEl.innerHTML = '';
-      for( let message of data ){
-        let currDom = buildMessageDom(message);
-        domChatEl.appendChild(currDom);
-      }
+  getUser( user => {
+    fetch( `/chat/get/messages/?convid=${id}` )
+      .then( response => response.json() )
+      .then( data => {
+        data.sort( (a, b) => a.timestamp < b.timestamp ? -1 : 1 );
+        domChatEl.innerHTML = '';
+        for( let message of data ){
+          let currDom = buildMessageDom(message, user.username);
+          domChatEl.appendChild(currDom);
+        }
 
-      domChatEl.scrollTop = domChatEl.scrollTopMax;
-    });
+        domChatEl.scrollTop = domChatEl.scrollTopMax;
+      });
+  })
 }
 
 function showChat( id ){
@@ -111,9 +119,12 @@ function showChat( id ){
   document.getElementById(`chat-${id}`).style.display = 'block';
 }
 
-function buildMessageDom( message ){
+function buildMessageDom( message, username='' ){
   let dom = document.createElement('div');
   dom.classList.add('chat-message-wrapper');
+  if( username == message.user ){
+    dom.classList.add('ml-auto');
+  }
   dom.innerHTML = `
     <p class="chat-user">${message.user}</p>
     <p class="chat-message">${message.message}</p>
