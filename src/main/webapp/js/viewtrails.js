@@ -77,7 +77,7 @@ $(window).load(function(){
         editable: false,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
-        strokeWeight: 2
+        strokeWeight: 6
       });
 
       var infowindow = new google.maps.InfoWindow({
