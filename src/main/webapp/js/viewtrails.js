@@ -18,6 +18,8 @@ $(window).load(function(){
       };
 
       map = new google.maps.Map(document.getElementById('mapFull'), mapOptions);
+      fetchTrails();
+
       map.addListener('dragend', function() {
         var latlng = map.getCenter().toJSON();
         geocoder.geocode({'location': latlng}, function(results, status) {
@@ -45,19 +47,22 @@ $(window).load(function(){
         });
 
       });
-      fetchTrails();
-
     }
     function fetchTrails(){
-      toggleLoader(true, 'mapFull', 'loadDiv');
+      let loaderStatus = true;
+      toggleLoader(loaderStatus, 'mapFull', 'loadDiv');
       fetch('/articles').then((response) => {
         return response.json();
       }).then((articles) => {
         articles.forEach((article) => {
-          createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
+          if(article.coordinates.length != 0){
+            createTrailForDisplay(article.authors, article.tags, article.header, article.body, article.coordinates, article.id);
+            if(loaderStatus){
+              loaderStatus = false;
+              toggleLoader(loaderStatus, 'mapFull', 'loadDiv');
+            }
+          }
         });
-      }).then(function(){
-        toggleLoader(false, 'mapFull', 'loadDiv');
       });
     }
     /** Creates a trail on map. */
