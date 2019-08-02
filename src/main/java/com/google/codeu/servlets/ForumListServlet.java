@@ -43,13 +43,20 @@ public class ForumListServlet extends HttpServlet {
         response.getWriter().println("<html>");
         response.getWriter().println("<head>");
         response.getWriter().println("<title>Servlet HTML Example</title>");
+        response.getWriter().println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">");
+        response.getWriter().println("<script src=\"/js/navbar.js\"></script>");
+        response.getWriter().println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>");
+        response.getWriter().println("<link rel=\"stylesheet\" href=\"css/main.css\">");
         response.getWriter().println("</head>");
         response.getWriter().println("<body>");
-
+        response.getWriter().println("<div id=\"navbar\"></div>");
+        response.getWriter().println("<script>loadNavbar(document.getElementById('navbar'));</script>");
+        response.getWriter().println("<div style=\"display:flex; flex-wrap: wrap;\">");
+        
         for (Forum forum: forums) {
-            response.getWriter().println("<div class='forum'>");
+            response.getWriter().println("<div class=\"forum well\">");
 
-            response.getWriter().println("<a href = \"/forum?id=" + forum.getId().toString() + "\">");
+            response.getWriter().println("<a href = \"/forum?country=" + forum.getTitle().toString() + "\">");
             response.getWriter().println("<h1>");
             response.getWriter().println(forum.getTitle());
             response.getWriter().println("</h1>");

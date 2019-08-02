@@ -24,18 +24,13 @@ limitations under the License.
   <script src="/js/user-page-loader.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="js/navbar.js"></script>
 </head>
-<body onload="buildUI();" style="color:black;">
-  <nav class="navbar navbar-expand-md">
-    <div class="navbar-nav ml-auto mr-md-2">
-      <ul id="navigation"  class="nav navbar-nav navbar-right">
-        <li><a href="index.html">Home</a><li>
-        <li><a href="explore.html">Explore</a><li>
-      </ul>
-    </div>
-  </nav>
+<body onload="buildUI();" style="color:black;">  
+  <div id="navbar"></div>
+  <script>loadNavbar(document.getElementById('navbar'));</script>
 
   <div class="container">
     <div class="row">
