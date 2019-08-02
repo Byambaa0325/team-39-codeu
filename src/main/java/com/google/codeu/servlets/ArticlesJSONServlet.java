@@ -31,7 +31,14 @@ public class ArticlesJSONServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
-        List<Article> articles = datastore.getAllArticles();
+        List<Article> articles;
+        if(request.getParameter("user")!=null){
+         articles = datastore.getArticles(request.getParameter("user"));
+         System.out.println("Querying with user.");
+        }
+        else{
+          articles = datastore.getAllArticles();
+        }
         Gson gson = new Gson();
         String json = gson.toJson(articles);
 

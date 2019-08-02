@@ -106,12 +106,58 @@ function fetchAboutMe() {
     }
     aboutMeContainer.innerHTML = aboutMe;
   });
+  }
+  function fetchArticles(){
+    const querystring = window.location.search;
+    const name = querystring.slice(querystring.indexOf("user=")+5);
+    var containerDiv = document.getElementById("article-container");
+    fetch('/articles?user='+name).then((response) => {
+      return response.json();
+    }).then((articles) => {
+      console.log(articles)
+      articles.forEach((article) => {
+        const articlePanel = buildArticlePanel(article);
+        containerDiv.appendChild(articlePanel);
+    });
+  });
 }
 
+  function buildArticlePanel(article){
+    const containerDiv = document.createElement("div");
+    containerDiv.classList.add("list-group-item");
+    containerDiv.innerHTML = '';
+
+    const h3 = document.createElement('h4');
+    h3.innerHTML = article.header;
+    h3.classList.add("list-group-heading");
+    containerDiv.appendChild(h3);
+
+    var li_link = document.createElement('a');
+    li_link.href = '/article?id='+article.id;
+    li_link.classList.add("list-group-text");
+    li_link.style.color="black";
+
+
+    var li_date = document.createElement('div');
+    var date = new Date(article.timestamp);
+    li_date.innerHTML = '<sub>Posted on ' + date.toDateString()+'</sub>';
+    li_link.appendChild(li_date);
+
+    var li_body = document.createElement('div');
+    li_body.innerHTML = article.body.substring(0,50);
+    li_link.appendChild(li_body);
+
+
+
+    containerDiv.appendChild(li_link);
+
+    return containerDiv;
+  }
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
+  fetchArticles();
 }

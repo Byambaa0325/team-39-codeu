@@ -55,3 +55,6 @@
 li a{
   color: white;
 }
+.content{
+  border: 1px solid black;
+}

@@ -51,10 +51,11 @@ limitations under the License.
           </form>
         </div>
       </div>
+      </div>
 
-      <div class="col-lg-1"></div>
-
+      <div class="row">
       <div class="col-lg-5">
+        <h2>Your Messages:</h2>
         <div style="margin-top:9vh"></div>
         <form id="message-form" action="/messages" method="POST" class="hidden">
           Enter a new message:
@@ -67,7 +68,16 @@ limitations under the License.
         <hr/>
         <div id="message-container">Loading...</div>
       </div>
-    </div>
-  </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-5">
+        <h2>Articles posted by you:</h2>
+        <div style="margin-top:9vh"></div>
+        <hr></hr>
+        <div id="article-container" class="list-group">
+        </div>
+        </div>
+      </div>
 </body>
 </html>
