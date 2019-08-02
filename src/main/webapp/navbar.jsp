@@ -12,7 +12,6 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/">Home</a></li>
-        <li><a href="/aboutus.html">About us</a></li>
         <li><a href="/forums">Forums</a></li>
         <li><a href="/explore.html">Explore</a></li>
         <li><a href="/chat">Chat</a></li>
