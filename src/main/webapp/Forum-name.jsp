@@ -33,9 +33,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="css/forum.css">
   <link rel="stylesheet" href="css/landing-style.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/trail-style.css">
   <script src="js/navigation-loader.js"></script>
     <title><%=forum.getTitle()%></title>
 </head>
@@ -46,10 +48,14 @@
 
   <div id="forum-title"><h1><%=forum.getTitle().toUpperCase()%></h1></div>
 <hr>
-<form action="/createTrail.html" method="GET" id="AddArticle">
-<input type="hidden" name="forum" value="<%= forum.getTitle()%>">
-<button type = "submit" form="AddArticle" value="Submit"><h4>+Add Article</h4></button>
-</form>
+
+<div id="floating-navbar" style="color: black;">
+  <button onclick="window.location='createTrail.html'">
+    <span class="material-icons">edit</span>
+    Add Trail
+  </button>
+</div><!-- End of floating navbar -->
+
 <div class="container">
     <div id="article-container">
       <% if(!articles.isEmpty()){
