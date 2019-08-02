@@ -60,7 +60,7 @@
                   <h2><%= article.getHeader()%></h2>
               </a>
               <div class="details">
-              <b class="flex-item">Posted by: <%=article.getAuthors().split(",")[0]%></b>
+              <b class="flex-item">Posted by: <a href="user-page.html?user=<%=article.getAuthors().split(",")[0]%>"><%=article.getAuthors().split(",")[0]%></a></b>
               <i class="flex-item">Date: <%=date.toString()%></i>
             </div>
           </div>
