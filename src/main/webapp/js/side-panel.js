@@ -22,7 +22,7 @@ function toggleMapCoordinates(coords){
 
 function buildArticlePanel(article){
   const containerDiv = document.createElement("div");
-  containerDiv.classList.add("content");
+  // containerDiv.classList.add("content");
   containerDiv.innerHTML = '';
 
   const h3 = document.createElement('h1');
@@ -63,7 +63,7 @@ function buildArticlePanel(article){
 }
 function buildArticleDiv(article){
   const containerDiv = document.createElement("div");
-  containerDiv.style.border="1px solid black";
+  containerDiv.style.border="thin solid black";
   containerDiv.classList.add('pathinfo');
   containerDiv.setAttribute("data-toggle", "collapse");
   containerDiv.setAttribute("data-target", "#article-container");
